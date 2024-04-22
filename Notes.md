@@ -48,6 +48,36 @@ IAM Best practices:
 - Use access keys for CLI and SDK
 - audit permissions w/ Credential report and IAM access advisor
 
+Shared reponsability model:
+You know.
+
+
+# EC2 Fundamentals
+### Elastic Compute Cloud
+Instance types:
+- General purpuse (diverse workloads, websites or code repos)
+- Compute optimized (high level of processign, machine learning, gaming server ecc..)
+- Memory optimized (fast work for large data in memory, in memory dbs, cache store, real time process of data)
+- Accelerated Computing 
+- Storage Optimized (when lots of datasets on local storage, data warehouse, oneline transaction)
+- HPC optimized
+
+m5.2xlarge: m = class like general purpuse, 5 = generation (aws improve over hw over time) 2xlarge = size in instance class (the more cup and memory ecc..)
+
+Security groups:
+firewall around EC2, control how traffic is allowed into EC2, they only contain ALLOW rules. 
+they control:
+- access to ports
+- autorize IP ranges
+- control of inbound network
+- control outbound network
+
+Ports to know
+- 22 SSH secure shell (linux instance access)
+- 21 FTP file transfer protocol
+- 80 HTTP unsecured websites
+- 443 secured website
+- 3389 RDP remote desktop protocol (windows instance access)
 
 
 
@@ -57,4 +87,17 @@ IAM Best practices:
 
 
 
-# EC2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
