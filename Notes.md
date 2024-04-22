@@ -118,11 +118,71 @@ purchasing options:
   - no time commitment
  
 # EC2 STORAGE
-- EBS (elastic block store) network drive you can attach to your drive while they run
+EBS (elastic block store) network drive you can attach to your drive while they run:
   - persistant data, only mounted to 1 ec2 at the time, in only 1 AZ at the time
   - network drive so a bit latency to communicate (not phisycal drive)
   - because its network it can be detached and reattached somewhere else
   - can have a delete on termination attribute
+
+EBS Volume types:
+  - gp2/gp3 "general purp." balance price and perf for wide variety workloads
+    - can be used for boot volume
+    - cosr effective low latency
+    - virtual desktops and test environments
+    - gp3 can individually increase IOPS and throughput, for gp2 they are linked together
+      
+  - io 1 / io 2 "prevision iops": highest performance ssd
+    - can be used as boot volume
+    - for mission critical low latency or high throughput workloads
+    - good for DB workloads (sensitive to storage and performance)
+      Multi attach family
+      - attach to multiple EC2 in same AZ (only avable to io 1 / io 2)
+      - for high app. availability
+      - manage cuncurrent write operations
+      - MAX 16 EC2 at the time
+        
+  - st 1 low cost hdd for frequent access throughput intensive
+    - cant be a boot volume
+    - throughput optimized (big data, data warehouse)
+      
+  - sc 1 lowst cost hdd for less frequent access
+    - cant be a boot volume
+    - for data that is infrequently accessed
+    - when the lowest cost is important
+
+EBS snapshot:
+backup of EBS at a point in time:
+  - can copy snapshot to another AZ, thats how you transfer it to another AZ
+  - can move it to an "archive tier" that is cheaper, 24-72hrs to restore it
+  - recycle bin, can be recovered
+  - fast snapshot restore
+
+EC2 instance store:
+  - better I/O performance, high performance because phisically attached hw store
+  - lose the storage if ec2 is stopped
+  - good for buffer / cache / scrath data / temp content
+  - risk of data if datacenter hw fails
+  - your respinsability to backup
+
+
+    
+
+# AMI
+### amazon machine image
+it powers the EC2 instance, rapresent a customization of EC2 instance
+you can launch EC2 from
+  - a Public AMI: aws provided
+  - your own AMI
+  - AWS marketplace AMI
+
+how to create:
+  - start EC2 instance and customize it
+  - stop it
+  - build the AMI
+  - launch instance from other AMI
+
+
+
 
 
 
