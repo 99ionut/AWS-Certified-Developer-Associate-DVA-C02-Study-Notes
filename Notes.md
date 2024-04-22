@@ -79,9 +79,50 @@ Ports to know
 - 443 secured website
 - 3389 RDP remote desktop protocol (windows instance access)
 
+Connect with: SSH, putty, EC2 Instance connect
 
+purchasing options:
+- on-demand
+  - pay for what you use
+  - no upfront comittment
+  - raccomanded for short workload inunterrupted you dont know how the app. will behave
+    
+- reserved (long workloads 1-3 years)
+  - discount compared to on-demand
+  - you reserce an instance attribute (type, region, os)
+  - pay pfront, partial, no
+  - raccomanded for steady-state usage (like a db)
+  - you can buy / sell it on the marketplace
+    
+- conv. reserved instances
+  - change type but less discount
+    
+- savings plan (1-3 years you commit not to type but to amount of workload in dollars)
+  - commit to a usage, beyond that its billed on-demand
+    
+- spot instances
+  - most aggressive discount
+  - you can lose it at any time, use it for workloads resilient to failure like batch, data anal, image process, distributed workl, flexible start and stop.
+  - not suited for critical jobs
+    
+- dedicated instance
+  - when compliance req. or bound sw licenses, or strong regularitory needs
+  - on demand or reserved
+  - share host with others
 
+- dedicated host
+  - access to your own server and visibility on lower level
 
+- capacity reservation
+  - reserve on demand instance capacity for any duration, you have access to ec2 capacity when you need it
+  - no time commitment
+ 
+# EC2 STORAGE
+- EBS (elastic block store) network drive you can attach to your drive while they run
+  - persistant data, only mounted to 1 ec2 at the time, in only 1 AZ at the time
+  - network drive so a bit latency to communicate (not phisycal drive)
+  - because its network it can be detached and reattached somewhere else
+  - can have a delete on termination attribute
 
 
 
