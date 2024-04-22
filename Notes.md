@@ -164,6 +164,17 @@ EC2 instance store:
   - risk of data if datacenter hw fails
   - your respinsability to backup
 
+Amazon EFS
+Elastic file system (network file system can be mounted on many EC2)
+  - they work with EC2 in multiple AZs
+  - high avalability, pay per use
+  - security gropu to control access to EFS
+  - compatible with AMI
+  - encryption at rest with KMS
+  - Scale automatically and is pay for use
+  Storage classes
+    - EFS scale
+    - performance mode............................................
 
     
 
