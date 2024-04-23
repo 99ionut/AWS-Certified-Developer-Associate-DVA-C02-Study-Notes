@@ -197,7 +197,7 @@ how to create:
   - build the AMI
   - launch instance from other AMI
 
-#ELB
+# ELB
 ### elastic load balancer
 its a MANAGED load balancer, aws guarantees it will be working and will upgrade it automatically
 what it does:
