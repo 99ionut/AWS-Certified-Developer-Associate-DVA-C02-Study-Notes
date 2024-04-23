@@ -192,9 +192,9 @@ Elastic file system (network file system can be mounted on many EC2)
     
 
 # AMI
-### amazon machine image
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/c8c0f021-4aef-4778-827b-697415ef7520">
 
+### amazon machine image
 it powers the EC2 instance, rapresent a customization of EC2 instance
 you can launch EC2 from
   - a Public AMI: aws provided
@@ -369,13 +369,26 @@ Route 53 records contains:
   - A maps hostname to ipv4
   - AAAA maps hostname to ipv6
   - CNAME Point a hostname to another hostname, works if you have a non root domain (something.domain.com)
-  - Alias: Point a hostname to AWS resource
+  - Alias: Point a hostname to AWS resource, works with root name (ELB, CloudFront, API Gateway, s3, VPC)
   - NS name server for the hosted zone controls how traffic is routed
     -  public hosted zones responds with the public ip when trying to resolve the DNS
     -  private hosted only you in your VPC network can access it
 - value: 128.241.223.111
 - routing policy: how r53 responds to queries
+  - Simple, route traffit to a single resource, if multiple values (ip adresses) are returned che client chooses a random one
+  - Weighted: control the % of the request that go to each resource
+  - Failover: done with health checks, if one is not healthy, switch
+  - Latency based: redirect to the resourch that has the least latency
+  - Geolocation: based on where the user is olocated
+  - Multi-Value: used when routing to multiple resources
+  - ip-based: routing is baded on clients IP address
+  - Geoproximity: based on a value called bias, which is the radius  
 - TTL amount of time the rcord is cached at DNS resolver
+
+traffic flow: node based editor allows to config complex routing decition policy 
+
+Health checks are for public resources
+- this allows automated dns failover
 
 Route 53 Records TTL:
 - the client will respond with the cached ip if TTL hasnt expired yet.
