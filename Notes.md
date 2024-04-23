@@ -333,6 +333,28 @@ TTL time to live:
 - can range from a few seconds to days
 
 # Route 53
+DNS domain name system: translates ip addresses to human friendly names
+terminology:
+- Domain registrar: Route 53, godaddy..
+- DNS records:
+- zone file: contain DNS records
+- name server: resolver DNS queries
+- top level TLD, second level SLD
+<img width="360" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/d48cb9cf-8a74-4eb9-a5ba-182dd28d3a23">
+
+Route 53 is an authoritative DNS (you can update the records youself), and is a Domain registrer
+Route 53 records contains:
+- Domain/subdomain name: example.com
+- record type: (must know)
+  - A maps hostname to ipv4
+  - AAAA maps hostname to ipv6
+  - CNAME maps hostname to another hostname
+  - NS name server for the hosted zone controls how traffic is routed
+    -  public hosted zones responds with the public ip when trying to resolve the DNS
+    -  private hosted only you in your VPC network can access it
+- value: 128.241.223.111
+- routing policy: how r53 responds to queries
+- TTL amount of time the rcord is cached at DNS resolver
 
 
 
