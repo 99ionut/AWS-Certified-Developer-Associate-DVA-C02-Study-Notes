@@ -473,6 +473,29 @@ enable versioning
 - buckets can be in diff AWS accounts
 - copy is async
 
+Storage classes:
+can use lifecycle configurations or move between classes manually
+- general purpuse
+  - frequently accessed data
+  - low latency high throughput
+  - fot big data analytics, mobile gaming, contenti distribuition
+- Standard-IA
+  - For data that is less frequently accessed, but requires rapid access when needed
+  - for disaster recovery / backups
+- One Zone-IA
+  - in a single AZ
+  - secondary copy of backup or data u can recreate
+- Glacier Instant Retrieval
+  - millisecond retrival
+- Glacier flexible retrieval
+  - 1-5 min
+- glacier deep archive
+  - 12 hrs
+- intelligent tiering
+  - move objects between tiers based on usage
+
+durability: how many times an object is going to be lost 9.99 11 9s  
+avalibility: how readly a service is: 99.99% not aval for 53min
 
   
 
