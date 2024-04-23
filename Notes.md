@@ -209,6 +209,7 @@ what it does:
 
 4 types:
 - classic load balancer: deprecated
+
 - application load balancer: routs https, websocket traffic
   -  load bal. to multiple http apps. across machines (target group), ec2 instances/ec2 tasks/lambds
   -  load bal. to multiple apps on the same machine (containers)
@@ -225,18 +226,46 @@ what it does:
 - gateway load balancer: operates at layer 3 network layer, scale and manage 3rd party virtual applications
   for example firewalls, intrusion detection system, inspection system... for example if u want your traffic to be
   inspected before it reaches ec2
+  - GENEVE protocol 6081
+  - target adresses: EC2 / IP adresses
+
+Sticky sessions: its possible to implement so that the same client is always redirected to the same instance behind a 
+load balancer, it uses a cookie with an expiration date. it can be an Application cookie or duration-based cookie.
+
+Cross zone load balancing: each load balancer distributes evenly across all instances in all AZs 
+or without all ASz recieve the same amount no matter how many instances in the AZ.
 
 can be public or private
+
+SSL/TLS certificate allows traffic between your client and load balancer to be encrypted in transit, they are
+issude by Certificate Autorities, they have an expiration date
+
+Connection Draining: If EC2 is shutting down it goes in draining mode so the uses that are already connected and need
+to complete their requests finish and ELB doesnt forward new traffic there, then when its all done it shuts down.
+
 load balancer security group allows traffic from anywhere, in routing table 0.0.0.0/0
 EC2 security group allow traffic only from the load balancer, so in routing table the source is the load balancer name
 
+# Auto scaling group
+in cloud u can get rid or add servers quickly
+the goal of ASG is to 
+- scale out (add EC2) to match increase in load
+- scale in (rem. EC2) to match decrease in load
+- ensure we have a min and max number of EC2 running
+- registed new instances to ELB
+- ASG launch template contains info on how the new instance should be created
+- its possible to scale based on CloudWatch alarms metrics
+- after a scaling happens there is a default 300 sec cooldown period
 
+Scaling policies:
+- dynamic scaling: based on tracking scaling ex: targeto to have ASG CPU to stay at 40%
+- simple / step scaling: when a CloudWatch alarm is triggered
+- scheduled scaling: anticipate scaling based on pattern
+- predictive scaling: pattern that repeat based on forecast
 
-
-
-
-
-
+Instance refresh:
+if you want to update the launch template, as scaling happens old instances get terminated and new ones
+will have the new template, so at the end after a while all instances will have the new template
 
 
 
