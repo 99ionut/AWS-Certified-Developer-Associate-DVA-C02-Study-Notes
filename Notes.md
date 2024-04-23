@@ -20,7 +20,7 @@ Consists of:
   - "Principal": account/user/role its applied to
   - "Action": API calls that will be allowed / denied based on the effect
   - "Resource": list of res. to which the action is applied
-  - "Contition": when its applied (optional)
+  - "Condition": when its applied (optional)
 
 Defense mechanisms:
 - password policy (length/special chars/numbers/pass expiration, prevent reuse)
@@ -392,6 +392,92 @@ Health checks are for public resources
 
 Route 53 Records TTL:
 - the client will respond with the cached ip if TTL hasnt expired yet.
+
+domain registrar: allows you to buy your domain value (godaddy) and they give you usually a way to manage your domain record
+but you can use a different one if needed
+
+# VPC
+### virtual private network
+subnet allow to partition network inside VPC
+subnet can be public / private
+to define access between subnets and how it flows between sections use Routing Tables
+
+Internet gateway: help VPC instances connect to internet
+
+Public subnet has a route to the intert gateway
+
+NAT gateway (aws managed) and NAT instance (self managed) allow your instances in private subnet to access the internet while remaining private
+
+network ACl (NACL) firewall which control traffic from and to subnet
+can only allow or deny rules
+is stateless return traffic must be explicitly allowed
+
+security group: only the allow rule
+firewall tha tcontrolla trafico from EC2 instances 
+stateful return traffic is automatically allowed
+
+VPC flow logs
+capture info about IP traffic 
+
+VPC peering: connect 2 VPCs privately
+must not have overlapping CIDR
+
+VPC endpoints
+allow to connect to AWS services using a private network instead of public network
+
+connect on premise site with VPC
+VPN encrypted conn over public connection
+Direct connection: phisical connection to AWS
+
+3 tier solution architecture
+Route 53 -> ELB public subnet (1) -> private subnet (2) with 3 EC2 -> data subnet (3) RDS / elastiCache
+
+LAMP stack on EC2
+Linux
+Apache
+MySQL
+Php
+
+wordpress on aws 
+
+# S3
+Used for everything, is the backbone for a lot of internet stuff
+backup and storage, disaster recovery, archive, hybrid cloud storage, app hosting, media hosting, data lakes and big data, sw delivery, static website
+
+store objects (files) in "buckets"
+must have unique name
+defined at the region level ( not global level)
+
+contains:
+- each object has a key: the full path of the file, prefix + object name
+- max size is 5TB, files > 5gb are multi part upload
+- metadata list of key-val per object
+- tags key-val for security / lifcycle
+- version ID (if versioning enabled) 
+
+security:
+- IAM policy for users
+- Bucket policy; bucket wide rules at the resource level
+- object ACL
+- bucket ACS
+- encrypt the object with encryption keys
+
+S3 can host static websites and have the accessible public with a policy
+
+you can version your files, its enabled at the bucket level, instead of overwiting it creates a new version
+
+replication:
+enable versioning 
+- CRR cross region replication (compliance or low latency)
+- SRR same region replication (live replication, log aggregation)
+- buckets can be in diff AWS accounts
+- copy is async
+
+
+  
+
+
+
 
 
 
