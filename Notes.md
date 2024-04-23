@@ -171,7 +171,7 @@ EC2 instance store:
   - risk of data if datacenter hw fails
   - your respinsability to backup
 
-Amazon EFS
+# Amazon EFS
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/02c35483-16c1-4347-833b-cafe9c6dc073">
 
 Elastic file system (network file system can be mounted on many EC2)
