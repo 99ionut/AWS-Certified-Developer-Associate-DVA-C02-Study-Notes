@@ -1,3 +1,12 @@
+# uncategorized
+AWS limits (quotas)
+- API rate limits
+- Service quotas (service limits)
+Exponential backoff is used when you get a ThrottlingException, so on each retry double the seconds you wait
+you must implement the retries on 5xx server errors
+Dont implement retry on 4xx client errors
+
+
 # IAM
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/3d22a197-c740-4bcb-bc14-38ea11d542e7">
 
@@ -29,7 +38,10 @@ Defense mechanisms:
 To access AWS:
 - AWS managment console (pw + MFA)
 - CLI (access keys)
+  - to use CLI with MFA you need to create a temporary session, you do so with the STS GetSessionToken API
+  - the CLI looks for credentials in this order: Command line, Env. Variab. CLI credential file, CLI config file, Container cred. Instance profile cred.
 - SDK (access keys)
+  - looks for credential in this order: Java system propreties, Env. variab. The defaul credential profile file. ECS container. instance profile credentials.
 Access keys are generated with the AWS console, users manage their keys and are secret like passwords.
 
 IAM Roles:
@@ -120,6 +132,11 @@ purchasing options:
 - capacity reservation
   - reserve on demand instance capacity for any duration, you have access to ec2 capacity when you need it
   - no time commitment
+
+EC2 Instance metadata IMDS
+allows aws EC2 instances to learn about themselves without using an aws role for that
+http..../latest/meta-data
+you can retrieve info about the EC2 but not the IAM policy
  
 # EC2 STORAGE
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/e04b234a-8821-4d49-94e8-9295df6a2c08">
@@ -452,7 +469,13 @@ contains:
 - each object has a key: the full path of the file, prefix + object name
 - max size is 5TB, files > 5gb are multi part upload
 - metadata list of key-val per object
+  - name must begin with "x-amz-meta-"
+  - retrieved when retrieving the object
+  - cant filter by metadata
 - tags key-val for security / lifcycle
+  - useful for fine-grained permission
+  - cant filter by tag
+  - good for analytical purpuses
 - version ID (if versioning enabled) 
 
 security:
@@ -460,11 +483,47 @@ security:
 - Bucket policy; bucket wide rules at the resource level
 - object ACL
 - bucket ACS
-- encrypt the object with encryption keys
+- encrypt the object server side SSE 
+  - SSE-S3 server side encryption with s3-managed-keys
+    - key handled and managed by AWS
+    - AES-256
+    - enabled by default
+  - SSE-KMS server side encryption with KMS keys stored in aws kms
+    - user control over keys, can audit who uses it with cloudtrail
+  - SSE-C server side encryption with customer-provided keys
+    - AWS does not store the key you provide
+    - must use HTTPS
+- encrypt the objects client-side
+  - encryption and decryption outside of AWS
+- encryption in transit
+  - SSL/TLS encryption while its being transmitted, using the HTTPS endpoint
+    
+can force encryption with bucket policy
+
+- CORS: cross origin resource sharing
+  its a security in web browsers to allow request from other website origins
+  (popular question) if a client makes a cross-origin request on our S3 bucket we need to enable the correct CORS headers
+
+- MFA delete
+  require MFA when deleting an object
+
+- S3 access logs
+  you can enable logging of all accesses and operations. The target of logs should be a different S3 bucket never the same one
+
+- pre signes URLS give access to a file on a private bucket from 1min to 12hrs, using a presigned url by you
+
+- S3 access points:
+  Users from finance can only access /finance/... files, sales can only access /sales/... files
+  this is done with an access point policy
+
+- S3 Object lambda
+  if u want to run a function before its being retrieved, use and object lambda access point.
+  ex: adding watermark specific for the user, resizing, converting the data
 
 S3 can host static websites and have the accessible public with a policy
 
 you can version your files, its enabled at the bucket level, instead of overwiting it creates a new version
+you can enable s3 versioning to have objects that when are deleted are hidden and can be recovered
 
 replication:
 enable versioning 
@@ -474,11 +533,10 @@ enable versioning
 - copy is async
 
 Storage classes:
-can use lifecycle configurations or move between classes manually
 - general purpuse
   - frequently accessed data
   - low latency high throughput
-  - fot big data analytics, mobile gaming, contenti distribuition
+  - for big data analytics, mobile gaming, contenti distribuition
 - Standard-IA
   - For data that is less frequently accessed, but requires rapid access when needed
   - for disaster recovery / backups
@@ -497,9 +555,20 @@ can use lifecycle configurations or move between classes manually
 durability: how many times an object is going to be lost 9.99 11 9s  
 avalibility: how readly a service is: 99.99% not aval for 53min
 
-  
+can use lifecycle configurations or move between classes manually
+lifecycles rules:
+- Transition Actions: configure objects to transition to another storage class after a certain time
+- Expirtation actions: configure objects to expire (delete) after a certain time / delete old files / del partial files
 
+S3 Event notifications:
+like generate thumbnails of images uploaded to s3
+S3 bucket -> Amazon EVent Bridge -> rules -> services
 
+S3 performance
+- can speed up upload by using multi-part upload
+- s3 transfer acceleration
+- byte-range fetch: request a specific range of bytes in a file to speed up downloads (only partial data)
+- sql server-side filtering, the server sends data already filtered
 
 
 
