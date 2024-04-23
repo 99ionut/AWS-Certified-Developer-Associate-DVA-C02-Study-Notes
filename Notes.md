@@ -286,12 +286,53 @@ Managed DB service, uses SQL, because its managed, rather than EC2 own DB:
 - scaling capability / Auto scaling
 - storage backed by EBS
 
+RDS proxy
+fully managed db proxy for RDS
+- allows apps to pool and share DB connection, minimizing timeouts, open connections, and reduce stress on DB resources
+- auto scaling, serverless, across multiple AZ
+- apps connect to proxy not directly to db instance
+
 # Aurora
 priorietary tech from AWS
+- SQL DB, 5x & 3x times faster
+- The storage automatically grows
+- up to 15 replicas
+- automatic native failover
+- automatic backup and recovery
+- 6 copies of data in 3 AZ
+- 1 of the 6 replicas in a master that writes
+- 5 of the 6 are read, you use a Read Endpoint that connects balances the request to the and decides from which one to read
+- automatic patching /maintance
+
+both RDS and Aurora:
+- at-rest encryption: with AWS KMS
+- at-flight encryption wusint AWSTLS
+- IAM authentication: IAM roles to connect / pw username
+- security grous for network access
+- audit logs can be enabled
+
+Elastic cache:
+redis / memcached
+in memory database with high performance low latency
+- common query will be cached
+- its managed, so aws takes care of the usual stuff
+- Application queries ElastiCache, if avable gets from there, otherwise query RDS and store in ElastiCache
+(cache hit or cache hit)
+- or you can cache the session data for faster
+- cached data may be eventually consistant
+- eficcient if data changes slowly
+- Lazy loading / Cache-Aside / Lazy Population architecture: cache hit / cache miss depending if the data is in ElastiCache, if not get from RDS and write it to cache for further searches.
+- write through architecture: write to cache when there is a modification to the DB
 
 
+Cache eviction:
+- you delete item explicitly
+- evicted cuz memory is full and not recently used
+TTL time to live:
+- used for leaderboards / comments / activity streams
+- can range from a few seconds to days
 
-
+# Route 53
 
 
 
