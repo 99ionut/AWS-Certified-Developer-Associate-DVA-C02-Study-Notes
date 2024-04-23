@@ -348,7 +348,8 @@ Route 53 records contains:
 - record type: (must know)
   - A maps hostname to ipv4
   - AAAA maps hostname to ipv6
-  - CNAME maps hostname to another hostname
+  - CNAME Point a hostname to another hostname, works if you have a non root domain (something.domain.com)
+  - Alias: Point a hostname to AWS resource
   - NS name server for the hosted zone controls how traffic is routed
     -  public hosted zones responds with the public ip when trying to resolve the DNS
     -  private hosted only you in your VPC network can access it
@@ -356,7 +357,8 @@ Route 53 records contains:
 - routing policy: how r53 responds to queries
 - TTL amount of time the rcord is cached at DNS resolver
 
-
+Route 53 Records TTL:
+- the client will respond with the cached ip if TTL hasnt expired yet.
 
 
 
