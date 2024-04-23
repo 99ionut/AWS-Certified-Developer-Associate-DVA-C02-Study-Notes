@@ -119,7 +119,8 @@ purchasing options:
  
 # EC2 STORAGE
 EBS (elastic block store) network drive you can attach to your drive while they run:
-  - persistant data, only mounted to 1 ec2 at the time, in only 1 AZ at the time
+  - persistant data, only mounted to 1 ec2 at the time
+  - locked to only 1 AZ at the time
   - network drive so a bit latency to communicate (not phisycal drive)
   - because its network it can be detached and reattached somewhere else
   - can have a delete on termination attribute
@@ -172,10 +173,14 @@ Elastic file system (network file system can be mounted on many EC2)
   - compatible with AMI
   - encryption at rest with KMS
   - Scale automatically and is pay for use
-  Storage classes
+  EFS Performance classes:
     - EFS scale
-    - performance mode............................................
-
+    - performance mode
+    - throughput mode
+  EFS Storage classes:
+    - standard: frequent access
+    - EFS-IA infrequent access, lifecycle policy says after how much it gets converted
+    - EFS One Zone-IA best cost saving
     
 
 # AMI
@@ -192,6 +197,38 @@ how to create:
   - build the AMI
   - launch instance from other AMI
 
+#ELB
+### elastic load balancer
+its a MANAGED load balancer, aws guarantees it will be working and will upgrade it automatically
+what it does:
+- forwards traffic to multiple servers
+- expose a single point of access (DNS) to your app
+- handle failures of instances, using health checks, by using a port and route to check the http response.
+  ex response 400 not healthy
+
+
+4 types:
+- classic load balancer: deprecated
+- application load balancer: routs https, websocket traffic
+  -  load bal. to multiple http apps. across machines (target group), ec2 instances/ec2 tasks/lambds
+  -  load bal. to multiple apps on the same machine (containers)
+  -  supports route routing / query strings like example.com/users
+  -  we can do stuff like if the request is ?=mobile it redirects to a specific instance otherwise if ?=desktop to
+     different one
+
+- network load balancer: forwards tcp udp lts traffic
+  - works like app. load balancer, we redirect to certain target groups
+  - redirects to target EC2 instances
+  - redirects to ip addresses
+  - supports tcp,http,https health checks
+    
+- gateway load balancer: operates at layer 3 network layer, scale and manage 3rd party virtual applications
+  for example firewalls, intrusion detection system, inspection system... for example if u want your traffic to be
+  inspected before it reaches ec2
+
+can be public or private
+load balancer security group allows traffic from anywhere, in routing table 0.0.0.0/0
+EC2 security group allow traffic only from the load balancer, so in routing table the source is the load balancer name
 
 
 
