@@ -279,8 +279,15 @@ Managed DB service, uses SQL, because its managed, rather than EC2 own DB:
   - cross AZ or cross region
   - can be converted to their own DB
 - multi AZ setup
+  - failover if disaster recovery
+  - replicas can be used for mutli AZ disaster recovery
+  - one DNS name, automatic failover
+  - sync replication 
 - scaling capability / Auto scaling
 - storage backed by EBS
+
+# Aurora
+priorietary tech from AWS
 
 
 
