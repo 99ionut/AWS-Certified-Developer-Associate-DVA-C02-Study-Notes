@@ -414,6 +414,9 @@ domain registrar: allows you to buy your domain value (godaddy) and they give yo
 but you can use a different one if needed
 
 # VPC
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/99820e8a-bbf2-41f7-aca8-44d30ce6a14e">
+
+
 ### virtual private network
 subnet allow to partition network inside VPC
 subnet can be public / private
@@ -458,6 +461,8 @@ Php
 wordpress on aws 
 
 # S3
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/c0ddee13-1fc0-4509-a333-766fd99bd775">
+
 Used for everything, is the backbone for a lot of internet stuff
 backup and storage, disaster recovery, archive, hybrid cloud storage, app hosting, media hosting, data lakes and big data, sw delivery, static website
 
@@ -569,6 +574,10 @@ S3 performance
 - s3 transfer acceleration
 - byte-range fetch: request a specific range of bytes in a file to speed up downloads (only partial data)
 - sql server-side filtering, the server sends data already filtered
+
+# CloudFront
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/eee7115d-40b2-432c-8b06-0d267cd3e9cc">
+
 
 
 
