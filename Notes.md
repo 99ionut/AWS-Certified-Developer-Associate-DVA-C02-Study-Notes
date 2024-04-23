@@ -1,4 +1,6 @@
 # IAM
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/3d22a197-c740-4bcb-bc14-38ea11d542e7">
+
 ### (identity and Access Managment)
 Its a global service (doesnt matter in which region i create the user, available everywhere)
 
@@ -53,6 +55,8 @@ You know.
 
 
 # EC2 Fundamentals
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/70df717a-6b4b-4bcd-b73c-5371b49c5822">
+
 ### Elastic Compute Cloud
 Instance types:
 - General purpuse (diverse workloads, websites or code repos)
@@ -118,6 +122,8 @@ purchasing options:
   - no time commitment
  
 # EC2 STORAGE
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/e04b234a-8821-4d49-94e8-9295df6a2c08">
+
 EBS (elastic block store) network drive you can attach to your drive while they run:
   - persistant data, only mounted to 1 ec2 at the time
   - locked to only 1 AZ at the time
@@ -166,6 +172,8 @@ EC2 instance store:
   - your respinsability to backup
 
 Amazon EFS
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/02c35483-16c1-4347-833b-cafe9c6dc073">
+
 Elastic file system (network file system can be mounted on many EC2)
   - they work with EC2 in multiple AZs
   - high avalability, pay per use
@@ -185,6 +193,8 @@ Elastic file system (network file system can be mounted on many EC2)
 
 # AMI
 ### amazon machine image
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/c8c0f021-4aef-4778-827b-697415ef7520">
+
 it powers the EC2 instance, rapresent a customization of EC2 instance
 you can launch EC2 from
   - a Public AMI: aws provided
@@ -198,6 +208,8 @@ how to create:
   - launch instance from other AMI
 
 # ELB
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/6e55cd0d-248e-4592-9a70-494a59b41e7d">
+
 ### elastic load balancer
 its a MANAGED load balancer, aws guarantees it will be working and will upgrade it automatically
 what it does:
@@ -247,6 +259,8 @@ load balancer security group allows traffic from anywhere, in routing table 0.0.
 EC2 security group allow traffic only from the load balancer, so in routing table the source is the load balancer name
 
 # Auto scaling group
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/f861c0d3-3b2a-4546-a6fd-2ab0a6252823">
+
 in cloud u can get rid or add servers quickly
 the goal of ASG is to 
 - scale out (add EC2) to match increase in load
@@ -268,6 +282,8 @@ if you want to update the launch template, as scaling happens old instances get 
 will have the new template, so at the end after a while all instances will have the new template
 
 # RDS
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/b70b6dcf-bc97-462c-8db3-30509fcb3ed4">
+
 ### relational database service
 Managed DB service, uses SQL, because its managed, rather than EC2 own DB:
 - OS patching by AWS
@@ -293,6 +309,8 @@ fully managed db proxy for RDS
 - apps connect to proxy not directly to db instance
 
 # Aurora
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/c84aa5c9-1953-48d1-8304-e702b1b3c738">
+
 priorietary tech from AWS
 - SQL DB, 5x & 3x times faster
 - The storage automatically grows
@@ -333,6 +351,8 @@ TTL time to live:
 - can range from a few seconds to days
 
 # Route 53
+<img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/72e0e111-ab7b-44fc-a095-c86f2704330b">
+
 DNS domain name system: translates ip addresses to human friendly names
 terminology:
 - Domain registrar: Route 53, godaddy..
