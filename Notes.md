@@ -267,6 +267,30 @@ Instance refresh:
 if you want to update the launch template, as scaling happens old instances get terminated and new ones
 will have the new template, so at the end after a while all instances will have the new template
 
+# RDS
+### relational database service
+Managed DB service, uses SQL, because its managed, rather than EC2 own DB:
+- OS patching by AWS
+- continious backups and restore
+- read replicas: help you scale your reads (not writes)
+  - async replications so the reads are "eventually consistant" because if they havent finishes syncing you can read
+    old data sometimes
+  - up to 15 read replicas
+  - cross AZ or cross region
+  - can be converted to their own DB
+- multi AZ setup
+- scaling capability / Auto scaling
+- storage backed by EBS
+
+
+
+
+
+
+
+
+
+
 
 
 
