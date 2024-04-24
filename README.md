@@ -785,16 +785,73 @@ High avalibility with load balancer: great for production
 Deploy options for updates:
 - All at once, deploy the new v all in one go but it has a bit of downtime
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/28d406a4-c6d7-4b02-84cb-74e1349db53b">
+  
 - Rolling: update a few instances at a time (at one point it funs at a smaller capacity
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a16b4ed3-21aa-48a3-b73b-96fe01d23ddb">
+  
 - Rolling with additional batches: like rolling but actively starts new instances to swtich, so it has all the capacity when needed
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2cb0caf7-d0db-43b9-ad76-f62eeb576408">
+  
 - immutable: deploys all to new instances the switches everything at once when its ready
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc51490f-db72-457f-8968-4b756dcd4f67">
+  
 - blue green: create a new environment and test, and switch when ready
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/051954d9-e3eb-4e27-8f85-60f0c180447b">
+  
 - traffic splitting: sends a small % of traffic to new deployment
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/07331a37-8b38-4f7f-850e-97060e09a667">
+
+Elastic Breanstalk CLI, helpful to automate pipelines
+
+EB Lifecycle policy: policy to remove old verions
+
+EB extentions: a file in the .ebextentions/ directory in our code that can configure all the paramaters you find in the web UI
+Because it uses CloudFormation under the hood, the extentions provisions any service you want.
+
+EB cloning: clones an environ. with the exact config. useful for "test" versions of app. After cloning u can change settings.
+
+EB migration: 
+for example ELB cant be changed (only configured) after cloning, so we need to migrate:
+create a new env. with the same config except LB (cant clone)
+deploy the app onto new env.perform a swap.
+
+# CloudFormation
+Declarative way to outline your aws infrastructure for any resource
+infrastructure as code
+can create a template in a Manual way: edit them in cloud formation designer or code editor
+automated way: using AWS CLI 
+
+YAMS and JSON are languages you can write CF templates
+
+template components:
+- template version
+- description
+- resources: are the core of your CloudFormation template, rapresent the components that will be created, res. can refer each other
+- parameters: they are a way to provide inputs to your AWS CF template (ex choose type of ec2, password...)
+- mapping: fixed vars within CF template ex (dev vs prod)
+- outputs: output the vars such as VPC ID and subnet ID to network stack
+- conditions: control the creation of res. based on conditions ex: what region u deploy in
+- Instrinct functions:
+  - Ref
+  - GetAtt
+  - FindInMap
+  - importValue
+  - Condition Functions
+  - Base64
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
