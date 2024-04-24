@@ -765,6 +765,64 @@ EKS data volume supports EBS, EFS, FSx, by specifying a StorageClass. It uses a 
 
 # Beanstalk
 Allows you to skip the manual setup for each service when deploying an architecture.
+Its a managed service that uses components seen before (EC2, ASG, ELB, RDS...) but you dont manually connect them and config them, you just focus on the code development
+we still have full control over the config if needed. The service is free but you pay for the underlying resources it deploys.
+Components:
+- Application: is the collection of all components
+- App. Version: version of your app. code
+- Environment:
+  - contains the collection of aws resources running
+  - tiers: services tiers
+  - you can create multiple environments
+
+Example of architectures:
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/4dc3c7dd-353e-4781-8466-769581ccbef4">
+
+deployment mode:
+single instance: great for dev
+High avalibility with load balancer: great for production
+
+Deploy options for updates:
+- All at once, deploy the new v all in one go but it has a bit of downtime
+  <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/28d406a4-c6d7-4b02-84cb-74e1349db53b">
+- Rolling: update a few instances at a time (at one point it funs at a smaller capacity
+  <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a16b4ed3-21aa-48a3-b73b-96fe01d23ddb">
+- Rolling with additional batches: like rolling but actively starts new instances to swtich, so it has all the capacity when needed
+  <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2cb0caf7-d0db-43b9-ad76-f62eeb576408">
+- immutable: deploys all to new instances the switches everything at once when its ready
+  <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc51490f-db72-457f-8968-4b756dcd4f67">
+- blue green: create a new environment and test, and switch when ready
+  <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/051954d9-e3eb-4e27-8f85-60f0c180447b">
+- traffic splitting: sends a small % of traffic to new deployment
+  <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/07331a37-8b38-4f7f-850e-97060e09a667">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
