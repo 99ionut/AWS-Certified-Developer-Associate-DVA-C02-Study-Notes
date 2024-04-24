@@ -1,5 +1,3 @@
-# WORK IN PROGRESS!
----
 
 # uncategorized
 AWS limits (quotas)
