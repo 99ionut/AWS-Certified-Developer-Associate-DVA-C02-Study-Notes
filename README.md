@@ -531,6 +531,8 @@ S3 can host static websites and have the accessible public with a policy
 you can version your files, its enabled at the bucket level, instead of overwiting it creates a new version
 you can enable s3 versioning to have objects that when are deleted are hidden and can be recovered
 
+S3 can generate pre-signed urls to issue a request as the person who signed it, using the IAM key of the signing principla, it has a limited lifetime
+
 replication:
 enable versioning 
 - CRR cross region replication (compliance or low latency)
@@ -576,11 +578,124 @@ S3 performance
 - byte-range fetch: request a specific range of bytes in a file to speed up downloads (only partial data)
 - sql server-side filtering, the server sends data already filtered
 
-# CloudFront
+# CloudFront CND
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/eee7115d-40b2-432c-8b06-0d267cd3e9cc">
 
+Its a CDN content delivery network
+impoves read performance, content is cached at the edge
+DDoS protectionintegrates with shield
+It integrates with ANY HTTP backend you want, S3, app load balancer, EC2, S3 website
+CLient asks to Edge location (cache), if it doesnt have it the edge location gets if from the origin
 
+CloudFront vs something like S3 replication
+CloudFront:
+- is global edge network
+- files are cached to each edge location TTL for a day
+- great for static content that must be aval eveywhere
+S3 replication
+- must be setup for each region you want replication
+- files are updatet in near real time
+- great for dynamic conent that need to be aval at low latency in few regions
 
+The cache lives at each cloudFront edge location
+you want to maximize the cache hit ration
+object are identified using the Cache Key
+- unique id for every object
+- consist of hostname + resource portion of URL
+- if you want info not static, like based on user device / language /location add other elements to HTTP headers using CLOUDFRONT CACHE POLICIES
+  - define cache based on HTTP headers, cookies, query strings
+  - controls the TTL
+  - All info you include here is automatically included in the origin requess
+  - YOu can use an Origin Request policy for vals that you want to include in origin request wihtout including them in cache key
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/26b2a180-f877-462e-bba7-f443c36d60cc">
+
+Cache invaludation:
+If you update your backend origin, CloudFront doesnt know about it and will only change after the TTL
+You can force and entire or partial cache refresh bypassing the TTL using cloudfront invalidation
+
+you can config different cache settings for different content type or path pattern (ex maximize hits by separating dynamic and static content)
+
+ALB or EC2 as HTTP background
+instances must be public there is no private VPC connection from edge location
+so the resources must allow traffic from public ip of edge location
+If it's an ELB it must be public, if its EC2 it can be private because there is VPC connection from ELB to EC2
+
+Geo restriction
+allowlist: if you are on the list of approved countries
+blocklist prevetnt user fron entering from banned countries
+
+Signed URL / signed cookie
+Signed URL = access to individual files ( one url per file )
+Signed Cookies = access to multiple files at once
+for example premium private users who paid for shared content
+we can use a URL / Cookie we attach to the policy that includes:
+- url expiration
+- ip range
+- who is the trusted signer
+
+Cloudfront signed URL vs S3 pre signed url
+presigned you have access to directly the S3 without being able to use cloudfront, it issues a request simulating the person who pre-signed the url
+
+Signed URL process:
+2 types of signers, either a trusted key group ( raccomanded ) or an aws account that contain a key pair (not raccomanded)
+create one of more trusted key groups, the public key is used in the URL, the private key is used by your app.
+
+Pricing:
+the cost of data out per edge location varies
+you can reduce the number of edge location for cost reduction usign the 3 cloudfront price classes
+
+multiple origin:
+route to different kind of origins based on the content type or path
+for example /api/* requests from ALB, /* requests from S3 bucket
+
+origin groups:
+to increase high avalability and do failover
+one primary and one secondary origin, if the primary fail the secondary is used
+
+Filed level encryption:
+protect user sensitive info through application stack
+sensitive info encrypted at the edge close to user
+
+Real time logs:
+get requests recieved by cloudfront and sent to Kinesis data streams, here you can monitor, analize and take action based on content performance
+
+# Docker
+- software development platform to deplay app
+- apps are packaged int containers that can be run my any OS, they run the same regardless of where they run
+Docker VS VMs
+resources are shared with the host, many containers on one server, they can be managed by ECS, EKS, ECR, Fargate
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/25b17b94-3cab-4d38-b615-95f0e1fe9864">
+
+# ECS
+### elastic container service
+to launche a container = launche an ECS task
+If you decide to use an "EC2 launch type" (EC2 inside ECS and ECS agent with docker on each EC2) You must provision and maintain the EC2 instances that run inside ECS
+- the EC2 instance makes API calls to ECS services
+- conds container logs to CloudWatch
+- pulls Docker images from ECR
+- individual taks can have roles to API calls with AWS services
+
+Another type of "launch type is *Fargate*", you dont need to provision the infrastructure, serverless, just run EC2 tasks, automatic scaling, is fully managed
+
+Load balancer integration
+we can run an ALB for different instances with tasks
+
+Data volumes
+we can use EFS file system onto ECS to have a file system for all tasks, tasks running in any AZ will share the same data in the EFS. Fargate + EFS = serverless, you cant mount s3 as a file system here
+
+ECS service auto scaling
+automatically increse / decrease tasks
+we can scale on CPU / Memory / ALB requests
+ECS services to scale undelying EC2 instances:
+- ECS Cluster Capacity Provider is what is used to automatically provision and scale the infrastructure, adds EC2 when you are missing capacity (CPU, RAM) (raccomanded)
+- Auto scalinng group scaling, scale based on CPU untilization
+we can scale using
+- target tracking based on a target value from cloudwatch metric
+- step scaling scale based on a specified cloudwatch alarm
+- scheduled scaling scale based ona specified date / timeW
+
+ECS Rolling updates
+when upgrading from V1 to V2 we can control how many tasks can be started and stopped and in which order in order to roll updates to different tasks
 
 
 
