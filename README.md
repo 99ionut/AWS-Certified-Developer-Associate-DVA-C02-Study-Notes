@@ -686,8 +686,8 @@ If you decide to use an "EC2 launch type" (EC2 inside ECS and ECS agent with doc
   - Random: places a task randomly, no logic to it
   - Spread: Places tasks evenly based on a specified value: ex spread evenly along AZs
 - ECS task placement contraints:
-  similarly it need to know which one to terminate when auto scaling
-  - distinct instance: 
+  - distinct instance: place each task on a different container instance, so never 2 task on the same container
+  - memberOf: place a task on the instance that satisfy an expression
 
 Another type of "launch type is *Fargate*", you dont need to provision the infrastructure, serverless, 
 just run EC2 tasks, automatic scaling, is fully managed
@@ -747,10 +747,24 @@ metadata JSON tell how to run Docker containers like AMI for ECS
 - Data volumes: share data between containers in the same task definition, so like some task can write to a path, and a logging task can read from it and save them.
   for EC2 instance stoagre, for fargate ephemeral storage tied to lifecycle.
 
+Amazon ECR
+elastic container registry, used to store and manage docker images on AWS
+private repo for your account or public repo using ECR public gallery
+IAM role to EC2 instance to pull ECR repository
 
+AWS Copilot:
+CLI tool to build release and operatre containerized apps.
+it provisions all required infrastructure for containerized apps (ECS, VPC, ELB, ECR...). Auto deploy with code pipeline + deploy to multiple environments
 
+Amazon EKS
+another way to run containerized apps. using Kubernetes not ECS, runs docker containers but is open source and used by more different cloud providers
+same goal but different API. supports EC2 mode or FARGATE mode. 
+Its Cloud agnostic so it can be used in any cloud, use it if your company / another cloud you use, uses it. 
+You create EKS nodes with tasks inside, they can be: Managed node groups (auto scaling, on demand ec..) by AWS or Self-Managed Nodes.
+EKS data volume supports EBS, EFS, FSx, by specifying a StorageClass. It uses a Container Storage Interface CSI, to be able to use them
 
-
+# Beanstalk
+Allows you to skip the manual setup for each service when deploying an architecture.
 
 
 
