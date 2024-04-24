@@ -668,26 +668,47 @@ resources are shared with the host, many containers on one server, they can be m
 
 # ECS
 ### elastic container service
+
+EC2 Launch type:
 to launche a container = launche an ECS task
 If you decide to use an "EC2 launch type" (EC2 inside ECS and ECS agent with docker on each EC2) You must provision and maintain the EC2 instances that run inside ECS
 - the EC2 instance makes API calls to ECS services
 - conds container logs to CloudWatch
 - pulls Docker images from ECR
 - individual taks can have roles to API calls with AWS services
+- Load balancing: Dynamic host port mapping, each task has a diff random port,
+  the ELB finds the correct ports automatically even if random. You must allow on the EC2 instance security group any port from the ALB security group
+- for EC2 instance storage to share data between tasks
+- ECS Task Placement:
+  when a task of EC2 is launched, ECS must determinate where in which EC2 to place it for memory and CPU avalability
+  to assist you, you can define a Task placemenet strategy and task placement constraints
+  - Binpack: Place tasks based on the LEAST available amount of CPU or memory, cost saving so it usese the least possible amount of EC2s
+  - Random: places a task randomly, no logic to it
+  - Spread: Places tasks evenly based on a specified value: ex spread evenly along AZs
+- ECS task placement contraints:
+  similarly it need to know which one to terminate when auto scaling
+  - distinct instance: 
 
-Another type of "launch type is *Fargate*", you dont need to provision the infrastructure, serverless, just run EC2 tasks, automatic scaling, is fully managed
+Another type of "launch type is *Fargate*", you dont need to provision the infrastructure, serverless, 
+just run EC2 tasks, automatic scaling, is fully managed
+- load balancing: each task has a unique private ip, you only define the container port. the ALB will
+  connect all incoming connections to the same port.
+- fargate ephemeral storage tied to lifecycle, shared between containers
+- ECS task placement ins automatically handled
 
 Load balancer integration
 we can run an ALB for different instances with tasks
 
 Data volumes
-we can use EFS file system onto ECS to have a file system for all tasks, tasks running in any AZ will share the same data in the EFS. Fargate + EFS = serverless, you cant mount s3 as a file system here
+we can use EFS file system onto ECS to have a file system for all tasks, tasks running in any AZ will share the same data in the EFS. 
+Fargate + EFS = serverless, you cant mount s3 as a file system here
 
 ECS service auto scaling
 automatically increse / decrease tasks
 we can scale on CPU / Memory / ALB requests
 ECS services to scale undelying EC2 instances:
-- ECS Cluster Capacity Provider is what is used to automatically provision and scale the infrastructure, adds EC2 when you are missing capacity (CPU, RAM) (raccomanded)
+- ECS Cluster Capacity Provider is what is used to automatically provision and scale the infrastructure,
+  adds EC2 when you are missing capacity (CPU, RAM) (raccomanded)
 - Auto scalinng group scaling, scale based on CPU untilization
 we can scale using
 - target tracking based on a target value from cloudwatch metric
@@ -695,7 +716,38 @@ we can scale using
 - scheduled scaling scale based ona specified date / timeW
 
 ECS Rolling updates
-when upgrading from V1 to V2 we can control how many tasks can be started and stopped and in which order in order to roll updates to different tasks
+when upgrading from V1 to V2 we can control how many tasks can be started and stopped and in which order in order 
+to roll updates to different tasks by starting the new ones with v2
+
+ECS solution architectures
+serverless object pocessing example with ECS
+user uploads image to s3 bucket
+even bridge runs ECS2 task
+the task now gets the object from the bucket
+it saves the results in Dynamo DB
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/46bfc7f7-1b41-4450-818b-6a312fb2323a">
+
+another serverless example using scheduled task every 1 hr
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/0ec7cc33-ad03-47ce-92d6-0da32133f6c8">
+
+tasks pool from SQS and if more messages, use auto scaling to handle them
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/df9fc722-bac7-4d56-b049-bdfec728587e">
+
+Event bridge allows you to handle lifecycle of your tasks
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/d2c60519-8734-4fb9-af5f-87043fc47de8">
+
+ECS task definition
+metadata JSON tell how to run Docker containers like AMI for ECS
+- port binding
+- cpu / memory
+- environment variables: hard coded like URLs, SSM parameters (eg API keys, shared configs). You fetch either from SSM paramater store or Secrets manager
+- IAM roles: task definition, each tasks in a service get this role, you can define different roles per services
+- logging config
+- network info
+- Data volumes: share data between containers in the same task definition, so like some task can write to a path, and a logging task can read from it and save them.
+  for EC2 instance stoagre, for fargate ephemeral storage tied to lifecycle.
+
+
 
 
 
