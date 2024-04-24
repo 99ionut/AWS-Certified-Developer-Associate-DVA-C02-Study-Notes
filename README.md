@@ -831,26 +831,53 @@ template components:
 - mapping: fixed vars within CF template ex (dev vs prod)
 - outputs: output the vars such as VPC ID and subnet ID to network stack
 - conditions: control the creation of res. based on conditions ex: what region u deploy in
-- Instrinct functions:
-  - Ref
-  - GetAtt
-  - FindInMap
-  - importValue
-  - Condition Functions
-  - Base64
+- Instrinct functions (the most importants):
+  - Ref: returns the instance ID
+  - GetAtt: returns the value of a specific attribute, ex: when creating and EBS vol you want to get the AZ of the EC2
+  - FindInMap: returns a named value from a specific key
+  - importValue: import values that are exported in other stacks
+  - Condition Functions: if / and / not / or
+  - Base64: convert value to base64
 
+CF Rollbacks
+if a stack creation fails you have the option to defailt: everything rolls back, or to disable rollback to troubleshoot
 
+CF Service Role
+IAM role that allows CloudFormation to CRUD resources, gives users the ability to CRUD even if they dont have permissions to work with the resources in the stack
 
+CF Capabilities
+CAPABILITY_IAM to enable CF to create or update IAMs
+CAPABILITY_AUTO_EXPAND enable if you need stacks within stacks for dynamic transforms of the CF
+insufficientCapabilitesException: exp. thrown if the capab. havent been aknowledged when deploying a template.
 
+CF Deletion policy:
+Control what happens when template is deleted or when a res. is removed from CloudFormation template
+- Default DeletePolicy Delete
+- DeletePolicy retain = specify res. to preseve in case of CF deletions
+- DeletePolicy Snapshot = take a last snapshot before del.
 
+CF Stack policies:
+JSON doc that defines the update actions that are allowed on specific res. during stack update.
 
+CF Custom resources:
+define res. not yet supported, custom res from 3rd party. They are integrations backed by lambda functions
 
+CF stack sets:
+CRUD stacks across multiple accounts and regions with a single opeartion
 
+# SQS
+### Simple queueing service
+A producer sends messages in SQS queue
+A Consumer polls messages and process it and deletes it from queue
+Fully managed service used for decoupling apps. max 256kb message
+it can have duplicated messages
 
+Producer sends message to SQS with SDK (sendMessage API)
+the message remains until it gets consumed and deleted (def. 4 days max 14 days)
 
-
-
-
+Consumer are apps. running on EC2 or lambda or your local server
+max 10 messages at a time. after consuming delete the message so no other consumer uses it.
+Can have multiple consumer at a time.
 
 
 
