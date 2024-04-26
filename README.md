@@ -1,8 +1,32 @@
 [IAM](#IAM)
+
 [EC2 Fundamentals](#EC2-Fundamentals)
 
+[EC2 Storage](#EC2-Storage)
+
+[EFS](#EFS)
+
+[AMI](#AMI)
+
+[Aurora](#Aurora)
+
+[Route 53](#Route-53)
+
+[VPC](#VPC)
+
+
+
+
+[Auto scaling group](#Auto-scaling-group)
+
+[RDS](#RDS)
+
+[EFS](#EFS)
+
 [EventBridge](#EventBridge)
+
 [X-Ray](#X-Ray)
+
 [EventBridge](#EventBridge)
 
 
@@ -147,7 +171,7 @@ allows aws EC2 instances to learn about themselves without using an aws role for
 http..../latest/meta-data
 you can retrieve info about the EC2 but not the IAM policy
  
-# EC2 STORAGE
+# EC2 Storage
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/e04b234a-8821-4d49-94e8-9295df6a2c08">
 
 EBS (elastic block store) network drive you can attach to your drive while they run:
@@ -197,7 +221,7 @@ EC2 instance store:
   - risk of data if datacenter hw fails
   - your respinsability to backup
 
-# Amazon EFS
+# EFS
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/02c35483-16c1-4347-833b-cafe9c6dc073">
 
 Elastic file system (network file system can be mounted on many EC2)
