@@ -1190,9 +1190,63 @@ Execution Context: temporary runtime that initializer external dependecies / ser
 /tmp folder if your functiond needs to download a big file, max 10gb of disk space.
 if you need persistance space, use S3
 
+Lambda Layers:
+custom runtimes for not supported languages, or create a layer to externalize dependencie to reuse them without having to repackage them to deploy, because the lambda can
+reference these layers.
 
+File System Mounting:
+Can access EFS if running in VPC, its a config to mount EFS file system to local directory at initialization, it usese EFS access points.
 
+Concurrency: the more we invoke the more executions up to 1000, we can set a "reserved concurrency" to limit the max amount per each function.
+if we dont set limit, we can have 1 function taking up all 1000 executions, and have the other functions not being able to start.
 
+Cold start and provisione concurrency: new instance so all initializations have to start. The first request has a higher latency, 
+you can use a "provision concurrency" to allocate before the function is invoked in advance so cold start never happens.
+
+Dependencies: to include the, you need to zip dependencies and code all together, if > 50 MB upload in S3 and reference it.
+
+Lambda and CloudFormation: 
+inline directly in the CF code for very simple functions, we cant include external dependencies.
+Through s3, store the Zip in S3 and refer it in CloudFormation code
+
+Lambda Container Images:
+Deploy Lambda functions as Container images up to 10BG, pack complex and large dependecies in a container, instead of Zip and upload.
+
+Lambda Versions:
+When you work on a function we work on $LATESTS, we we publish we create a version which is immutable and cant be modified (v1,v2 ec...) = code + config.
+Aliases used to give the user a stable endpoint, "dev" "prod" ecc... point to the right lambda version. We can also use them for Canary deployment
+
+Lambda and CodeDeploy:
+help automate the traffic shift for lamba aliases.
+Linear: glow traffic by x percent every n minutes
+Canary: x percent then 100%
+AllAtOnce: immediate
+
+Lambda function URL:
+to expose the function as HTTP endpoint without having to use API gateway ecc... can create a unique URL endpoint, access only with public internet
+can have Resource-based policy, CORS security like S3. we can set AuthTypeNone or AuthTypeAWS_IAM for access.
+
+Lambda and CodeGuru: can be acctivate from console to get runtime performance insights
+
+Lamba Limits per region:
+128mb-10gb ram memory allocation
+max execution 15min
+env var. max 4kb
+disk capacity /tmp 512MB to 10GB
+concurrency ececutions: 1000 (can be increase by support)
+compresseed zip deploy: 50MB
+size of uncompressed: 250MB
+
+best practices:
+never have recursive code.
+Heavy duty work put it outside the function handler:
+connection to databasees
+initialization of AWS SDK
+pull in dependencies
+Use env. variables for stuff that changes frequently:
+DB connection strings
+S3 bucket ecc....
+Passwords, encrypted with KMS
 
 
 
