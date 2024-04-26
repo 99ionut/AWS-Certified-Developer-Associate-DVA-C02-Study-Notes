@@ -1,38 +1,28 @@
-[IAM](#IAM)
-
-[EC2 Fundamentals](#EC2-Fundamentals)
-
-[EC2 Storage](#EC2-Storage)
-
-[EFS](#EFS)
-
-[AMI](#AMI)
-
-[ELB](#ELB)
-
-[Auto scaling group](#Auto-scaling-group)
-
-[RDS](#RDS)
-
-[Aurora](#Aurora)
-
-[Route 53](#Route-53)
-
-[VPC](#VPC)
-
-
-
-
-
-
-
-[EFS](#EFS)
-
-[EventBridge](#EventBridge)
-
-[X-Ray](#X-Ray)
-
-[EventBridge](#EventBridge)
+- [IAM](#IAM)
+- [EC2 Fundamentals](#EC2-Fundamentals)
+- [EC2 Storage](#EC2-Storage)
+- [EFS](#EFS)
+- [AMI](#AMI)
+- [ELB](#ELB)
+- [Auto scaling group](#Auto-scaling-group)
+- [RDS](#RDS)
+- [Aurora](#Aurora)
+- [Route 53](#Route-53)
+- [VPC](#VPC)
+- [S3](#S3)
+- [CloudFront CND](#CloudFront-CND)
+- [Docker](#Docker)
+- [ECS](#ECS)
+- [Beanstalk](#Beanstalk)
+- [CloudFormation](#CloudFormation)
+- [SQS](#SQS)
+- [SNS](#SNS)
+- [Kinesis](#Kinesis)
+- [CloudWatch](#CloudWatch)
+- [EventBridge](#EventBridge)
+- [X-Ray](#X-Ray)
+- [CloudTrail](#CloudTrail)
+- [Lambda](#Lambda)
 
 
 
@@ -971,7 +961,7 @@ FIFO queue Message grouping:
 We can give the queue messages a MessageGroupID, so it gets in the same queue but gets processed by different consumers,
 so we can have type A, B, C ecc... messages and each one type gets processed by different conusumers
 
-# Amazon SNS
+# SNS
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ffc2f900-e207-4a4f-b527-f5c8ac5ab1f0">
 
 ### Simple notification system
