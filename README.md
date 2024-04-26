@@ -667,6 +667,8 @@ resources are shared with the host, many containers on one server, they can be m
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/25b17b94-3cab-4d38-b615-95f0e1fe9864">
 
 # ECS
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/7701684b-84d8-4979-bf61-f32db171ac1a">
+
 ### elastic container service
 
 EC2 Launch type:
@@ -764,6 +766,8 @@ You create EKS nodes with tasks inside, they can be: Managed node groups (auto s
 EKS data volume supports EBS, EFS, FSx, by specifying a StorageClass. It uses a Container Storage Interface CSI, to be able to use them
 
 # Beanstalk
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2902359b-4e68-430a-b99a-a9da6e41c116">
+
 Allows you to skip the manual setup for each service when deploying an architecture.
 Its a managed service that uses components seen before (EC2, ASG, ELB, RDS...) but you dont manually connect them and config them, you just focus on the code development
 we still have full control over the config if needed. The service is free but you pay for the underlying resources it deploys.
@@ -816,6 +820,8 @@ create a new env. with the same config except LB (cant clone)
 deploy the app onto new env.perform a swap.
 
 # CloudFormation
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/1fe959c9-96f0-4dd9-a07c-82fcd3c052e7">
+
 Declarative way to outline your aws infrastructure for any resource
 infrastructure as code
 can create a template in a Manual way: edit them in cloud formation designer or code editor
@@ -866,6 +872,8 @@ CF stack sets:
 CRUD stacks across multiple accounts and regions with a single opeartion
 
 # SQS
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/986a4ac4-0e84-4b1a-8731-f06774f3b7ae">
+
 ### Simple queueing service
 Producer sends message to SQS, like with SDK (sendMessage API)
 the message remains until it gets consumed and deleted (def. 4 days max 14 days)
@@ -879,7 +887,7 @@ Can have multiple consumer at a time. we can horizontal scale by adding more con
 We can enable Auto Scaling, the queue has an ApproximateNumberOfMessages which can be increased by setting a cloudwatch alarm that increases it
 
 sqs has unlimited nr of messages and unlimited throughput, so we can scale fronted and backend indimendently and decouple them
-<img width="603" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/59d0b910-d7e0-4381-9a51-42c20d4fcf22">
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/59d0b910-d7e0-4381-9a51-42c20d4fcf22">
 
 SQS securty:
 inflight encryption with HTTPS API
@@ -927,6 +935,8 @@ We can give the queue messages a MessageGroupID, so it gets in the same queue bu
 so we can have type A, B, C ecc... messages and each one type gets processed by different conusumers
 
 # Amazon SNS
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ffc2f900-e207-4a4f-b527-f5c8ac5ab1f0">
+
 ### Simple notification system
 if u want to send the message to many recievers at the same time, email, sqs queue, shipping service ecc....
 It uses the pub/sub method. A buying service publishes the message inside and SNS topic, and subs of the topic listen to the SNS topic notification
@@ -948,12 +958,17 @@ SNS message filtering:
 JSON policy to filter messages and only send the messages of a filter in a specific sqs queue.ù
 
 # Kinesis
+
 Easy to collect/process/analize streaming data in real-time, such as Application logs, metrics, website clickstreams, IoT
 
 - Kinesis Data Streams: capture, process and store data streams
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5c8f258e-1e14-4a5f-95a5-685f309db280">
+
   is a way to stream big data in your systems (ingest data at scale), is made of multiple "Shards" per stream (can be used to scale up or down),
   data will be split to Client. it sends a record to the stream that is made out of Partition Key and Data Blob (max 1MB)
   after it reaches KDS it gets send a consumer, with the Partition Key, Data Blob, and Sequence Nr.
+  Partition key hashed a uinique ID you pass, and it always send the data from that provider to the same shard. Multiple hashes from multiple
+  sources can be sent to the same stream, so its distributed. 
   - Retention of messages 1-365 days
   - because of this: ability to reprocess data
   - once data is inserted in kynesis it cant be deleted (mmultability)
@@ -976,6 +991,8 @@ Easy to collect/process/analize streaming data in real-time, such as Application
   - Merging shards: decrease capacity and save costs by merging them. both used to scale up and down kinesis
 
 - Kinesis Data Firehouse:
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/41492d0c-faaa-4e15-8d66-c1bd21b45c8c">
+
   Managed (ingest data at scale) used to load data into specific services, streams into ASW data stores near real time, fully managed serverless.
   Takes data form producers / kinesis data stream. And Batch write data into destinations to:
   (to know)(S3, Redshift, Amazon Open Search, 3rd party destinations, HTTP endpoints) custom destinations
@@ -983,13 +1000,16 @@ Easy to collect/process/analize streaming data in real-time, such as Application
   it has auto scaling not like KDS, there is no storage so no replay capability.
   
 - Kinesis Data Analytics:
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/fb8c6601-9e33-4380-b85e-e160cb48ef3d">
+
   analyze data Streams for SQL, fully managed.
   It can read either from KDS or KDF, and apply SQL statements to perform real type analytics + can add s3 to join data
   it can then send the data to KDS (that can do real time processing of the data) or KDF ( that can send it to S3, Redshift, other)
 
   Analyze data for Apache Flink:
-  For managed clusters, it can read data from multiple sources at a time:
+  For managed clusters, it can read data from multiple sources at a time
 
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a364a0e5-ad38-4286-9a42-7f7bf9491009">
 
 
 
