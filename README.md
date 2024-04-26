@@ -1285,7 +1285,48 @@ Control the R/W capacity modes:
 
 Data is stored in partitions: primary keys go through hash to know which partition they go to, WCU and RCU are going to be evenly spread across partitions
 
-Throttling: reasons: Hot keys (one partition read too many times ex populat items), Hot partitions, very large items, the solution is Exponential backoff
+Throttling: reasons: Hot keys (one partition read too many times ex populat items), Hot partitions, very large items, the solution is Exponential backoff, 
+distribute partition keys, if RCU issue use DynamoDB Accelerator DAX
+
+Basic Operations:
+- Writing Data:
+  - PutItem: create a new item or fully replaces an old one (same primary key)
+  - UpdateItem: used to edit a few attributes, but it can also edit all of them, it inserts a new item if not exist
+  - Conditional Writes: accept a Write / update /delete only if conditions are met
+    - attribute_exist / attribute_not_exist / attribute_type / contains / begins_with / IN and between / size
+ 
+- Reading Data: 
+  - GetItem: read based on Primary Key (hash / hash + range), evenetually consistant (default) / strongly, ProjectionExpression to read only certain attributes
+  - Query: based on Partition key value (required) , and optional sort key values (=,<,> ec...), FilterExpression additional filtering after query for non-key attributes
+  - Scan: get the entire table and filter out on your application (inefficient). supports parallel scan for faster result.
+ 
+- Deleteing Data:
+  - Delete an individual item
+  - conditional delete
+  - DeleteTable
+
+ You can batch operations to reduce API calls, it will be done in prallel for efficiency
+ - BatchWriteItem: up to 25 PutItem / DeleteItem
+ - BatchGetItem: up to 100 items.
+
+PartiQL: do SQL-compatible query (no joins) if all you know is SQL. You can select, CRUD, and supports batch operations.
+
+
+Local Secondary Index LSI
+Alternative sort key for table (same as partition key) based on sort key = scalar attribute (String, Number, Binary) + up to 5 local secondary intexes per table
+must be defined at table creation time.
+ex: give me all the games that have been played by this user between 2021 and 2023. We have a different sort key thanks to LSI  
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/4cb1c79c-c587-4ab8-b635-f573ac1fd9c7">  
+
+Global secondary index (GSI)
+Alternative Primary Key (hash / hash+range)  
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/01541488-4980-4905-8c41-e73febf490a8">  
+
+
+
+
+
+
   
 
 
