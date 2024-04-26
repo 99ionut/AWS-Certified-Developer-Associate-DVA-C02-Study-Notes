@@ -814,7 +814,7 @@ single instance: great for dev
 High avalibility with load balancer: great for production
 
 Deploy options for updates:
-- All at once, deploy the new v all in one go but it has a bit of downtime
+- All at once, deploy the new v all in one go but it has a bit of downtime  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/28d406a4-c6d7-4b02-84cb-74e1349db53b">
   
 - Rolling: update a few instances at a time (at one point it funs at a smaller capacity
