@@ -1011,7 +1011,52 @@ Easy to collect/process/analize streaming data in real-time, such as Application
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a364a0e5-ad38-4286-9a42-7f7bf9491009">
 
+Monitoring / troubleshooting / logs
 
+# CloudWatch
+Collect and track metrics
+collect, monitor and analyze and store Logs
+Send notifications for Events
+- Metrics:
+  for every service in AWS, its a variable to minotr ex CPU, networkIn, they have timestamps and you can create dashboards with them
+  EC2 instance metrics every 5 min, there is a "detailed monitoring" for a cost you get every 1 minute. By default no log from EC2,
+  need to setup an "agent" to push them. "CloudWatch Unified Agent" allows you to get more granular extra data form EC2 instead of the default ones
+  You can define Custom Metrics, using the API PutMetricData
+- Logs:
+  - log groups: name rapresenting the application
+  - log stream, instance withing application
+  - log expiration policy
+  - can send logs (export) to multiple sources. Either using S3 Export, export in bactch when running the API CreateExportTastk Or
+    Using "CloudWatch log subscription" realtime logs 
+  - logs encrypted by default, you can use your own KMS
+  - "CloudWatch Logs Insight" used to query the logs
+  - "CloudWatch metric filter" filter expressions (ex. count "ERROR" in logs) to trigger alarms
+- Alarms:
+  used to trigger notifications. status OK ISUFFICIENT_DATA ALARM
+  it can do 3 things
+  - Stop / terminate / reboot / recover EC2
+  - Trigger Auto Scaling
+  - Send SNS notification (here we can attach lambda and do anything)
+  we can use Cmposite alarms to monitor multiple metric at a time, useful to filter "alarm noise"
+
+Cloudwatch Synthetics scripts that monitor APIs, URLs, Website workflow eccc and check the avalability and correct operation of these elements
+reproduces what customers do on a website for example, access to Headless chrome
+
+# EventBridge
+- schedule scripts / cron jobs in the cloud
+- react to event pattern ex: IAm user signing in -> send email with SNS, it can also trigger lambda, step function, kinesis ecc..,
+  or if CodeBuild Fails, if an EC2 is   started, if S3 uplaod ecc...
+Its the default event bus for AWS services, it can react to events from 3rd party "Partner Event bus", or custom Apps "Custom Event Bus"
+You can archive events or replay archived events
+Resource-based Policy can deny events from other AWS acc, or aggregate from multiple acc. into one using "Multi-Accont aggregration"
+  
+# X-Ray
+Troubleshoot app. performance and errors
+Distributed tracing of microservices
+
+# CloudTrail
+Internal monitoring of API calls being made
+Audit changes to AWS resources by users.
 
 
 
