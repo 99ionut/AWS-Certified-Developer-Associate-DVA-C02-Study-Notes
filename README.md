@@ -951,8 +951,8 @@ JSON policy to filter messages and only send the messages of a filter in a speci
 Easy to collect/process/analize streaming data in real-time, such as Application logs, metrics, website clickstreams, IoT
 
 - Kinesis Data Streams: capture, process and store data streams
-  is a way to stream big data in your systems, is made of multiple "Shards" per stream, where data will be split to
-  Client send a record to the stream that is made out of Partition Key and Data Blob (max 1MB)
+  is a way to stream big data in your systems (ingest data at scale), is made of multiple "Shards" per stream (can be used to scale up or down),
+  data will be split to Client. it sends a record to the stream that is made out of Partition Key and Data Blob (max 1MB)
   after it reaches KDS it gets send a consumer, with the Partition Key, Data Blob, and Sequence Nr.
   - Retention of messages 1-365 days
   - because of this: ability to reprocess data
@@ -971,8 +971,24 @@ Easy to collect/process/analize streaming data in real-time, such as Application
   Java library that helps read records from Kinesis Data Stream with distributed apps. sharing the read workload.
   Each shard is to be read by only one KCL instance, 4 shards = max 4KCL instances, 8 = 8 instances
 
-- Kinesis Data Firehouse: load data streams into ASW data stores
-- Kinesis Data Analythics: analyze data Streams with SQL
+  Kinesis operations:
+  - shard splitting: increase the stream capacity: used to divide "Hot shards"
+  - Merging shards: decrease capacity and save costs by merging them. both used to scale up and down kinesis
+
+- Kinesis Data Firehouse:
+  Managed (ingest data at scale) used to load data into specific services, streams into ASW data stores near real time, fully managed serverless.
+  Takes data form producers / kinesis data stream. And Batch write data into destinations to:
+  (to know)(S3, Redshift, Amazon Open Search, 3rd party destinations, HTTP endpoints) custom destinations
+  it can first transform the data by compressing/converting ecc.. or custom with Lambda
+  it has auto scaling not like KDS, there is no storage so no replay capability.
+  
+- Kinesis Data Analytics:
+  analyze data Streams for SQL, fully managed.
+  It can read either from KDS or KDF, and apply SQL statements to perform real type analytics + can add s3 to join data
+  it can then send the data to KDS (that can do real time processing of the data) or KDF ( that can send it to S3, Redshift, other)
+
+  Analyze data for Apache Flink:
+  For managed clusters, it can read data from multiple sources at a time:
 
 
 
