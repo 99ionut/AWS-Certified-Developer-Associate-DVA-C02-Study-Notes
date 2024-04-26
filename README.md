@@ -1014,6 +1014,8 @@ Easy to collect/process/analize streaming data in real-time, such as Application
 Monitoring / troubleshooting / logs
 
 # CloudWatch
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/b5813ebd-7021-4505-abbf-ec18af030d43">
+
 Collect and track metrics
 collect, monitor and analyze and store Logs
 Send notifications for Events
@@ -1043,6 +1045,8 @@ Cloudwatch Synthetics scripts that monitor APIs, URLs, Website workflow eccc and
 reproduces what customers do on a website for example, access to Headless chrome
 
 # EventBridge
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/c3fd578a-6ee7-4551-9f57-7404a8375f8e">
+
 - schedule scripts / cron jobs in the cloud
 - react to event pattern ex: IAm user signing in -> send email with SNS, it can also trigger lambda, step function, kinesis ecc..,
   or if CodeBuild Fails, if an EC2 is   started, if S3 uplaod ecc...
@@ -1051,6 +1055,8 @@ You can archive events or replay archived events
 Resource-based Policy can deny events from other AWS acc, or aggregate from multiple acc. into one using "Multi-Accont aggregration"
   
 # X-Ray
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/250aee0d-120c-4f36-ae9f-2b3b9136beb4">
+
 It has a Visual analysis of your application
 Troubleshoot app. performance and errors
 You can understand dependencies between microservicess
@@ -1070,6 +1076,8 @@ AWS-supported distro of the open-source project Open Telemetry
 Collects distributes traces and metrics from your apps. Its like xray but open source.
 
 # CloudTrail
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f112834f-04ad-4f4c-b183-937edb7bd2b7">
+
 Internal monitoring of API calls being made
 Audit changes to AWS resources by users.
 History of all evenets like who deleted something, can put logs into CloudWatch Logs or S3
@@ -1083,6 +1091,8 @@ You can have Event Bridge integration ex. User changes IAM Role -> CloudTrail ->
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/30e0f21a-9804-461c-8a8d-6a1864818194">
 
+# Lambda
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/eba57b02-7f3d-479b-adc4-f2e0feb4e258">
 
 
 
