@@ -1138,8 +1138,9 @@ CloudWatch Logs: stream the logs where we want
 SNS: React to notification
 SQS: process queue messages
 Cognito: react for example to logins  
-ALB: HTTP client call to ALB -> ALB convert HTTP to JSON request and invokes Lambda synchronusly
+ALB: HTTP client call to ALB -> ALB convert HTTP to JSON request and invokes Lambda synchronusly  
 <img width="200" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/858dd518-f375-44a1-bd80-0a1c2abc0613">
+
 <img width="200" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5976dd42-d6d8-4e95-aa0b-433917a1184b">
 
 Ways to process data:
@@ -1153,7 +1154,7 @@ which means your code needs to be Idempotent so it shouldnt break if it retries.
 - Event Source Mapping (important?): Kinesis, SQS, DynamoDB, Lambda neds to poll fron the source, it doesnt get invoked. Process streams or Queues (SQS)
 
 Event: Json contains data the function is going to process 
-Context: methods and propreties that provide information about the invocation, function, and environment
+Context: methods and propreties that provide information about the invocation, function, and environment  
 <img width="200" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/6344ebcd-3561-4f2a-aae4-1423c294bdb7">
 
 Destinations: Send the results of successful or fails to a destination (Lambda, SNS, SQS, EventBridge)
@@ -1179,14 +1180,15 @@ Lambda are launched in a VPC outside of yours, in a VPC managed by AWS so it can
 Byt you can deploy it in your own VPC using AWSLambdaVPCAccessExecutionRole
 Lambda in a public subnet doesnt have access to internet or public IP, if you want you need to:
 By default it doesnt have access to the internet in your private VPC, so you need to give it access with NAT Gateway / instance.
-Or you can use a VPC endpoint to privately access AWS services without NAT.
+Or you can use a VPC endpoint to privately access AWS services without NAT.  
 <img width="300" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/489bec1f-22e1-4e14-9e26-058ed41dc987">
 
 Lambda function configuration:
 Ram from 128MB to 10GB, if you need to increase vCPU you NEED to increase RAM, so if your app is CPU-bound, increase RAM!
 Tiemout: default 3s, max 15min, if you need more use Fargate, EC2, ECS
 Execution Context: temporary runtime that initializer external dependecies / services connection ecc.. is maintained for a short period expecting a new invokation ex:  
-<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/b8e7144f-9bdb-4baa-bd52-29d693aa81f5">  
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/b8e7144f-9bdb-4baa-bd52-29d693aa81f5">
+
 /tmp folder if your functiond needs to download a big file, max 10gb of disk space.
 if you need persistance space, use S3
 
