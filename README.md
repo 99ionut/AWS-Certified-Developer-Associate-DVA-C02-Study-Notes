@@ -404,8 +404,8 @@ terminology:
 - DNS records:
 - zone file: contain DNS records
 - name server: resolver DNS queries
-- top level TLD, second level SLD
-<img width="360" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/d48cb9cf-8a74-4eb9-a5ba-182dd28d3a23">
+- top level TLD, second level SLD  
+<img width="450" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/d48cb9cf-8a74-4eb9-a5ba-182dd28d3a23">
 
 Route 53 is an authoritative DNS (you can update the records youself), and is a Domain registrer
 Route 53 records contains:
@@ -633,7 +633,7 @@ object are identified using the Cache Key
   - define cache based on HTTP headers, cookies, query strings
   - controls the TTL
   - All info you include here is automatically included in the origin requess
-  - YOu can use an Origin Request policy for vals that you want to include in origin request wihtout including them in cache key
+  - YOu can use an Origin Request policy for vals that you want to include in origin request wihtout including them in cache key  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/26b2a180-f877-462e-bba7-f443c36d60cc">
 
 Cache invaludation:
@@ -690,7 +690,7 @@ get requests recieved by cloudfront and sent to Kinesis data streams, here you c
 - software development platform to deplay app
 - apps are packaged int containers that can be run my any OS, they run the same regardless of where they run
 Docker VS VMs
-resources are shared with the host, many containers on one server, they can be managed by ECS, EKS, ECR, Fargate
+resources are shared with the host, many containers on one server, they can be managed by ECS, EKS, ECR, Fargate  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/25b17b94-3cab-4d38-b615-95f0e1fe9864">
 
 # ECS
@@ -753,16 +753,16 @@ serverless object pocessing example with ECS
 user uploads image to s3 bucket
 even bridge runs ECS2 task
 the task now gets the object from the bucket
-it saves the results in Dynamo DB
+it saves the results in Dynamo DB  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/46bfc7f7-1b41-4450-818b-6a312fb2323a">
 
-another serverless example using scheduled task every 1 hr
+another serverless example using scheduled task every 1 hr  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/0ec7cc33-ad03-47ce-92d6-0da32133f6c8">
 
-tasks pool from SQS and if more messages, use auto scaling to handle them
+tasks pool from SQS and if more messages, use auto scaling to handle them  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/df9fc722-bac7-4d56-b049-bdfec728587e">
 
-Event bridge allows you to handle lifecycle of your tasks
+Event bridge allows you to handle lifecycle of your tasks  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/d2c60519-8734-4fb9-af5f-87043fc47de8">
 
 ECS task definition
@@ -806,7 +806,7 @@ Components:
   - tiers: services tiers
   - you can create multiple environments
 
-Example of architectures:
+Example of architectures:  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/4dc3c7dd-353e-4781-8466-769581ccbef4">
 
 deployment mode:
@@ -817,19 +817,19 @@ Deploy options for updates:
 - All at once, deploy the new v all in one go but it has a bit of downtime  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/28d406a4-c6d7-4b02-84cb-74e1349db53b">
   
-- Rolling: update a few instances at a time (at one point it funs at a smaller capacity
+- Rolling: update a few instances at a time (at one point it funs at a smaller capacity  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a16b4ed3-21aa-48a3-b73b-96fe01d23ddb">
   
-- Rolling with additional batches: like rolling but actively starts new instances to swtich, so it has all the capacity when needed
+- Rolling with additional batches: like rolling but actively starts new instances to swtich, so it has all the capacity when needed  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2cb0caf7-d0db-43b9-ad76-f62eeb576408">
   
-- immutable: deploys all to new instances the switches everything at once when its ready
+- immutable: deploys all to new instances the switches everything at once when its ready  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc51490f-db72-457f-8968-4b756dcd4f67">
   
-- blue green: create a new environment and test, and switch when ready
+- blue green: create a new environment and test, and switch when ready  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/051954d9-e3eb-4e27-8f85-60f0c180447b">
   
-- traffic splitting: sends a small % of traffic to new deployment
+- traffic splitting: sends a small % of traffic to new deployment  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/07331a37-8b38-4f7f-850e-97060e09a667">
 
 Elastic Breanstalk CLI, helpful to automate pipelines
@@ -913,7 +913,7 @@ Can have multiple consumer at a time. we can horizontal scale by adding more con
 
 We can enable Auto Scaling, the queue has an ApproximateNumberOfMessages which can be increased by setting a cloudwatch alarm that increases it
 
-sqs has unlimited nr of messages and unlimited throughput, so we can scale fronted and backend indimendently and decouple them
+sqs has unlimited nr of messages and unlimited throughput, so we can scale fronted and backend indimendently and decouple them  
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/59d0b910-d7e0-4381-9a51-42c20d4fcf22">
 
 SQS securty:
