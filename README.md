@@ -1292,8 +1292,13 @@ Basic Operations:
 - Writing Data:
   - PutItem: create a new item or fully replaces an old one (same primary key)
   - UpdateItem: used to edit a few attributes, but it can also edit all of them, it inserts a new item if not exist
+  - Concurrent Writes: the second one overwrite the first one
   - Conditional Writes: accept a Write / update /delete only if conditions are met
-    - attribute_exist / attribute_not_exist / attribute_type / contains / begins_with / IN and between / size
+    attribute_exist / attribute_not_exist / attribute_type / contains / begins_with / IN and between / size (2 concurrent write could fail because 1 updates and the other
+    finds the new data and doesnt match so the second one fails)
+  - atomic writes: one says increase by 1, the other increase by 2, at the end the result is 3, both writes succeed
+  - batch writes: Write / update many items at a time  
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/d5a35a98-dbf1-4cac-a847-e70c3bfcb9bb">  
  
 - Reading Data: 
   - GetItem: read based on Primary Key (hash / hash + range), evenetually consistant (default) / strongly, ProjectionExpression to read only certain attributes
@@ -1304,6 +1309,15 @@ Basic Operations:
   - Delete an individual item
   - conditional delete
   - DeleteTable
+ 
+- Table Cleanup:
+  - scan + deleteItem very slow and expensive
+  - drop table + recreate table fast and cheap
+
+- Copy DynamoDbTable
+  - use AWS data Pipeline
+  - Backup and restore into a new table
+  - Scan + PutItem 
 
  You can batch operations to reduce API calls, it will be done in prallel for efficiency
  - BatchWriteItem: up to 25 PutItem / DeleteItem
@@ -1321,6 +1335,56 @@ ex: give me all the games that have been played by this user between 2021 and 20
 Global secondary index (GSI)
 Alternative Primary Key (hash / hash+range)  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/01541488-4980-4905-8c41-e73febf490a8">  
+
+Optimistic Locking:
+"conditional writes" ensure the item hasnt changed before you update/delete it, each item has an atrribute that acts as a version number. 
+
+DynamoDB DAX: Fully managed highly aval. seamless i-memory cache for DynamoDB, fully secure, microseconds cached reads and queries. Doesnt require 
+application logic modification because compatible with existing DynamoDB APIs. Solves the "hot key" problem so too many reads. 
+
+DynamoDB Streams: ordered stream of item level modifications (CRUD), streams can be sent to kinesis, Lamba. 
+use cases: react to changes in real time ex: send welcome email to users, analytics, insert in derivate tables  
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/1f266a95-fd6f-474a-ab9a-2ca2036e5ea4">  
+With lambda for table -> DynamoDB Stream -> AWS Lambda event mapping source polls form it
+
+DynamoDB TTL: time to live delete item after an expiry timestamp. Ex to delete session data. It takes up to 48hrs after the TTL for it to get deleted.
+
+DynamoDB Transactions: all or nothing operations. 
+In read mode it can be consistance/strong consist./"transactional"
+in write mode it can be standart/"transactional"
+consumes 2x WCUS and RCU
+TransactGetItem one or more GetItem operations
+TranctWriteItem ore or more PutItem, UpdateItem, DeleteItem
+ex: multiplayer games, financial
+ex: 3 transacitonal writes per second with 5KB = 3 * 5 * 2 = 30WCU
+ex: 5 transaction reads per second with 5KB = 5 * (8/4)(5 got rounded to 8) * 2 = 20RCU 
+
+DynamoDB Session State cache:
+DynamoDB can store sessions is serverless, also ElastiCache can but its in memory. 
+At exam if "Session state STORE in meory" = elastiCache, it it talks about automatic scaling = DynamoDB. Also EFS can do the exact same thing but its a file system not DB,
+EBS and Instance Store cant be used for shared caching, only local. S3 could be but it has high latency not ment for that small objects
+
+Write sharding:  
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ba8c96fd-4345-459a-92a9-29b125f3344f">  
+
+DynamoDB large objects
+max allowed in Dynamo 400kb, we use an s3 bucket to contain a large object  
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/4e0d48d0-07df-4c6f-9a3b-949edae5cbd5">  ù
+OR  
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5e20f558-9a14-4fb9-9972-01e02c68b8ff">
+
+Security:
+VPC Endpoints to access without internet
+Access with IAM
+encyption KMS, in trasnit SSL/TLS
+backup and restore features
+Global tables, fully replicated multi region
+DynamoDB Local dev and test apps locally without the offical server
+DMS
+Can use identity providers / Cognito to exchange credentials for temporary credentiaslw with roles, and can do operations only on data they own
+
+
+
 
 
 
