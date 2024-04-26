@@ -1,3 +1,6 @@
+[EventBridge](#EventBridge)
+
+
 
 # uncategorized
 AWS limits (quotas)
@@ -1094,6 +1097,7 @@ You can have Event Bridge integration ex. User changes IAM Role -> CloudTrail ->
 # Lambda
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/eba57b02-7f3d-479b-adc4-f2e0feb4e258">
 
+Serverlsess: just deploy code without provisioning / managing servers. 
 
 
 
