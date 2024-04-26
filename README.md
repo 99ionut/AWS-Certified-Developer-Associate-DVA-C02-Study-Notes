@@ -1121,20 +1121,74 @@ You can have Event Bridge integration ex. User changes IAM Role -> CloudTrail ->
 # Lambda
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/eba57b02-7f3d-479b-adc4-f2e0feb4e258">
 
-Serverlsess: just deploy code without provisioning / managing servers. 
+Serverless: just deploy code without provisioning / managing servers. 
+Virtual function no server to manage
+mag 15min execution
+runs on-demand when it gets invoked
+scaling is automated
+pay just for request and compute time
 
+Main integrations: 
+API Gateway: to create rest API
+Kinesis: data transofrmation on the fly
+DynamoDB and S3: triggers for when something happens in DB
+CloudFront: lambda edge
+CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule.
+CloudWatch Logs: stream the logs where we want
+SNS: React to notification
+SQS: process queue messages
+Cognito: react for example to logins  
+ALB: HTTP client call to ALB -> ALB convert HTTP to JSON request and invokes Lambda synchronusly
+<img width="200" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/858dd518-f375-44a1-bd80-0a1c2abc0613">
+<img width="200" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5976dd42-d6d8-4e95-aa0b-433917a1184b">
 
+Ways to process data:
+- Synchronus invocation: happens when using CLI, SDK, API Gateway, ALB, Cognito, step functions, cloudfront (all user invoked or service invoked services)
+it means you are waiting for the result and the result will be returned to you, errors must be handled client side ex button to retry
 
+- Asynchronus invocation: S3, SNS, CloudWatch events ecc..
+The events are placed in an EventQueue for the lambda to consume, if the vent fails it retries it 3 times, after 1 min and after 2 min
+which means your code needs to be Idempotent so it shouldnt break if it retries. We can define a DLQ dead letter queue with SNS or SQS for failed processes
 
+- Event Source Mapping (important?): Kinesis, SQS, DynamoDB, Lambda neds to poll fron the source, it doesnt get invoked. Process streams or Queues (SQS)
 
+Event: Json contains data the function is going to process 
+Context: methods and propreties that provide information about the invocation, function, and environment
+<img width="200" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/6344ebcd-3561-4f2a-aae4-1423c294bdb7">
 
+Destinations: Send the results of successful or fails to a destination (Lambda, SNS, SQS, EventBridge)
 
+Lambda Execution Role (IAM Role) Policy to AWS services to ex. event source mapping, permission to Lambda to read from services / write to resources
+Lambda Resource base policies: To give other accounts and AWS services to use and invoke Lambda resources
 
+EnvironmentVariables: Key/value pairs in String form, adjust the function behaviour without updating code. Like a config file.
 
+Loggin and monitoring:
+CloudWatch logs: lambda logs are stored there if function has the policy
+CloudWatch metrics: lambda metrics are displayed there, error counts, invocations, success rates...
+X-Ray: Can use in lambda if correct IAM role and enable "Active Tracing", it will run the xray deamon for you
 
+Edge Functions: code attached to CloudFront execution, logic at the edge locations, runs close to users to minimize latency. Deployed globally, serverless
+used for: website security, SEO, intelligent Route, real time image transfromation, user authentication, user prioritizing, user tracking and anlytics...
+- Cloudfront Functions: JS functions for high scale, latency-sensitive CDN costumization. used to customize the viewer response / requests (before cloudFront
+  forwards the request to the origin / after it got the response and returns it to the client). Ex for header manipulation, URL redirects...
+- Lambda@Edge: Used to change CloudFront request / responses to both Origin and Viewer requests. higher package dimensions but slower. do what CloudFront functions
+  do but with file system access, handles heavier data so it can use the body of the HTTP request, longer execution, both for viewer and origin.
 
+Lambda are launched in a VPC outside of yours, in a VPC managed by AWS so it can't access your VPC resources.
+Byt you can deploy it in your own VPC using AWSLambdaVPCAccessExecutionRole
+Lambda in a public subnet doesnt have access to internet or public IP, if you want you need to:
+By default it doesnt have access to the internet in your private VPC, so you need to give it access with NAT Gateway / instance.
+Or you can use a VPC endpoint to privately access AWS services without NAT.
+<img width="300" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/489bec1f-22e1-4e14-9e26-058ed41dc987">
 
-
+Lambda function configuration:
+Ram from 128MB to 10GB, if you need to increase vCPU you NEED to increase RAM, so if your app is CPU-bound, increase RAM!
+Tiemout: default 3s, max 15min, if you need more use Fargate, EC2, ECS
+Execution Context: temporary runtime that initializer external dependecies / services connection ecc.. is maintained for a short period expecting a new invokation ex:  
+<img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/b8e7144f-9bdb-4baa-bd52-29d693aa81f5">  
+/tmp folder if your functiond needs to download a big file, max 10gb of disk space.
+if you need persistance space, use S3
 
 
 
