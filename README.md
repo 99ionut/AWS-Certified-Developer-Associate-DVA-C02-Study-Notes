@@ -954,9 +954,23 @@ Easy to collect/process/analize streaming data in real-time, such as Application
   is a way to stream big data in your systems, is made of multiple "Shards" per stream, where data will be split to
   Client send a record to the stream that is made out of Partition Key and Data Blob (max 1MB)
   after it reaches KDS it gets send a consumer, with the Partition Key, Data Blob, and Sequence Nr.
-  Retention of messages 1-365 days
-  because of this: ability to reprocess data
-  once data is inserted in kynesis it cant be deleted (mmultability)
+  - Retention of messages 1-365 days
+  - because of this: ability to reprocess data
+  - once data is inserted in kynesis it cant be deleted (mmultability)
+  - Capacity modes: prevision mode: fixed nr of shards, scale maually with API, you pay per shard provisioned per hour
+  - Capacity modes: on-demand mode no need per provision or manage the capacity, scale based on throughput during the last 30 days, pay per stream per hour
+  - Security: encryption at rest, in flight with HTTPS, IAM policies, VPC endpoints
+  Producers: SDK, Kinesis Producer Library KPL, Kinesis Agent, monitor log files.
+  ProvisionedThroughputExceeded: too many inputs in a shard, solution: use highly distributed partition key, retries with exponential backoff, increase shards
+
+  Consumers: custom with SDK, Kinsesis Client Library, Lambda ecc... can have multiple consumers getting from the same shards.
+  Shared fan out consumer: max 2mb/s split between all consumers of a shard (pool model)
+  Enhanced fan out Consumer: 2mb/s per consumer per shard by subscribing (push model to subscribers)
+
+  Kinesis Client Library KLC
+  Java library that helps read records from Kinesis Data Stream with distributed apps. sharing the read workload.
+  Each shard is to be read by only one KCL instance, 4 shards = max 4KCL instances, 8 = 8 instances
+
 - Kinesis Data Firehouse: load data streams into ASW data stores
 - Kinesis Data Analythics: analyze data Streams with SQL
 
