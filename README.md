@@ -1051,12 +1051,39 @@ You can archive events or replay archived events
 Resource-based Policy can deny events from other AWS acc, or aggregate from multiple acc. into one using "Multi-Accont aggregration"
   
 # X-Ray
+It has a Visual analysis of your application
 Troubleshoot app. performance and errors
-Distributed tracing of microservices
+You can understand dependencies between microservicess
+understand where the error is
+It uses tracing, each component dealing with the request adds its own "trace"
+IAM, KMS
+To enable it:
+modify your code using x-ray SDK then install the xRay deamon or enable AWS integration
+How to instrument your code: instrument = measure the products performance, siagnose erorrrs and write trace information. you use
+the X-Ray SDK. 
+Segments: each app. will send them.
+Trace: segments collected together to form an end-to-end trace.
+Sampling: decrease the amount of requests sent to x-ray. control the amount of data.
+
+AWS Distro for OpenTelemetry
+AWS-supported distro of the open-source project Open Telemetry
+Collects distributes traces and metrics from your apps. Its like xray but open source.
 
 # CloudTrail
 Internal monitoring of API calls being made
 Audit changes to AWS resources by users.
+History of all evenets like who deleted something, can put logs into CloudWatch Logs or S3
+3 type of events:
+- managment events: anything that modifies your res. or aws account (enabled by default)
+- data events: S3 object-level activity ex: S3 GetObject, DeleteObject ecc... or AWS lambda ececution activity (all not enabled by default) 
+- Inseights evenets: because of many logs and types, it automatically analizes your logs and detects unusual activity / patterns based on your usual baseline
+event retention: stored for 90 days, if u want longer, send to S3 and use Athena to analyze them.
+
+You can have Event Bridge integration ex. User changes IAM Role -> CloudTrail -> triggers an event -> EventBridge -> SNS email
+
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/30e0f21a-9804-461c-8a8d-6a1864818194">
+
+
 
 
 
