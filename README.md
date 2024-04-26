@@ -867,17 +867,100 @@ CRUD stacks across multiple accounts and regions with a single opeartion
 
 # SQS
 ### Simple queueing service
-A producer sends messages in SQS queue
-A Consumer polls messages and process it and deletes it from queue
-Fully managed service used for decoupling apps. max 256kb message
+Producer sends message to SQS, like with SDK (sendMessage API)
+the message remains until it gets consumed and deleted (def. 4 days max 14 days)
 it can have duplicated messages
 
-Producer sends message to SQS with SDK (sendMessage API)
-the message remains until it gets consumed and deleted (def. 4 days max 14 days)
-
-Consumer are apps. running on EC2 or lambda or your local server
+A Consumer polls messages and process it and deletes it from queue
+Fully managed service used for decoupling apps. max 256kb message. running on EC2 or lambda or your local server
 max 10 messages at a time. after consuming delete the message so no other consumer uses it.
-Can have multiple consumer at a time.
+Can have multiple consumer at a time. we can horizontal scale by adding more consumers. Atleast once delivery because queue can have duplicate messages
+
+We can enable Auto Scaling, the queue has an ApproximateNumberOfMessages which can be increased by setting a cloudwatch alarm that increases it
+
+sqs has unlimited nr of messages and unlimited throughput, so we can scale fronted and backend indimendently and decouple them
+<img width="603" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/59d0b910-d7e0-4381-9a51-42c20d4fcf22">
+
+SQS securty:
+inflight encryption with HTTPS API
+- at rest encryption with KMS keys
+- client-side if user handles it himself
+- AMI policies to regulate access
+- SQS access policies (if u want corss account access or publish S3 event notifications)
+
+SQS Message Visibility TImeout
+After a messaged is polled by a consumer it becomes invisible to other consumers, it has 30s to process it,
+if the message hasnt been deleted cuz not processed yet, it will be put back in the queue and be processed twice, if u need more than 30s to process it
+use the "ChangeMessageVisibility" API to change the timeout time
+
+SQS Dead Letter queues (DLQ)
+We can set a treshold to how many times a message can go back into the queue because a consumer fails to process it, after the "MaximumReceives" treshold
+is exceeded it goes in the deal letter queue. DLQ useful for debugging, messages in there expire after the retention period, so set a higher 14days for the DLQ
+Debug the DLQ, fix your code, use the "Redrive to Source" to put the DLQ messages back in the Source queue so it can be processed correctly this time
+
+SQS Delay queue
+Delay a messages so cosumers dont see it immedialty, up to 15 min, or per message individually, default is 0
+
+SQS Long polling
+When a consumer requests a message from the queue it can wait for messages from queue to arrive if there are none in the queue, this is called long polling
+long polling decreasese the number of API calls, messages get processed at the end of the wait period, higher efficency
+the wait time can be 1-20s, its bette than short polling
+
+SQS Extended client
+library that uses an s3 bucket to send messages higher than 256kb, the queue sends a message telling the consumer to get the larger message from the s3
+
+Must know API
+CreateQUeue, Delete queue
+PurgeQUeue, deletes all messages
+SendMEssage, RecieveMessage, DeleteMessage
+MaxNumberOfMessages (for recieving) def. 1 max 10
+RevieceMessageWaitTimeSeconds: long Polling
+ChangeMessageVisibility: change message timeout
+
+FIFO queue
+Deduplication methods: if u send the same message twice within 5 minutes it gets discarded
+- Content-body SHA256, if 2 are found it discards
+- Explicit-body, if 2 messages with explicit body are found it gets discarded
+
+FIFO queue Message grouping:
+We can give the queue messages a MessageGroupID, so it gets in the same queue but gets processed by different consumers,
+so we can have type A, B, C ecc... messages and each one type gets processed by different conusumers
+
+# Amazon SNS
+### Simple notification system
+if u want to send the message to many recievers at the same time, email, sqs queue, shipping service ecc....
+It uses the pub/sub method. A buying service publishes the message inside and SNS topic, and subs of the topic listen to the SNS topic notification
+subs can be Lambda, email, SMS, kinesisi data stream, SQS, HTTP endpoints, and many services
+
+
+SNS securty same as SQS:
+inflight encryption with HTTPS API
+- at rest encryption with KMS keys
+- client-side if user handles it himself
+- AMI policies to regulate access
+- SNS access policies (if u want corss account access or publish S3 event notifications)
+
+Fan Out pattern:
+push the same message to multiple SQS by pushing it only once. SQS are a sub of SNS
+ex. for S3 evenets to multiple queues.
+
+SNS message filtering:
+JSON policy to filter messages and only send the messages of a filter in a specific sqs queue.ù
+
+# Kinesis
+Easy to collect/process/analize streaming data in real-time, such as Application logs, metrics, website clickstreams, IoT
+
+- Kinesis Data Streams: capture, process and store data streams
+  is a way to stream big data in your systems, is made of multiple "Shards" per stream, where data will be split to
+  Client send a record to the stream that is made out of Partition Key and Data Blob (max 1MB)
+  after it reaches KDS it gets send a consumer, with the Partition Key, Data Blob, and Sequence Nr.
+  Retention of messages 1-365 days
+  because of this: ability to reprocess data
+  once data is inserted in kynesis it cant be deleted (mmultability)
+- Kinesis Data Firehouse: load data streams into ASW data stores
+- Kinesis Data Analythics: analyze data Streams with SQL
+
+
 
 
 
