@@ -23,7 +23,7 @@
 - [X-Ray](#X-Ray)
 - [CloudTrail](#CloudTrail)
 - [Lambda](#Lambda)
-
+- [DynamoDB](#DynamoDB)
 
 
 # uncategorized
@@ -1250,10 +1250,43 @@ DB connection strings
 S3 bucket ecc....
 Passwords, encrypted with KMS
 
+# DynamoDB
+NoSQL serverlesss DB
+They can scale horizontally for more Read/Write capacity, do not support joins or operations like "SUM", "AVG"
+it a fully managed highly avalible with replica across multiple AZ. 
+Scales massive workloads
+Fast and consistant performance
+Low cost and Auto-Scaling
+Standart and IA calsses.
 
+Each table has a Primary Key, infinite rows, each one has attributes can be null or added over time
 
+options to choose the primary key
+- Hash: unique for each one like "user_id"
+- Partition Key + sort key: "user_id" + "game_id" unique for each item. For example each user can attend multiple games
+  so the same partition key is equal in 2 rows but different game_id keys, the combination is unique
 
+Control the R/W capacity modes:
+- Provisioned mode (dfault): specify the r/w per second you need to plan your capacity before hand, you pay for what is going to be provisioned
+  - RCU read capacity units: rapresent one strongly consistant read per second or 2 eventually consistant read per second, for an item up to 4KB
+    - read eventually consistant: if we read right after a write data could be old cuz it hasnt replicated you from the copy we are reading from
+    - read strongly consistant: read the data correct for sure, uses TWICE the RCUs
+    ex: 10 strongly consistant reads per seond with item 4KB = 10RCUs
+    ex: 16 eventually consistant read per second with item size 12KB = (16/2) * (12/4) = 24RCUs
+    ex: 10 strongy consistant reads per second with item size 6 KB = 10 * (8/4) because 6 get rounded to 8KB
+  - WCU write capacity units: are the throughput, rapresent one write per second for an item up to 1KB, if larger than 1KB, more WCU
+    ex: we write 10 items per second with item size 2KB = 20WCUs
+    ex: we write 6 items per second, with item size 4.5KB = 30WCUs (the 4.5 gets rounded up to 5)
+    ex: 120 items per MINUTE with item size 2KB = 120/60 * 2KB = 4WCUs
+  - option to enable auto-scaling to meet demand
+  -  throughput can be exceeted temporarely by using "burst capacity"
+    
+- On-Demand, no provision pay for what you use but more expensive
 
+Data is stored in partitions: primary keys go through hash to know which partition they go to, WCU and RCU are going to be evenly spread across partitions
+
+Throttling: reasons: Hot keys (one partition read too many times ex populat items), Hot partitions, very large items, the solution is Exponential backoff
+  
 
 
 
