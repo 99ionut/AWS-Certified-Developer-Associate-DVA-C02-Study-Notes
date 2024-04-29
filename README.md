@@ -29,6 +29,9 @@
 - [SAM](#SAM)
 - [CDK](#CDK)
 - [Cognito](#Cognito)
+- [Step functions](#Step-functions)
+- [KMS](#KMS)
+- [CloudHSM](#CloudHSM)
 
 # uncategorized
 Exponential backoff is used when you get a ThrottlingException, so on each retry double the seconds you wait
@@ -925,6 +928,10 @@ define res. not yet supported, custom res from 3rd party. They are integrations 
 CF stack sets:
 CRUD stacks across multiple accounts and regions with a single opeartion
 
+CF Dynamic references:
+Reference external vals stored in System Manager, Parameter Store and Secrets Manager within Cloud Formation templates. 
+for ex. get the RDS DB instance master password from secret manager. 
+
 # SQS
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/986a4ac4-0e84-4b1a-8731-f06774f3b7ae">
 
@@ -1097,6 +1104,12 @@ Send notifications for Events
 
 Cloudwatch Synthetics scripts that monitor APIs, URLs, Website workflow eccc and check the avalability and correct operation of these elements
 reproduces what customers do on a website for example, access to Headless chrome
+
+Logs encryption:
+you can encrypt logs with KMS keys, is enabled at the log group level, by associating a CMK with a log group
+
+CloudWatch Evidently:
+Safely validate features by serving them only to a small % of users. Use feature flags to test a feature only by some users. 
 
 # EventBridge
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/c3fd578a-6ee7-4551-9f57-7404a8375f8e">
@@ -1511,7 +1524,8 @@ happens often and quck, shift away from "one release every 3 months" to "5 relea
 
 - CodeBuild: Build and test code. The build instructions are in buildspec.yml (must be at root of code like .git).
   Logs can be used in S3 / cloudwatch. we can use CloudWatch Metrics to monitor build statistics.
-  Detect faild build and triggers / alarms. 
+  Detect faild build and triggers / alarms.
+  Dont store codefuild secrets as plaintext in env. vars. Instead environment vars can reference parameters store parameters, or secrets manager secrets. 
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f0d2d3dc-08c8-4b10-a775-e59e55911a99">  
 
@@ -1664,9 +1678,50 @@ Envelope Encryption: KMS has a limit of 4kb, if you want more, use Envelope Encr
 KMS limits: ThrottlingException, to respond use Exppnential backoff, all service that useses KMS shares a quota across all regions and accounts. we can use DKE caching
 or you can request quotas increase through API or AWS support. 
 
-# CloudHSM
-<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ff1da939-b7f0-4a70-aba4-479048da0efa">
+AWS CloudHSM:
+AWS provisions encryption Hardware, dedicated hardware (hardware security module), so you manage your encryption keys entirely not AWS, supports both
+symmetric and asymmetric. Spread across multiple AZ, great for aval and durability. 
 
+AWS SSM Patameter store:
+Secure storage for you configs and secrets, optional encryption using KMS. Security through IAM, notification with EventBridge, version tracking for changes inside.
+Parameter policies can have TTL
+
+AWS Secrets Manager:
+meant for storing secrets, newer than SSM, allows to force rotation of secrets every x days. Integrated with RDS, meant for RDS so in the exam if u see its Secret Manager.
+You can replicate secrets across multple regions, and replicas sync. 
+
+AWS Nitro Enclaves:
+process sensitive data in an isolated computer environment, only authorized code can be running, fully isolated vms. 
+
+AWS SES: 
+Simple Email service, send emails, get emails to S3, SNS, lambda 
+
+AWS OpenSearch Service:
+In DynamoDB, query only by primary key or indexes, with open search you can search any field even partially matches. You can perform analytics with the data
+and use OpenSearch Dashboards to visualize it. 
+
+Amazon Athena:
+serverless query service to analyze data stored in S3, SQL to query files. Commonly used with QuickSight for reporting / dashboard, used for business intelligence,
+analythics, report, ecc... Exam if analyze data in s3 using serverless SQL, use athena. 
+You can improve its performance using a columna data for cost-saving, compress data for small retrieval, partition dataset for data you check often.
+Federated query: you can query data not only on s3, but from anywhere and different types, by using an AWS Lambda. 
+
+Amazon Managed Streaming for Apache Kafka (MSK):
+Alternative for kinesis. 
+
+AWS Certificate Manager (ACM):
+manage and deploy SSL/TLS certificate, provide in-flight encryption for websites
+
+AWS Private Certificate Authority (CA)
+Managed service allows you to create private Certificate Authorities, only work in your Organization / services that have the integration, not on the public internet. 
+For custom Encypted comunication, authenticatio users, public key infrastructure. 
+
+AWS Macie:
+Managed Machine learning pattern matching to deiscover and portect your seinsitive data in AWS. Help identify and alert about PII 
+
+AWS APPConfig:
+If you want your config outsiede of your app instead of shipping it with it. Ex. feature flags, to dynamic disable or enable features on an app. or ip blacklist ecc...
+without changing application code. 
 
 
 
