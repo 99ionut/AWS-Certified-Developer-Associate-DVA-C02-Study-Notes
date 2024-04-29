@@ -31,7 +31,6 @@
 - [Cognito](#Cognito)
 - [Step functions](#Step-functions)
 - [KMS](#KMS)
-- [CloudHSM](#CloudHSM)
 
 # uncategorized
 Exponential backoff is used when you get a ThrottlingException, so on each retry double the seconds you wait
@@ -1692,6 +1691,9 @@ You can replicate secrets across multple regions, and replicas sync.
 
 AWS Nitro Enclaves:
 process sensitive data in an isolated computer environment, only authorized code can be running, fully isolated vms. 
+
+---
+# Extra services
 
 AWS SES: 
 Simple Email service, send emails, get emails to S3, SNS, lambda 
