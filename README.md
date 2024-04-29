@@ -24,7 +24,8 @@
 - [CloudTrail](#CloudTrail)
 - [Lambda](#Lambda)
 - [DynamoDB](#DynamoDB)
-
+- [API Gateway](#API-Gateway)
+  
 
 # uncategorized
 AWS limits (quotas)
@@ -1383,11 +1384,69 @@ DynamoDB Local dev and test apps locally without the offical server
 DMS
 Can use identity providers / Cognito to exchange credentials for temporary credentiaslw with roles, and can do operations only on data they own
 
+# API Gateway
+Serverless Expose functions to the world / Access to the app with REST APIs, even with Authentication
+It integrates with / can call: 
+- Lambda function: invoke / expose the REST API
+- HTTP: HTTP endpoints even on premise / ABL   
+- AWS Services: Any AWS service API with gateway
+
+3 ways to deploy (called Endpoint Types)
+- Edge-Optimized (default): for global clients,  Requests are routed through CloudFront Edge locations (improve latency)
+  the API Gateway still lives in only one region
+- Regional: for clients in the same regione, could manually combine with CloudFront
+- Private: Can only be access from your VPC using an interface VPC endpoint (ENI)
+
+Security: 
+Can Authenticate users with:
+- IAM roles (for internal apps)
+- Cognito (for external users)
+- Custom Authorizer
+
+- Custom Domain Name HTTPS: security through integration with AWS Certificate Manager (ACM)
+  
+Deployment Stages:
+After Making a change must be deployed it or else changes wont apply, its done through "stages"
+each stage has its own config. parameters. Stages are kept and can be rolled back if needed  
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/8baded8a-55ea-461e-8980-df53eb2cebc8">
+
+Stage variables: like Env. variables (config) but for API Gateway, use them for often changing values
+so it prevents redeployment every time. A common use defining to which Lambda function it points
+and when you deploy V2 change a % of traffic to the new one changing the Stage Var. (Canary Deployment)
+
+Integration types:
+- Mock: API Gateway return a response without sendig the request to the backend
+- HTTP / AWS (lambda or AWS services): You must config the integration reqeuest and response, setup data mapping
+  with mapping templates for request and response which means we can change the data before it reaches client or backend.
+  Mapping template: modify parameters and strings, filter output results, use VTL scripting language for loops,
+  if ecc.. We can use it to convert from JSON (REST APIs) to XML (SOAP APIs) 
+- AWS_PROXY (lambda proxy) incoming requesta from the client is input data to lambda without changing the data,
+  the function handles all logic
+
+It has integration with Open API spec. (its a common way to define REST APIs, using API defined as code.
+
+Can config API Gateway to perform validation so if the data structure doesnt correspond to a scherma returns 400-error
+(reduces nr of calls made)
+
+Caching API responses: reduces the nr of calls made, default TTL is 300s, min 0 max 1hr
+Caches are different for every stage. We can invalidate the Cache immediatly and flush it, or the user can do that
+with max-age=0 if it has the IAM Auth. 
+
+You can make your API aval. for money to customers. We can config how much and fast they can access them, how many calls
+possible, use API Keys to identify them, callsers pass the key in x-api-key header. 
+Throttling default 10000 rps across all API, in case it happens Error 429 too many req.
+Can set Stage limit and Method limit ti increase performance
 
 
+CloudWatch Logs: Log contains info about request/response body
 
+X-Ray: enable tracing to get extra info
 
+CloudWatch Metrics: Metrics based on stages, CacheHitCount & CacheMissCount, Count (nr of req), IntegrationLatency
+(time between request and response from the backend), Latency (time between request and send response to user), 
+4XXError (client side) 5XXError (server side)
 
+CORS: must be enable if u want to recieve calls from another domain
 
 
 
