@@ -25,7 +25,7 @@
 - [Lambda](#Lambda)
 - [DynamoDB](#DynamoDB)
 - [API Gateway](#API-Gateway)
-  
+- [CICD](#CICD)  
 
 # uncategorized
 AWS limits (quotas)
@@ -1388,8 +1388,13 @@ Can use identity providers / Cognito to exchange credentials for temporary crede
 Serverless Expose functions to the world / Access to the app with REST APIs, even with Authentication
 It integrates with / can call: 
 - Lambda function: invoke / expose the REST API
-- HTTP: HTTP endpoints even on premise / ABL   
-- AWS Services: Any AWS service API with gateway
+- HTTP: HTTP endpoints even on premise / ABL (HTTP API)
+- AWS Services: Any AWS service API with gateway (HTTP API)
+- Websockets: two-way interactive commun. between browser and server, enable stateful apps. server can push info to client
+  used in real-time apps like chat, collab platforms, multiplayer games.
+  Client connects to API Gateway, it gives a Conncetion ID, lambda uses logic and stores in DB the connection ID,
+  it usese a Connection URL Callback to send data to client. You can use Routing to reoute to a specific backend when
+  the connection is open (for example to do CRUD different backends) 
 
 3 ways to deploy (called Endpoint Types)
 - Edge-Optimized (default): for global clients,  Requests are routed through CloudFront Edge locations (improve latency)
@@ -1399,9 +1404,13 @@ It integrates with / can call:
 
 Security: 
 Can Authenticate users with:
-- IAM roles (for internal apps)
-- Cognito (for external users)
-- Custom Authorizer
+- IAM roles (for internal apps) create and IAM policy auth and attach to User/Role, IAM credentials are signed
+  in the headers.
+- Resource policies: Allow for cross account access combined with IAM security, or for specific IP Addresses, or VPC
+  endpoint.
+- Cognito user pools(for external users) users sign in with congnito first which provides token
+- Custom Authorizer (Lambda Authorizer) Token-Bsesd auth. the lambda if auth is correct returns an IAM policy that will
+  be cached
 
 - Custom Domain Name HTTPS: security through integration with AWS Certificate Manager (ACM)
   
@@ -1437,7 +1446,6 @@ possible, use API Keys to identify them, callsers pass the key in x-api-key head
 Throttling default 10000 rps across all API, in case it happens Error 429 too many req.
 Can set Stage limit and Method limit ti increase performance
 
-
 CloudWatch Logs: Log contains info about request/response body
 
 X-Ray: enable tracing to get extra info
@@ -1448,7 +1456,7 @@ CloudWatch Metrics: Metrics based on stages, CacheHitCount & CacheMissCount, Cou
 
 CORS: must be enable if u want to recieve calls from another domain
 
-
+# CICD 
 
   
 
