@@ -31,12 +31,11 @@
 - [Cognito](#Cognito)
 
 # uncategorized
-AWS limits (quotas)
-- API rate limits
-- Service quotas (service limits)
 Exponential backoff is used when you get a ThrottlingException, so on each retry double the seconds you wait
 you must implement the retries on 5xx server errors
 Dont implement retry on 4xx client errors
+
+AWS Directory Services (AD)
 
 
 # IAM
@@ -62,6 +61,23 @@ Consists of:
   - "Action": API calls that will be allowed / denied based on the effect
   - "Resource": list of res. to which the action is applied
   - "Condition": when its applied (optional)
+
+If there are 2 policies one the same resource Deny and one Allow, the Deny wins.
+If IAM policy + S3 policy, the UNION of those create the Total Policy Evaluated, so if you remove one the other one remains
+
+Dynamic policies:
+How do you assign each user a /hone/user folder?
+- either create an IAM policy allowing matt access ony to /home/matt ecc... policy for each user, but this doesnt scale
+- or create a dynamic policy with IAM, using variables like ${aws:username}
+
+Inline vs Managed policies:
+- managed: maintained by AWS, good for power users and administartors , updated in case of new services and APIs
+- Customer Managed Policy, granular control, versions, rollback, reusable, best practice
+- inline: strict one-to-one if IAM deleted policy deleted
+
+Permission to Pass a Role:
+you need the iam:PassRole permission, roles can only be passed to what their trust allows
+
 
 Defense mechanisms:
 - password policy (length/special chars/numbers/pass expiration, prevent reuse)
@@ -97,6 +113,13 @@ IAM Best practices:
 Shared reponsability model:
 You know.
 
+AWS STS
+Sceurity token service: allows to grand limited and temp access to aws resources (up to 1hr)
+Define an IAM role, define its principals, use AWS STS to impersonate the IAM Role (AssumeRole API), Get the temp. credentials
+- AssumeRole: Assume roles within your account or cross account
+- GetSessionToken: for STS with MFA, from a user or AWS account root user. it returns Access ID, Secret Key, Session Token, Expiration date.
+- GetCallerIdentityt: return details about the IAM user or role used in the API call
+- DecodeAuthorizationMessage: decode error message when AWS API is denied.
 
 # EC2 Fundamentals
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/70df717a-6b4b-4bcd-b73c-5371b49c5822">
@@ -1606,10 +1629,43 @@ gives you Data Store out of the box with AppSync and DynamoDB
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a3f6a3a4-f326-4f00-a43c-4a1af6226434">
 
 
+---
+# AWS Security
+in flight TLS / SSL will be encrypted before sending and decrypted after. prevents MITM man in the middle attack. 
+Server-Side encryption: Data is encr. after being recieved by the server, decrypted before being sent. Its stored in an encrypted for thanks to a key.
+Client-Side encryption: data in encrypt. by the client and never decypted by server.
 
+# KMS 
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/471d117e-2e6a-4390-a241-b0a00c50934e">
 
+### Key Managment Service
+manages encr. keys for us. Seamlessly integrated into AWS service, they need access to keys. Able to audit the Keys with CloudTrail.
+Types of keys:
+- Symmetric (AES-256 keys)
+  Single key for encrypt and decrypt.
+- Asymmetric (RSA, ECC key pairs)
+  Public and private keys, public key is downloadable.
 
+Types of KMS keys:
+- AWS owned keys (free) 
+- AWS Managed Key: free (automatic rotation every 1 year)
+- Customer managed keys created in KMS (1$ a month) automatic rotatio 1 year
+- Customer maanaged keys imported (1$ a month must be symmetric only manual rotation possible)
 
+KMS Key policies: control access to keys like s3 bucket policies. Defines who has access to KMS keys. You can set which actions to allow, only generate key, encrypt,
+decrypt ecc...
+
+how encrypt / decrypt works:  
+
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ad7a1c71-5da4-42ab-9e64-62d9d40a57a1">
+
+Envelope Encryption: KMS has a limit of 4kb, if you want more, use Envelope Encryptio which corresponds to GenerateDataKey API
+
+KMS limits: ThrottlingException, to respond use Exppnential backoff, all service that useses KMS shares a quota across all regions and accounts. we can use DKE caching
+or you can request quotas increase through API or AWS support. 
+
+# CloudHSM
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ff1da939-b7f0-4a70-aba4-479048da0efa">
 
 
 
