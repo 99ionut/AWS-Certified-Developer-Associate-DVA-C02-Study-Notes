@@ -1198,6 +1198,14 @@ it means you are waiting for the result and the result will be returned to you, 
 - Asynchronous invocation: S3, SNS, CloudWatch events ecc..
 The events are placed in an EventQueue for the lambda to consume, if the vent fails it retries it 3 times, after 1 min and after 2 min
 which means your code needs to be Idempotent so it shouldn't break if it retries. We can define a DLQ dead letter queue with SNS or SQS for failed processes
+strategy to do this:
+Extract the value of a unique attribute of the input event. (For example, a transaction or purchase ID.)
+2.Check if the attribute value exists in a control database. (For example, an Amazon DynamoDB table.)
+3.Depending on the results, complete the following step:
+If a unique value exists, then end the action without producing an error.
+-or-
+If a unique value doesn't exist, then proceed with the action that you originally designed.
+So get ID, check DynamoDB if duplicate, act accordingly
 
 - Event Source Mapping (important?): Kinesis, SQS, DynamoDB, Lambda needs to poll from the source, it doesn't get invoked. Process streams or Queues (SQS)
 
