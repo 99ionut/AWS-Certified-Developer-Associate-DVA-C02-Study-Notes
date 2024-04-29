@@ -39,6 +39,10 @@ Dont implement retry on 4xx client errors
 
 AWS Directory Services (AD)
 
+Administrative overhead is the cost of setting up the service. This includes setting up users, security configs, and all the monitoring tools available. These questions usually differentiated themselves by having answers that would show you could setup a given task faster with a tool like cloud formation or beanstalk. They usually have an element of security to them as well.
+
+Operational overhead is the cost of the day-to-day operation of the service in question. The questions usually differentiated themselves by having answers that demonstrated knowing a service could potentially be expensive and you might be able to minimize the cost using an a different AWS service or sometimes not an AWS service at all. These require general knowledge of all the different services available. Reading this subreddit it seems these questions take the full breadth of AWS services into account. Mine was heavy with Lambda.
+
 
 # IAM
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/3d22a197-c740-4bcb-bc14-38ea11d542e7">
@@ -370,7 +374,7 @@ Managed DB service, uses SQL, because its managed, rather than EC2 own DB:
   - can be converted to their own DB
 - multi-AZ setup
   - failover if disaster recovery
-  - replicas can be used for multi-AZ disaster recovery
+  - replicas can be used for multi-AZ disaster recovery (THEY ARE NOT READ REPLICAS)
   - one DNS name, automatic failover
   - sync replication 
 - scaling capability / Auto scaling
