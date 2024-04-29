@@ -25,7 +25,10 @@
 - [Lambda](#Lambda)
 - [DynamoDB](#DynamoDB)
 - [API Gateway](#API-Gateway)
-- [CICD](#CICD)  
+- [CICD](#CICD)
+- [SAM](#SAM)
+- [CDK](#CDK)
+- [Cognito](#Cognito)
 
 # uncategorized
 AWS limits (quotas)
@@ -1473,10 +1476,48 @@ happens often and quck, shift away from "one release every 3 months" to "5 relea
 - CodeBuild: Build and test code. The build instructions are in buildspec.yml (must be at root of code like .git).
   Logs can be used in S3 / cloudwatch. we can use CloudWatch Metrics to monitor build statistics.
   Detect faild build and triggers / alarms. 
-- CodeDeploy: deploy code to EC2
-- CodeStart: Manage sw dev activities.
-- CodeArtifact: share sw packages
-- CodeGuru: Automated code reivews with Machine Learning
+- CodeDeploy: automate deploy code to EC2 / lambda (help automate with traffic shift linear / canary) / ECS (only Blue-
+  green). Rollback / deploy capability. Gradual deploy control (AllAtOnce, HalfAtATime,OneAtTime,Custom, Blue-green).
+  AppSpe.yml file says how deploys shoud happen.  Must run a CodeDeploy Afent on the target instance. 
+- CodeStart / CodeCatalyst: Manage sw dev activities.
+- CodeArtifact: share sw packages, sw packages depend on each other to be built (code dependecncies), storing and
+  getting these dependencies is called artifact mangment. We can use Resource policy to auth different packages.
+- CodeGuru: Automated code reivews (reviewer) and app performance (codeGuru profiler) with Machine Learning. 
+- Cloud9: IDE in clud. can work anywhere in the world if u have internet. 
+
+# SAM
+Serverless application model basically a shortcut to cloud formation, says how the app should be deployed and should behave
+framework for dev and depl. serverless applications.
+All config is in YAMAL code, generate complex CloudFormation from simple SAM YAML file
+Only 2 commnads to deploy to AWS (sam package and sam deploy)
+can use CodeDeploy to deploy lambda functions
+Can help you run Lambdda, API Gateway, DynamoDB
+AWS toolkits: ide plugin allow you to run build test Lambda functions with AWS SAM.
+
+# CDK
+Cloud development Kit
+define cloud infrastructure using familiar language, code gets compiled into CloudFormation model (Json/Yaml)
+You can deploy infrastructure and application code togethere, if it doesnt compile you dont get either of them.
+CDK Construct: library collection of constructs for every aws resource.
+Construct hub: 3rd party and opne source from community CDKs.
+
+# Cognito
+give user an identity to interact with web or mobile app (outside of AWS) so in exam if they say
+"hundreds of users", "mobile users", "authenicate with SAML"
+
+Cognito user pool (CUP): create a serverless DB of your users. sign in function for app users. 
+Username / email / password / MFA / phone verif. / login with google (federate identity). block users compromised. 
+when they login they get back a JSON web toke JST. 
+CUP can invoke Lambda on triggers. 
+It offers a Hosted autentication UI that you can use in your apps.
+Offers Adaptive Authentication: block sign-ins or require MFA if the login is suspicious.
+We can integrate it with API Gateway and ALB (offload the auth. to the load balancer) we can use 2 ways to auth:
+With Cognito user pools, or OIDC auth.
+
+Cognito Identity pools (federated identitites): AWS credentials to users to access AWS resources directly, temporary
+credentials by logging in with public providers (amazon, google, apple, facebook), or users in an Amazon Cognito pool.
+we can also allow for unauthenticaded gues acccess.  
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/9af0fe7d-94c5-4a2b-a5fe-c132c533bf99">
 
 
 
