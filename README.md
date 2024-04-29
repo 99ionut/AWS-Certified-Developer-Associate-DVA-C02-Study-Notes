@@ -1255,6 +1255,8 @@ S3 bucket ecc....
 Passwords, encrypted with KMS
 
 # DynamoDB
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/60590f72-b4e5-4b77-b546-237a679894c6">
+
 NoSQL serverlesss DB
 They can scale horizontally for more Read/Write capacity, do not support joins or operations like "SUM", "AVG"
 it a fully managed highly avalible with replica across multiple AZ. 
@@ -1388,6 +1390,8 @@ DMS
 Can use identity providers / Cognito to exchange credentials for temporary credentiaslw with roles, and can do operations only on data they own
 
 # API Gateway
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/e272307f-1bfe-4156-8f98-dbba2b4c4cd8">
+
 Serverless Expose functions to the world / Access to the app with REST APIs, even with Authentication
 It integrates with / can call: 
 - Lambda function: invoke / expose the REST API
@@ -1460,6 +1464,7 @@ CloudWatch Metrics: Metrics based on stages, CacheHitCount & CacheMissCount, Cou
 CORS: must be enable if u want to recieve calls from another domain
 
 # CICD 
+
 Automate and Push code without doing anything else
 we want to push code in a repo and deploy it to AWS.
 
@@ -1468,24 +1473,39 @@ we dont need to test the code its all automatic
 CD: Continous delivery: Ensures that the sw can be relased reliably after the test and build. We ensure deploy
 happens often and quck, shift away from "one release every 3 months" to "5 releases a day" 
 
-- CodeCommit: store the code, Versioning control using a version control system. Its fully managed, SSH/HTTPS auth.
-  IAM Plicies, encryption at rest with AWS KMS, in transit,
 - CodePipeline: automate pipeline. Visual workflow tool to orchestate CICD. We can control the Source / build / test /
   deplot / invoke stages. If a stage fails pipeline stops. You can create events for failed pipelines / events with
-  CloudWatch events. 
+  CloudWatch events.
+  
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bc65a9a7-7ddf-4d4c-86a5-fe9e9a28747e">  
+- CodeCommit: store the code, Versioning control using a version control system. Its fully managed, SSH/HTTPS auth.
+  IAM Plicies, encryption at rest with AWS KMS, in transit, 
+  
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc98d861-4d4f-4ab7-90fd-260eda8be962">  
 - CodeBuild: Build and test code. The build instructions are in buildspec.yml (must be at root of code like .git).
   Logs can be used in S3 / cloudwatch. we can use CloudWatch Metrics to monitor build statistics.
   Detect faild build and triggers / alarms. 
+
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f0d2d3dc-08c8-4b10-a775-e59e55911a99">  
 - CodeDeploy: automate deploy code to EC2 / lambda (help automate with traffic shift linear / canary) / ECS (only Blue-
   green). Rollback / deploy capability. Gradual deploy control (AllAtOnce, HalfAtATime,OneAtTime,Custom, Blue-green).
   AppSpe.yml file says how deploys shoud happen.  Must run a CodeDeploy Afent on the target instance. 
+
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">  
 - CodeStart / CodeCatalyst: Manage sw dev activities.
+
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/079e00e5-8737-4a92-b317-8b972e9473f7">  
 - CodeArtifact: share sw packages, sw packages depend on each other to be built (code dependecncies), storing and
   getting these dependencies is called artifact mangment. We can use Resource policy to auth different packages.
-- CodeGuru: Automated code reivews (reviewer) and app performance (codeGuru profiler) with Machine Learning. 
+
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/8c76f5b0-bfe0-4f1b-8b03-3c983ecfdbe8">  
+- CodeGuru: Automated code reivews (reviewer) and app performance (codeGuru profiler) with Machine Learning.
+
 - Cloud9: IDE in clud. can work anywhere in the world if u have internet. 
 
 # SAM
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f2e46532-12c0-4f01-b0c9-b549809d651e">
+
 Serverless application model basically a shortcut to cloud formation, says how the app should be deployed and should behave
 framework for dev and depl. serverless applications.
 All config is in YAMAL code, generate complex CloudFormation from simple SAM YAML file
@@ -1494,7 +1514,11 @@ can use CodeDeploy to deploy lambda functions
 Can help you run Lambdda, API Gateway, DynamoDB
 AWS toolkits: ide plugin allow you to run build test Lambda functions with AWS SAM.
 
+<img width="500" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bde587c1-1ff8-47b3-8b14-3d5df83b8d8f">
+
 # CDK
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/181c3088-4372-4996-9a5f-fdc502dfa23c">
+
 Cloud development Kit
 define cloud infrastructure using familiar language, code gets compiled into CloudFormation model (Json/Yaml)
 You can deploy infrastructure and application code togethere, if it doesnt compile you dont get either of them.
@@ -1502,6 +1526,8 @@ CDK Construct: library collection of constructs for every aws resource.
 Construct hub: 3rd party and opne source from community CDKs.
 
 # Cognito
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/17343071-a6ff-4e38-a0f3-a8a9a40080ae">
+
 give user an identity to interact with web or mobile app (outside of AWS) so in exam if they say
 "hundreds of users", "mobile users", "authenicate with SAML"
 
@@ -1518,6 +1544,12 @@ Cognito Identity pools (federated identitites): AWS credentials to users to acce
 credentials by logging in with public providers (amazon, google, apple, facebook), or users in an Amazon Cognito pool.
 we can also allow for unauthenticaded gues acccess.  
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/9af0fe7d-94c5-4a2b-a5fe-c132c533bf99">
+
+# Step functions  
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a419bce9-9dd6-4b93-92fd-59d51c9d550a">
+
+
+
 
 
 
