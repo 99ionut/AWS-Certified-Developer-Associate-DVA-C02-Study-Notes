@@ -1556,6 +1556,58 @@ we can also allow for unauthenticaded gues acccess.
 # Step functions  
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a419bce9-9dd6-4b93-92fd-59d51c9d550a">
 
+perofrm many simple tasks.
+Model your workflow as state machines (one per workflow) for order fulfillment, data processing, web app... any workflow
+Writte in JSON, visualized. In task states you can invoke AWS services, like lambda, do dynamoDB stuff ecc...
+States can be: Choice (test condition) / fail or succeed / Pass (pass data with no work) / Wait / Map state /
+PARALLEL STEP - begin parallel brancesh of execution.
+
+<img width="300" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a63f3b08-3aa7-44be-b5b7-92d1dba4535b">
+
+Error handling: we can have retry or catch (transit to failure path)
+
+Wait for task token: allows you to pause step function until a task token is returned. by appending .waitForTaskToken
+
+Activity task: allows you to have the task work performed by an Activity worker (Apps on EC2 / Lambda / mobile device...)
+after it send a SendTaskSuccess or SendTaskFailure. To set how long it should run TiemoutSettings, periodic send beat
+with SendTaskHeartBeat 
+
+2 types of workflows:
+- Standard (default):
+max duration 1 year
+price by nr of states
+used for non-idempotent actions (same request leads to the same system state, and no action is unintentionally 
+executed more than once) like payment process.
+
+- Express:
+  up to 5 min, higher capacity, billed by nr of executions, duartion and memory consumption. used for IoT data ingestion,
+  streaming Data, mobile app backends.
+  - Async (At least once execution guarantee) dont wait for result, ex message services you dont wait for response.
+    must manage indepontance to manage that if it runs twice you dont have twice the effects.
+  - Sync (At most once execution guarantee) Wait for workflow to complete. When you need an immediate response. At-most
+    because if there is a failure it doesnt automatically restart, its up to your logic.
+
+AWS App sync:  
+
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/c86141c0-adb0-4b08-8784-c5ced50208ef">  
+
+managed service that useses GraphQL: makes it easy for app to get exactly the data they need. You ask for a field
+and that is what gets returned. You can combine data from multiple data sources types, noSQL, SQL, HTTP, APIs...
+You can also use it to get real-time data with WebSocker or MQTT on WebSocket, so if u need a field real time
+For mobile apps: can be used for local data access and data synchronization.
+To start upload a GraphQL query
+Security: API_KEY, AWS_IAM, OPENID_CONNECT, AWS_COGNITO_POOLS, Https with CF in front.
+
+AWS Amplify:
+EB for mobile and web apps. Gives us Data Storage, auth, ml, fontend libraries.
+gives you Authentication out of the box with cognito.
+gives you Data Store out of the box with AppSync and DynamoDB
+
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a3f6a3a4-f326-4f00-a43c-4a1af6226434">
+
+
+
+
 
 
 
