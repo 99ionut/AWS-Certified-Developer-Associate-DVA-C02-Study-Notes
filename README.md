@@ -1457,6 +1457,42 @@ CloudWatch Metrics: Metrics based on stages, CacheHitCount & CacheMissCount, Cou
 CORS: must be enable if u want to recieve calls from another domain
 
 # CICD 
+Automate and Push code without doing anything else
+we want to push code in a repo and deploy it to AWS.
+
+CI: Continious integration, devs will push code to repo, a testing / build checks code, the dev gets feedback and fix bugs
+we dont need to test the code its all automatic
+CD: Continous delivery: Ensures that the sw can be relased reliably after the test and build. We ensure deploy
+happens often and quck, shift away from "one release every 3 months" to "5 releases a day" 
+
+- CodeCommit: store the code, Versioning control using a version control system. Its fully managed, SSH/HTTPS auth.
+  IAM Plicies, encryption at rest with AWS KMS, in transit,
+- CodePipeline: automate pipeline. Visual workflow tool to orchestate CICD. We can control the Source / build / test /
+  deplot / invoke stages. If a stage fails pipeline stops. You can create events for failed pipelines / events with
+  CloudWatch events. 
+- CodeBuild: Build and test code. The build instructions are in buildspec.yml (must be at root of code like .git).
+  Logs can be used in S3 / cloudwatch. we can use CloudWatch Metrics to monitor build statistics.
+  Detect faild build and triggers / alarms. 
+- CodeDeploy: deploy code to EC2
+- CodeStart: Manage sw dev activities.
+- CodeArtifact: share sw packages
+- CodeGuru: Automated code reivews with Machine Learning
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
 
