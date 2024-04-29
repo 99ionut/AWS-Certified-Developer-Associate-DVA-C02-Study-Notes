@@ -1473,32 +1473,40 @@ we dont need to test the code its all automatic
 CD: Continous delivery: Ensures that the sw can be relased reliably after the test and build. We ensure deploy
 happens often and quck, shift away from "one release every 3 months" to "5 releases a day" 
 
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/7e9b3b94-9646-401f-a808-3bac71924293">
+
 - CodePipeline: automate pipeline. Visual workflow tool to orchestate CICD. We can control the Source / build / test /
   deplot / invoke stages. If a stage fails pipeline stops. You can create events for failed pipelines / events with
   CloudWatch events.
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bc65a9a7-7ddf-4d4c-86a5-fe9e9a28747e">  
+
 - CodeCommit: store the code, Versioning control using a version control system. Its fully managed, SSH/HTTPS auth.
   IAM Plicies, encryption at rest with AWS KMS, in transit, 
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc98d861-4d4f-4ab7-90fd-260eda8be962">  
+
 - CodeBuild: Build and test code. The build instructions are in buildspec.yml (must be at root of code like .git).
   Logs can be used in S3 / cloudwatch. we can use CloudWatch Metrics to monitor build statistics.
   Detect faild build and triggers / alarms. 
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f0d2d3dc-08c8-4b10-a775-e59e55911a99">  
+
 - CodeDeploy: automate deploy code to EC2 / lambda (help automate with traffic shift linear / canary) / ECS (only Blue-
   green). Rollback / deploy capability. Gradual deploy control (AllAtOnce, HalfAtATime,OneAtTime,Custom, Blue-green).
   AppSpe.yml file says how deploys shoud happen.  Must run a CodeDeploy Afent on the target instance. 
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">  
+
 - CodeStart / CodeCatalyst: Manage sw dev activities.
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/079e00e5-8737-4a92-b317-8b972e9473f7">  
+
 - CodeArtifact: share sw packages, sw packages depend on each other to be built (code dependecncies), storing and
   getting these dependencies is called artifact mangment. We can use Resource policy to auth different packages.
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/8c76f5b0-bfe0-4f1b-8b03-3c983ecfdbe8">  
+
 - CodeGuru: Automated code reivews (reviewer) and app performance (codeGuru profiler) with Machine Learning.
 
 - Cloud9: IDE in clud. can work anywhere in the world if u have internet. 
