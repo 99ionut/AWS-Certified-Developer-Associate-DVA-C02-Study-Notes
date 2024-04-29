@@ -415,6 +415,9 @@ in-memory database with high-performance low latency
 - efficient if data changes slowly
 - Lazy loading / Cache-Aside / Lazy Population architecture: cache hit / cache miss depending if the data is in ElastiCache, if not get from RDS and write it to cache for further searches.
 - write through architecture: write to cache when there is a modification to the DB
+Redis: Supports various data structures such as strings, hashes, lists, sets, sorted sets, bitmaps... You can use Amazon Elasticache for Redis Sorted Sets
+to easily implement a dashboard with the ability to sort or rank the cached datasets.
+Memcached: Primarily supports string-based keys and values; does not support advanced data structures.
 
 
 Cache eviction:
@@ -575,8 +578,10 @@ can force encryption with bucket policy
 - pre signes URLS give access to a file on a private bucket from 1min to 12hrs, using a pre-signed url by you
 
 - S3 access points:
-  Users from finance can only access /finance/... files, sales can only access /sales/... files
-  this is done with an access point policy
+  An S3 Object Lambda access point is a new type of access point that you can create to invoke your own AWS Lambda function to modify the content of an S3 object.
+  You can use S3 Object Lambda access points to transform data as it is being retrieved from an S3 bucket, without modifying the original data stored in the bucket.
+  - Or Access point policy: Users from finance can only access /finance/... files, sales can only access /sales/... files
+  this is done with an access point policy.
 
 - S3 Object lambda
   if u want to run a function before its being retrieved, use and object lambda access point.
@@ -1255,7 +1260,10 @@ Deploy Lambda functions as Container images up to 10BG, pack complex and large d
 
 Lambda Versions:
 When you work on a function we work on $LATESTS, we publish we create a version which is immutable and can't be modified (v1,v2 ec...) = code + config.
-Aliases used to give the user a stable endpoint, "dev" "prod" ecc... point to the right lambda version. We can also use them for Canary deployment
+
+Lambda Aliases: 
+used to give the user a stable endpoint, "dev" "prod" ecc... point to the right lambda version. We can also use them for Canary deployment, 
+ability to return to older versions of the function quickly. A Lambda alias is a pointer to a function version that you can update.
 
 Lambda and CodeDeploy:
 help automate the traffic shift for Lamba aliases.
@@ -1530,7 +1538,8 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 
 - CodeDeploy: automate deploy code to EC2 / lambda (help automate with traffic shift linear / canary) / ECS (only Blue-
   green). Rollback / deploy capability. Gradual deploy control (AllAtOnce, HalfAtATime,OneAtTime,Custom, Blue-green).
-  AppSpe.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance. 
+  AppSpe.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance.
+  un order of the hooks for in-place deployments: ApplicationStop -> BeforeInstall -> AfterInstall -> ApplicationStart
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">  
 
@@ -1592,7 +1601,7 @@ we can also allow for unauthenticated guess access.
 # Step functions  
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a419bce9-9dd6-4b93-92fd-59d51c9d550a">
 
-perform many simple tasks.
+perform many simple tasks, process this data through multiple business rules and transformations. 
 Model your workflow as state machines (one per workflow) for order fulfillment, data processing, web app... any workflow
 Write in JSON, visualized. In task states you can invoke AWS services, like lambda, do dynamoDB stuff ecc...
 States can be: Choice (test condition) / fail or succeed / Pass (pass data with no work) / Wait / Map state /
@@ -1635,7 +1644,8 @@ To start uploading a GraphQL query
 Security: API_KEY, AWS_IAM, OPENID_CONNECT, AWS_COGNITO_POOLS, Https with CF in front.
 
 AWS Amplify:
-EB for mobile and web apps. Gives us Data Storage, auth, ml, frontend libraries.
+AWS Amplify is a fully managed service that allows developers to build and deploy web applications and static websites. With Amplify, developers can easily connect their repositories, such as AWS CodeCommit, Bitbucket, and GitHub, to automatically build and deploy changes to the website based on code merge-
+Like EB for mobile and web apps. Gives us Data Storage, auth, ml, frontend libraries.
 gives you Authentication out of the box with Cognito.
 gives you Data Store out of the box with AppSync and DynamoDB
 
