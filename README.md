@@ -1232,56 +1232,56 @@ Execution Context: temporary runtime that initializer external dependencies / se
 if you need persistence space, use S3
 
 Lambda Layers:
-custom runtimes for not supported languages, or create a layer to externalize dependencie to reuse them without having to repackage them to deploy, because the lambda can
+custom runtimes for not supported languages, or create a layer to externalize dependencies to reuse them without having to repackage them to deploy, because the lambda can
 reference these layers.
 
 File System Mounting:
-Can access EFS if running in VPC, its a config to mount EFS file system to local directory at initialization, it usese EFS access points.
+Can access EFS if running in VPC, it's a config to mount EFS file system to local directory at initialization, it uses EFS access points.
 
 Concurrency: the more we invoke the more executions up to 1000, we can set a "reserved concurrency" to limit the max amount per each function.
-if we dont set limit, we can have 1 function taking up all 1000 executions, and have the other functions not being able to start.
+if we don't set limit, we can have 1 function taking up all 1000 executions, and have the other functions not being able to start.
 
-Cold start and provisione concurrency: new instance so all initializations have to start. The first request has a higher latency, 
+Cold start and provision concurrency: new instance so all initializations have to start. The first request has a higher latency, 
 you can use a "provision concurrency" to allocate before the function is invoked in advance so cold start never happens.
 
-Dependencies: to include the, you need to zip dependencies and code all together, if > 50 MB upload in S3 and reference it.
+Dependencies: to include them, you need to zip dependencies and code all together, if > 50 MB upload in S3 and reference it.
 
 Lambda and CloudFormation: 
-inline directly in the CF code for very simple functions, we cant include external dependencies.
+inline directly in the CF code for very simple functions, we can't include external dependencies.
 Through s3, store the Zip in S3 and refer it in CloudFormation code
 
 Lambda Container Images:
-Deploy Lambda functions as Container images up to 10BG, pack complex and large dependecies in a container, instead of Zip and upload.
+Deploy Lambda functions as Container images up to 10BG, pack complex and large dependencies in a container, instead of Zip and upload.
 
 Lambda Versions:
-When you work on a function we work on $LATESTS, we we publish we create a version which is immutable and cant be modified (v1,v2 ec...) = code + config.
+When you work on a function we work on $LATESTS, we publish we create a version which is immutable and can't be modified (v1,v2 ec...) = code + config.
 Aliases used to give the user a stable endpoint, "dev" "prod" ecc... point to the right lambda version. We can also use them for Canary deployment
 
 Lambda and CodeDeploy:
-help automate the traffic shift for lamba aliases.
+help automate the traffic shift for Lamba aliases.
 Linear: glow traffic by x percent every n minutes
 Canary: x percent then 100%
-AllAtOnce: immediate
+AllAtOnce: Immediate
 
 Lambda function URL:
 to expose the function as HTTP endpoint without having to use API gateway ecc... can create a unique URL endpoint, access only with public internet
 can have Resource-based policy, CORS security like S3. we can set AuthTypeNone or AuthTypeAWS_IAM for access.
 
-Lambda and CodeGuru: can be acctivate from console to get runtime performance insights
+Lambda and CodeGuru: can be activated from console to get runtime performance insights
 
 Lamba Limits per region:
-128mb-10gb ram memory allocation
+128mb-10gb RAM allocation
 max execution 15min
 env var. max 4kb
 disk capacity /tmp 512MB to 10GB
-concurrency ececutions: 1000 (can be increase by support)
-compresseed zip deploy: 50MB
+concurrency executions: 1000 (can be increased by support)
+compressed zip deploy: 50MB
 size of uncompressed: 250MB
 
 best practices:
 never have recursive code.
-Heavy duty work put it outside the function handler:
-connection to databasees
+Heavy-duty work put it outside the function handler:
+connection to databases
 initialization of AWS SDK
 pull in dependencies
 Use env. variables for stuff that changes frequently:
@@ -1292,12 +1292,12 @@ Passwords, encrypted with KMS
 # DynamoDB
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/60590f72-b4e5-4b77-b546-237a679894c6">
 
-NoSQL serverlesss DB
+NoSQL serverless DB
 They can scale horizontally for more Read/Write capacity, do not support joins or operations like "SUM", "AVG"
-it a fully managed highly avalible with replica across multiple AZ. 
+it a fully managed highly available with replicas across multiple AZ. 
 Scales massive workloads
-Fast and consistant performance
-Low cost and Auto-Scaling
+Fast and consistent performance
+Low-cost and Auto-Scaling
 Standart and IA calsses.
 
 Each table has a Primary Key, infinite rows, each one has attributes can be null or added over time
@@ -1308,45 +1308,45 @@ options to choose the primary key
   so the same partition key is equal in 2 rows but different game_id keys, the combination is unique
 
 Control the R/W capacity modes:
-- Provisioned mode (dfault): specify the r/w per second you need to plan your capacity before hand, you pay for what is going to be provisioned
-  - RCU read capacity units: rapresent one strongly consistant read per second or 2 eventually consistant read per second, for an item up to 4KB
-    - read eventually consistant: if we read right after a write data could be old cuz it hasnt replicated you from the copy we are reading from
-    - read strongly consistant: read the data correct for sure, uses TWICE the RCUs
-    ex: 10 strongly consistant reads per seond with item 4KB = 10RCUs
-    ex: 16 eventually consistant read per second with item size 12KB = (16/2) * (12/4) = 24RCUs
-    ex: 10 strongy consistant reads per second with item size 6 KB = 10 * (8/4) because 6 get rounded to 8KB
-  - WCU write capacity units: are the throughput, rapresent one write per second for an item up to 1KB, if larger than 1KB, more WCU
+- Provisioned mode (default): specify the r/w per second you need to plan your capacity beforehand, you pay for what is going to be provisioned
+  - RCU read capacity units: represent one strongly consistent read per second or 2 eventually consistent read per second, for an item up to 4KB
+    - read eventually consistently: if we read right after a write data could be old cuz it hasn't replicated you from the copy we are reading from
+    - read strongly consistently: read the data correctly for sure, uses TWICE the RCUs
+    ex: 10 strongly consistent reads per second with item 4KB = 10RCUs
+    ex: 16 eventually consistent read per second with item size 12KB = (16/2) * (12/4) = 24RCUs
+    ex: 10 strongy consistant reads per second with item size 6 KB = 10 * (8/4) because 6 gets rounded to 8KB
+  - WCU write capacity units: are the throughput, represent one write per second for an item up to 1KB, if larger than 1KB, more WCU
     ex: we write 10 items per second with item size 2KB = 20WCUs
     ex: we write 6 items per second, with item size 4.5KB = 30WCUs (the 4.5 gets rounded up to 5)
     ex: 120 items per MINUTE with item size 2KB = 120/60 * 2KB = 4WCUs
   - option to enable auto-scaling to meet demand
-  -  throughput can be exceeted temporarely by using "burst capacity"
+  -  throughput can be exceeded temporarily by using "burst capacity"
     
-- On-Demand, no provision pay for what you use but more expensive
+- On-demand, no provision pay for what you use but more expensive
 
 Data is stored in partitions: primary keys go through hash to know which partition they go to, WCU and RCU are going to be evenly spread across partitions
 
-Throttling: reasons: Hot keys (one partition read too many times ex populat items), Hot partitions, very large items, the solution is Exponential backoff, 
+Throttling: reasons: Hot keys (one partition read too many times ex popular items), Hot partitions, very large items, the solution is Exponential backoff, 
 distribute partition keys, if RCU issue use DynamoDB Accelerator DAX
 
 Basic Operations:
 - Writing Data:
-  - PutItem: create a new item or fully replaces an old one (same primary key)
+  - PutItem: create a new item or fully replace an old one (same primary key)
   - UpdateItem: used to edit a few attributes, but it can also edit all of them, it inserts a new item if not exist
-  - Concurrent Writes: the second one overwrite the first one
+  - Concurrent Writes: the second one overwrites the first one
   - Conditional Writes: accept a Write / update /delete only if conditions are met
     attribute_exist / attribute_not_exist / attribute_type / contains / begins_with / IN and between / size (2 concurrent write could fail because 1 updates and the other
-    finds the new data and doesnt match so the second one fails)
+    finds the new data and doesn't match so the second one fails)
   - atomic writes: one says increase by 1, the other increase by 2, at the end the result is 3, both writes succeed
   - batch writes: Write / update many items at a time  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/d5a35a98-dbf1-4cac-a847-e70c3bfcb9bb">  
  
 - Reading Data: 
-  - GetItem: read based on Primary Key (hash / hash + range), evenetually consistant (default) / strongly, ProjectionExpression to read only certain attributes
-  - Query: based on Partition key value (required) , and optional sort key values (=,<,> ec...), FilterExpression additional filtering after query for non-key attributes
-  - Scan: get the entire table and filter out on your application (inefficient). supports parallel scan for faster result.
+  - GetItem: read based on Primary Key (hash / hash + range), eventually consistent (default) / strongly, ProjectionExpression to read only certain attributes
+  - Query: Based on Partition key value (required) , and optional sort key values (=,<,> ec...), FilterExpression additional filtering after query for non-key attributes
+  - Scan: get the entire table and filter out on your application (inefficient). supports parallel scans for faster results.
  
-- Deleteing Data:
+- Deleting Data:
   - Delete an individual item
   - conditional delete
   - DeleteTable
@@ -1356,11 +1356,11 @@ Basic Operations:
   - drop table + recreate table fast and cheap
 
 - Copy DynamoDbTable
-  - use AWS data Pipeline
+  - use AWS Data Pipeline
   - Backup and restore into a new table
   - Scan + PutItem 
 
- You can batch operations to reduce API calls, it will be done in prallel for efficiency
+ You can batch operations to reduce API calls, it will be done in parallel for efficiency
  - BatchWriteItem: up to 25 PutItem / DeleteItem
  - BatchGetItem: up to 100 items.
 
@@ -1368,7 +1368,7 @@ PartiQL: do SQL-compatible query (no joins) if all you know is SQL. You can sele
 
 
 Local Secondary Index LSI
-Alternative sort key for table (same as partition key) based on sort key = scalar attribute (String, Number, Binary) + up to 5 local secondary intexes per table
+Alternative sort key for table (same as partition key) based on sort key = scalar attribute (String, Number, Binary) + up to 5 local secondary indexes per table
 must be defined at table creation time.
 ex: give me all the games that have been played by this user between 2021 and 2023. We have a different sort key thanks to LSI  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/4cb1c79c-c587-4ab8-b635-f573ac1fd9c7">  
@@ -1378,32 +1378,32 @@ Alternative Primary Key (hash / hash+range)
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/01541488-4980-4905-8c41-e73febf490a8">  
 
 Optimistic Locking:
-"conditional writes" ensure the item hasnt changed before you update/delete it, each item has an atrribute that acts as a version number. 
+"conditional writes" ensure the item hasn't changed before you update/delete it, each item has an attribute that acts as a version number. 
 
 DynamoDB DAX: Fully managed highly aval. seamless i-memory cache for DynamoDB, fully secure, microseconds cached reads and queries. Doesnt require 
 application logic modification because compatible with existing DynamoDB APIs. Solves the "hot key" problem so too many reads. 
 
 DynamoDB Streams: ordered stream of item level modifications (CRUD), streams can be sent to kinesis, Lamba. 
-use cases: react to changes in real time ex: send welcome email to users, analytics, insert in derivate tables  
+use cases: react to changes in real-time ex: send welcome email to users, analytics, insert in derivate tables  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/1f266a95-fd6f-474a-ab9a-2ca2036e5ea4">  
-With lambda for table -> DynamoDB Stream -> AWS Lambda event mapping source polls form it
+With lambda for table -> DynamoDB Stream -> AWS Lambda event mapping source polls from it
 
 DynamoDB TTL: time to live delete item after an expiry timestamp. Ex to delete session data. It takes up to 48hrs after the TTL for it to get deleted.
 
-DynamoDB Transactions: all or nothing operations. 
-In read mode it can be consistance/strong consist./"transactional"
-in write mode it can be standart/"transactional"
+DynamoDB Transactions: all-or-nothing operations. 
+In read mode it can be consistent/strong consistent/"transactional"
+in write mode it can be standard/"transactional"
 consumes 2x WCUS and RCU
 TransactGetItem one or more GetItem operations
 TranctWriteItem ore or more PutItem, UpdateItem, DeleteItem
 ex: multiplayer games, financial
-ex: 3 transacitonal writes per second with 5KB = 3 * 5 * 2 = 30WCU
+ex: 3 transactional writes per second with 5KB = 3 * 5 * 2 = 30WCU
 ex: 5 transaction reads per second with 5KB = 5 * (8/4)(5 got rounded to 8) * 2 = 20RCU 
 
 DynamoDB Session State cache:
-DynamoDB can store sessions is serverless, also ElastiCache can but its in memory. 
-At exam if "Session state STORE in meory" = elastiCache, it it talks about automatic scaling = DynamoDB. Also EFS can do the exact same thing but its a file system not DB,
-EBS and Instance Store cant be used for shared caching, only local. S3 could be but it has high latency not ment for that small objects
+DynamoDB can store sessions is serverless, also ElastiCache can but it's in memory. 
+At exam if "Session state STORE in memory" = elastiCache, it it talks about automatic scaling = DynamoDB. Also EFS can do the exact same thing but it's a file system not DB,
+EBS and Instance Store can't be used for shared caching, only local. S3 could be but it has high latency not meant for that small objects
 
 Write sharding:  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ba8c96fd-4345-459a-92a9-29b125f3344f">  
@@ -1417,12 +1417,12 @@ OR
 Security:
 VPC Endpoints to access without internet
 Access with IAM
-encyption KMS, in trasnit SSL/TLS
+encryption KMS, in transit SSL/TLS
 backup and restore features
-Global tables, fully replicated multi region
-DynamoDB Local dev and test apps locally without the offical server
+Global tables, fully replicated multi-region
+DynamoDB Local dev and test apps locally without the official server
 DMS
-Can use identity providers / Cognito to exchange credentials for temporary credentiaslw with roles, and can do operations only on data they own
+Can use identity providers / Cognito to exchange credentials for temporary credentials with roles, and can do operations only on data they own
 
 # API Gateway
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/e272307f-1bfe-4156-8f98-dbba2b4c4cd8">
@@ -1430,27 +1430,27 @@ Can use identity providers / Cognito to exchange credentials for temporary crede
 Serverless Expose functions to the world / Access to the app with REST APIs, even with Authentication
 It integrates with / can call: 
 - Lambda function: invoke / expose the REST API
-- HTTP: HTTP endpoints even on premise / ABL (HTTP API)
+- HTTP: HTTP endpoints even on-premise / ABL (HTTP API)
 - AWS Services: Any AWS service API with gateway (HTTP API)
-- Websockets: two-way interactive commun. between browser and server, enable stateful apps. server can push info to client
+- Websockets: two-way interactive communicatio. between browser and server, enable stateful apps. server can push info to client
   used in real-time apps like chat, collab platforms, multiplayer games.
-  Client connects to API Gateway, it gives a Conncetion ID, lambda uses logic and stores in DB the connection ID,
-  it usese a Connection URL Callback to send data to client. You can use Routing to reoute to a specific backend when
+  Client connects to API Gateway, it gives a Connection ID, lambda uses logic and stores in DB the connection ID,
+  it uses a Connection URL Callback to send data to client. You can use Routing to reroute to a specific backend when
   the connection is open (for example to do CRUD different backends) 
 
 3 ways to deploy (called Endpoint Types)
 - Edge-Optimized (default): for global clients,  Requests are routed through CloudFront Edge locations (improve latency)
   the API Gateway still lives in only one region
-- Regional: for clients in the same regione, could manually combine with CloudFront
-- Private: Can only be access from your VPC using an interface VPC endpoint (ENI)
+- Regional: for clients in the same region, could manually combine with CloudFront
+- Private: Can only be accessed from your VPC using an interface VPC endpoint (ENI)
 
 Security: 
 Can Authenticate users with:
 - IAM roles (for internal apps) create and IAM policy auth and attach to User/Role, IAM credentials are signed
   in the headers.
-- Resource policies: Allow for cross account access combined with IAM security, or for specific IP Addresses, or VPC
+- Resource policies: Allow for cross-account access combined with IAM security, or for specific IP Addresses, or VPC
   endpoint.
-- Cognito user pools(for external users) users sign in with congnito first which provides token
+- Cognito user pools(for external users) users sign in with Congnito first which provides token
 - Custom Authorizer (Lambda Authorizer) Token-Bsesd auth. the lambda if auth is correct returns an IAM policy that will
   be cached
 
@@ -1466,71 +1466,71 @@ so it prevents redeployment every time. A common use defining to which Lambda fu
 and when you deploy V2 change a % of traffic to the new one changing the Stage Var. (Canary Deployment)
 
 Integration types:
-- Mock: API Gateway return a response without sendig the request to the backend
-- HTTP / AWS (lambda or AWS services): You must config the integration reqeuest and response, setup data mapping
+- Mock: API Gateway returns a response without sending the request to the backend
+- HTTP / AWS (lambda or AWS services): You must config the integration request and response, setup data mapping
   with mapping templates for request and response which means we can change the data before it reaches client or backend.
   Mapping template: modify parameters and strings, filter output results, use VTL scripting language for loops,
   if ecc.. We can use it to convert from JSON (REST APIs) to XML (SOAP APIs) 
-- AWS_PROXY (lambda proxy) incoming requesta from the client is input data to lambda without changing the data,
+- AWS_PROXY (lambda proxy) incoming requests from the client is input data to lambda without changing the data,
   the function handles all logic
 
-It has integration with Open API spec. (its a common way to define REST APIs, using API defined as code.
+It has integration with Open API spec. (it's a common way to define REST APIs, using API defined as code.
 
-Can config API Gateway to perform validation so if the data structure doesnt correspond to a scherma returns 400-error
+Can config API Gateway to perform validation so if the data structure doesn't correspond to a schema returns 400-error
 (reduces nr of calls made)
 
 Caching API responses: reduces the nr of calls made, default TTL is 300s, min 0 max 1hr
-Caches are different for every stage. We can invalidate the Cache immediatly and flush it, or the user can do that
+Caches are different for every stage. We can invalidate the Cache immediately and flush it, or the user can do that
 with max-age=0 if it has the IAM Auth. 
 
-You can make your API aval. for money to customers. We can config how much and fast they can access them, how many calls
-possible, use API Keys to identify them, callsers pass the key in x-api-key header. 
+You can make your API available for money to customers. We can config how much and fast they can access them, how many calls
+possible, use API Keys to identify them, callers pass the key in x-api-key header. 
 Throttling default 10000 rps across all API, in case it happens Error 429 too many req.
-Can set Stage limit and Method limit ti increase performance
+Can set Stage limit and Method limit to increase performance
 
 CloudWatch Logs: Log contains info about request/response body
 
 X-Ray: enable tracing to get extra info
 
 CloudWatch Metrics: Metrics based on stages, CacheHitCount & CacheMissCount, Count (nr of req), IntegrationLatency
-(time between request and response from the backend), Latency (time between request and send response to user), 
+(time between request and response from the backend), Latency (time between request and sending response to user), 
 4XXError (client side) 5XXError (server side)
 
-CORS: must be enable if u want to recieve calls from another domain
+CORS: must be enabled if u want to receive calls from another domain
 
 # CICD 
 
 Automate and Push code without doing anything else
 we want to push code in a repo and deploy it to AWS.
 
-CI: Continious integration, devs will push code to repo, a testing / build checks code, the dev gets feedback and fix bugs
-we dont need to test the code its all automatic
-CD: Continous delivery: Ensures that the sw can be relased reliably after the test and build. We ensure deploy
-happens often and quck, shift away from "one release every 3 months" to "5 releases a day" 
+CI: Continuous integration, devs will push code to repo, a testing / build checks code, the dev gets feedback and fix bugs
+we don't need to test the code it's all automatic
+CD: Continous delivery: Ensures that the sw can be released reliably after the test and build. We ensure deploy
+happens often and quickly, shift away from "one release every 3 months" to "5 releases a day" 
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/7e9b3b94-9646-401f-a808-3bac71924293">
 
-- CodePipeline: automate pipeline. Visual workflow tool to orchestate CICD. We can control the Source / build / test /
+- CodePipeline: automate pipeline. Visual workflow tool to orchestrate CICD. We can control the Source / build / test /
   deplot / invoke stages. If a stage fails pipeline stops. You can create events for failed pipelines / events with
   CloudWatch events.
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bc65a9a7-7ddf-4d4c-86a5-fe9e9a28747e">  
 
 - CodeCommit: store the code, Versioning control using a version control system. Its fully managed, SSH/HTTPS auth.
-  IAM Plicies, encryption at rest with AWS KMS, in transit, 
+  IAM Policies, encryption at rest with AWS KMS, in transit, 
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc98d861-4d4f-4ab7-90fd-260eda8be962">  
 
 - CodeBuild: Build and test code. The build instructions are in buildspec.yml (must be at root of code like .git).
   Logs can be used in S3 / cloudwatch. we can use CloudWatch Metrics to monitor build statistics.
-  Detect faild build and triggers / alarms.
-  Dont store codefuild secrets as plaintext in env. vars. Instead environment vars can reference parameters store parameters, or secrets manager secrets. 
+  Detect failed build and triggers / alarms.
+  Don't store codefuild secrets as plaintext in env. vars. Instead environment vars can reference parameters store parameters, or secrets manager secrets. 
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f0d2d3dc-08c8-4b10-a775-e59e55911a99">  
 
 - CodeDeploy: automate deploy code to EC2 / lambda (help automate with traffic shift linear / canary) / ECS (only Blue-
   green). Rollback / deploy capability. Gradual deploy control (AllAtOnce, HalfAtATime,OneAtTime,Custom, Blue-green).
-  AppSpe.yml file says how deploys shoud happen.  Must run a CodeDeploy Afent on the target instance. 
+  AppSpe.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance. 
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">  
 
@@ -1538,25 +1538,25 @@ happens often and quck, shift away from "one release every 3 months" to "5 relea
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/079e00e5-8737-4a92-b317-8b972e9473f7">  
 
-- CodeArtifact: share sw packages, sw packages depend on each other to be built (code dependecncies), storing and
-  getting these dependencies is called artifact mangment. We can use Resource policy to auth different packages.
+- CodeArtifact: share sw packages, sw packages depend on each other to be built (code dependencies), storing and
+  getting these dependencies is called artifact management We can use Resource policy to auth different packages.
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/8c76f5b0-bfe0-4f1b-8b03-3c983ecfdbe8">  
 
-- CodeGuru: Automated code reivews (reviewer) and app performance (codeGuru profiler) with Machine Learning.
+- CodeGuru: Automated code reviews (reviewer) and app performance (codeGuru profiler) with Machine Learning.
 
-- Cloud9: IDE in clud. can work anywhere in the world if u have internet. 
+- Cloud9: IDE in cloud. can work anywhere in the world if u have internet. 
 
 # SAM
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f2e46532-12c0-4f01-b0c9-b549809d651e">
 
 Serverless application model basically a shortcut to cloud formation, says how the app should be deployed and should behave
-framework for dev and depl. serverless applications.
-All config is in YAMAL code, generate complex CloudFormation from simple SAM YAML file
-Only 2 commnads to deploy to AWS (sam package and sam deploy)
+framework for dev and deploy serverless applications.
+All config is in YAMAL code, generating complex CloudFormation from simple SAM YAML file
+Only 2 commands to deploy to AWS (sam package and sam deploy)
 can use CodeDeploy to deploy lambda functions
-Can help you run Lambdda, API Gateway, DynamoDB
-AWS toolkits: ide plugin allow you to run build test Lambda functions with AWS SAM.
+Can help you run Lambda, API Gateway, DynamoDB
+AWS toolkits: ide plugin allows you to run build test Lambda functions with AWS SAM.
 
 <img width="500" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bde587c1-1ff8-47b3-8b14-3d5df83b8d8f">
 
@@ -1565,38 +1565,38 @@ AWS toolkits: ide plugin allow you to run build test Lambda functions with AWS S
 
 Cloud development Kit
 define cloud infrastructure using familiar language, code gets compiled into CloudFormation model (Json/Yaml)
-You can deploy infrastructure and application code togethere, if it doesnt compile you dont get either of them.
-CDK Construct: library collection of constructs for every aws resource.
-Construct hub: 3rd party and opne source from community CDKs.
+You can deploy infrastructure and application code together, if it doesn't compile you don't get either of them.
+CDK Construct: library collection of constructs for every AWS resource.
+Construct hub: 3rd party and open source from community CDKs.
 
 # Cognito
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/17343071-a6ff-4e38-a0f3-a8a9a40080ae">
 
-give user an identity to interact with web or mobile app (outside of AWS) so in exam if they say
-"hundreds of users", "mobile users", "authenicate with SAML"
+give users an identity to interact with web or mobile apps (outside of AWS) so in exam if they say
+"hundreds of users", "mobile users", "authenticate with SAML"
 
-Cognito user pool (CUP): create a serverless DB of your users. sign in function for app users. 
-Username / email / password / MFA / phone verif. / login with google (federate identity). block users compromised. 
+Cognito user pool (CUP): create a serverless DB of your users. sign-in function for app users. 
+Username / email / password / MFA / phone verify. / login with Google (federate identity). block users compromised. 
 when they login they get back a JSON web toke JST. 
 CUP can invoke Lambda on triggers. 
-It offers a Hosted autentication UI that you can use in your apps.
+It offers a Hosted authentication UI that you can use in your apps.
 Offers Adaptive Authentication: block sign-ins or require MFA if the login is suspicious.
 We can integrate it with API Gateway and ALB (offload the auth. to the load balancer) we can use 2 ways to auth:
 With Cognito user pools, or OIDC auth.
 
-Cognito Identity pools (federated identitites): AWS credentials to users to access AWS resources directly, temporary
-credentials by logging in with public providers (amazon, google, apple, facebook), or users in an Amazon Cognito pool.
-we can also allow for unauthenticaded gues acccess.  
+Cognito Identity pools (federated identities): AWS credentials to users to access AWS resources directly, temporary
+credentials by logging in with public providers (amazon, google, apple, Facebook), or users in an Amazon Cognito pool.
+we can also allow for unauthenticated guess access.  
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/9af0fe7d-94c5-4a2b-a5fe-c132c533bf99">
 
 # Step functions  
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a419bce9-9dd6-4b93-92fd-59d51c9d550a">
 
-perofrm many simple tasks.
+perform many simple tasks.
 Model your workflow as state machines (one per workflow) for order fulfillment, data processing, web app... any workflow
-Writte in JSON, visualized. In task states you can invoke AWS services, like lambda, do dynamoDB stuff ecc...
+Write in JSON, visualized. In task states you can invoke AWS services, like lambda, do dynamoDB stuff ecc...
 States can be: Choice (test condition) / fail or succeed / Pass (pass data with no work) / Wait / Map state /
-PARALLEL STEP - begin parallel brancesh of execution.
+PARALLEL STEP - begin parallel branches of execution.
 
 <img width="300" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a63f3b08-3aa7-44be-b5b7-92d1dba4535b">
 
@@ -1605,7 +1605,7 @@ Error handling: we can have retry or catch (transit to failure path)
 Wait for task token: allows you to pause step function until a task token is returned. by appending .waitForTaskToken
 
 Activity task: allows you to have the task work performed by an Activity worker (Apps on EC2 / Lambda / mobile device...)
-after it send a SendTaskSuccess or SendTaskFailure. To set how long it should run TiemoutSettings, periodic send beat
+after it sends a SendTaskSuccess or SendTaskFailure. To set how long it should run TiemoutSettings, periodic send beat
 with SendTaskHeartBeat 
 
 2 types of workflows:
@@ -1616,27 +1616,27 @@ used for non-idempotent actions (same request leads to the same system state, an
 executed more than once) like payment process.
 
 - Express:
-  up to 5 min, higher capacity, billed by nr of executions, duartion and memory consumption. used for IoT data ingestion,
+  up to 5 min, higher capacity, billed by nr of executions, duration and memory consumption. used for IoT data ingestion,
   streaming Data, mobile app backends.
-  - Async (At least once execution guarantee) dont wait for result, ex message services you dont wait for response.
-    must manage indepontance to manage that if it runs twice you dont have twice the effects.
+  - Async (At least once execution guarantee) Don't wait for results, ex message services you don't wait for a response.
+    must manage independence to manage that if it runs twice you don't have twice the effects.
   - Sync (At most once execution guarantee) Wait for workflow to complete. When you need an immediate response. At-most
-    because if there is a failure it doesnt automatically restart, its up to your logic.
+    because if there is a failure it doesn't automatically restart, it's up to your logic.
 
 AWS App sync:  
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/c86141c0-adb0-4b08-8784-c5ced50208ef">  
 
-managed service that useses GraphQL: makes it easy for app to get exactly the data they need. You ask for a field
-and that is what gets returned. You can combine data from multiple data sources types, noSQL, SQL, HTTP, APIs...
-You can also use it to get real-time data with WebSocker or MQTT on WebSocket, so if u need a field real time
+managed service that uses GraphQL: makes it easy for apps to get exactly the data they need. You ask for a field
+and that is what gets returned. You can combine data from multiple data source types, NoSQL, SQL, HTTP, APIs...
+You can also use it to get real-time data with WebSocket or MQTT on WebSocket, so if u need a field real-time
 For mobile apps: can be used for local data access and data synchronization.
-To start upload a GraphQL query
+To start uploading a GraphQL query
 Security: API_KEY, AWS_IAM, OPENID_CONNECT, AWS_COGNITO_POOLS, Https with CF in front.
 
 AWS Amplify:
-EB for mobile and web apps. Gives us Data Storage, auth, ml, fontend libraries.
-gives you Authentication out of the box with cognito.
+EB for mobile and web apps. Gives us Data Storage, auth, ml, frontend libraries.
+gives you Authentication out of the box with Cognito.
 gives you Data Store out of the box with AppSync and DynamoDB
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a3f6a3a4-f326-4f00-a43c-4a1af6226434">
@@ -1644,26 +1644,26 @@ gives you Data Store out of the box with AppSync and DynamoDB
 
 ---
 # AWS Security
-in flight TLS / SSL will be encrypted before sending and decrypted after. prevents MITM man in the middle attack. 
-Server-Side encryption: Data is encr. after being recieved by the server, decrypted before being sent. Its stored in an encrypted for thanks to a key.
-Client-Side encryption: data in encrypt. by the client and never decypted by server.
+in flight TLS / SSL will be encrypted before sending and decrypted after. prevents MITM man-in-the-middle attack. 
+Server-Side encryption: Data is encrypted after being recieved by the server, decrypted before being sent. It's stored in an encrypted for thanks to a key.
+Client-Side encryption: data in encrypt. by the client and never decrypted by server.
 
 # KMS 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/471d117e-2e6a-4390-a241-b0a00c50934e">
 
-### Key Managment Service
-manages encr. keys for us. Seamlessly integrated into AWS service, they need access to keys. Able to audit the Keys with CloudTrail.
+### Key Management Service
+manages encrypted keys for us. Seamlessly integrated into AWS service, they need access to keys. Able to audit the Keys with CloudTrail.
 Types of keys:
 - Symmetric (AES-256 keys)
-  Single key for encrypt and decrypt.
+  Single key for encrypting and decryptynd
 - Asymmetric (RSA, ECC key pairs)
   Public and private keys, public key is downloadable.
 
 Types of KMS keys:
 - AWS owned keys (free) 
 - AWS Managed Key: free (automatic rotation every 1 year)
-- Customer managed keys created in KMS (1$ a month) automatic rotatio 1 year
-- Customer maanaged keys imported (1$ a month must be symmetric only manual rotation possible)
+- Customer-managed keys created in KMS (1$ a month) automatic rotation 1 year
+- Customer-managed keys imported (1$ a month must be symmetric only manual rotation possible)
 
 KMS Key policies: control access to keys like s3 bucket policies. Defines who has access to KMS keys. You can set which actions to allow, only generate key, encrypt,
 decrypt ecc...
@@ -1672,25 +1672,25 @@ how encrypt / decrypt works:
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ad7a1c71-5da4-42ab-9e64-62d9d40a57a1">
 
-Envelope Encryption: KMS has a limit of 4kb, if you want more, use Envelope Encryptio which corresponds to GenerateDataKey API
+Envelope Encryption: KMS has a limit of 4kb, if you want more, use Envelope Encryption which corresponds to GenerateDataKey API
 
-KMS limits: ThrottlingException, to respond use Exppnential backoff, all service that useses KMS shares a quota across all regions and accounts. we can use DKE caching
-or you can request quotas increase through API or AWS support. 
+KMS limits: ThrottlingException, to respond use Exponential backoff, all services that use KMS share a quota across all regions and accounts. we can use DKE caching
+or you can request quota increase through API or AWS support. 
 
 AWS CloudHSM:
 AWS provisions encryption Hardware, dedicated hardware (hardware security module), so you manage your encryption keys entirely not AWS, supports both
 symmetric and asymmetric. Spread across multiple AZ, great for aval and durability. 
 
 AWS SSM Patameter store:
-Secure storage for you configs and secrets, optional encryption using KMS. Security through IAM, notification with EventBridge, version tracking for changes inside.
+Secure storage for your configs and secrets, optional encryption using KMS. Security through IAM, notification with EventBridge, version tracking for changes inside.
 Parameter policies can have TTL
 
 AWS Secrets Manager:
 meant for storing secrets, newer than SSM, allows to force rotation of secrets every x days. Integrated with RDS, meant for RDS so in the exam if u see its Secret Manager.
-You can replicate secrets across multple regions, and replicas sync. 
+You can replicate secrets across multiple regions, and replicas sync. 
 
 AWS Nitro Enclaves:
-process sensitive data in an isolated computer environment, only authorized code can be running, fully isolated vms. 
+process sensitive data in an isolated computer environment, only authorized code can be running, fully isolated VMs. 
 
 ---
 # Extra services
@@ -1704,9 +1704,9 @@ and use OpenSearch Dashboards to visualize it.
 
 Amazon Athena:
 serverless query service to analyze data stored in S3, SQL to query files. Commonly used with QuickSight for reporting / dashboard, used for business intelligence,
-analythics, report, ecc... Exam if analyze data in s3 using serverless SQL, use athena. 
-You can improve its performance using a columna data for cost-saving, compress data for small retrieval, partition dataset for data you check often.
-Federated query: you can query data not only on s3, but from anywhere and different types, by using an AWS Lambda. 
+analysis, report, ecc... Exam if analyzing data in s3 using serverless SQL, use Athena. 
+You can improve its performance using a columnar data for cost-saving, compress data for small retrieval, partition datasets for data you check often.
+Federated query: you can query data not only on S3, but from anywhere and different types, by using an AWS Lambda. 
 
 Amazon Managed Streaming for Apache Kafka (MSK):
 Alternative for kinesis. 
@@ -1716,14 +1716,14 @@ manage and deploy SSL/TLS certificate, provide in-flight encryption for websites
 
 AWS Private Certificate Authority (CA)
 Managed service allows you to create private Certificate Authorities, only work in your Organization / services that have the integration, not on the public internet. 
-For custom Encypted comunication, authenticatio users, public key infrastructure. 
+For custom Encrypted communication, authentication users, public key infrastructure. 
 
 AWS Macie:
-Managed Machine learning pattern matching to deiscover and portect your seinsitive data in AWS. Help identify and alert about PII 
+Managed Machine learning pattern matching to discover and protect your sensitive data in AWS. Help identify and alert about PII 
 
 AWS APPConfig:
-If you want your config outsiede of your app instead of shipping it with it. Ex. feature flags, to dynamic disable or enable features on an app. or ip blacklist ecc...
-without changing application code. 
+If you want your config outside of your app instead of shipping it with it. Ex. feature flags, to dynamically disable or enable features on an app. or ip blacklist ecc...
+without changing the application code. 
 
 
 
