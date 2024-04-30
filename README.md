@@ -43,6 +43,7 @@ Administrative overhead is the cost of setting up the service. This includes set
 
 Operational overhead is the cost of the day-to-day operation of the service in question. The questions usually differentiated themselves by having answers that demonstrated knowing a service could potentially be expensive and you might be able to minimize the cost using an a different AWS service or sometimes not an AWS service at all. These require general knowledge of all the different services available. Reading this subreddit it seems these questions take the full breadth of AWS services into account. Mine was heavy with Lambda.
 
+Port 3306 is the default port used for the MySQL protocol
 
 # IAM
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/3d22a197-c740-4bcb-bc14-38ea11d542e7">
@@ -449,7 +450,9 @@ Route 53 records contains:
 - record type: (must know)
   - A maps hostname to ipv4
   - AAAA maps hostname to ipv6
-  - CNAME Point a hostname to another hostname, works if you have a non-root domain (something.domain.com)
+  - CNAME Point a hostname to another hostname, works if you have a non-root domain (something.domain.com). provides a domain name for it, such as d111111abcdef8.cloudfront.net. Instead of using this provided domain name, you can use an alternate domain name (also known as a CNAME).
+
+To use your own domain name, such as www.example.com
   - Alias: Point a hostname to AWS resource, works with root name (ELB, CloudFront, API Gateway, s3, VPC)
   - NS name server for the hosted zone controls how traffic is routed
     -  public hosted zones responds with the public ip when trying to resolve the DNS
@@ -934,7 +937,7 @@ CF Custom resources:
 define res. not yet supported, custom res from 3rd party. They are integrations backed by lambda functions
 
 CF stack sets:
-CRUD stacks across multiple accounts and regions with a single operation
+CRUD stacks across multiple accounts and regions with a single operation, the developer can deploy the same CloudFormation stack to multiple regions without additional application code. ex: for geographic load testing of an API.
 
 CF Dynamic references:
 Reference external vals stored in System Manager, Parameter Store and Secrets Manager within Cloud Formation templates. 
@@ -1444,6 +1447,8 @@ DynamoDB Local dev and test apps locally without the official server
 DMS
 Can use identity providers / Cognito to exchange credentials for temporary credentials with roles, and can do operations only on data they own
 
+Enabling DynamoDB Streams on the table allows you to capture and process changes (inserts, updates, deletes) to the table in real-time
+
 # API Gateway
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/e272307f-1bfe-4156-8f98-dbba2b4c4cd8">
 
@@ -1734,7 +1739,7 @@ Amazon Managed Streaming for Apache Kafka (MSK):
 Alternative for kinesis. 
 
 AWS Certificate Manager (ACM):
-manage and deploy SSL/TLS certificate, provide in-flight encryption for websites
+manage and deploy SSL/TLS certificate, provide in-flight encryption for websites. Remember its stored in us-east-1 always!
 
 AWS Private Certificate Authority (CA)
 Managed service allows you to create private Certificate Authorities, only work in your Organization / services that have the integration, not on the public internet. 
