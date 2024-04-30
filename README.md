@@ -198,7 +198,7 @@ purchasing options:
 EC2 Instance metadata IMDS
 allows aws EC2 instances to learn about themselves without using an aws role for that
 HTTP..../latest/meta-data
-you can retrieve info about the EC2 but not the IAM policy
+you can retrieve info about the EC2 but not the IAM policy ex: know the public IPv4 address
  
 # EC2 Storage
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/e04b234a-8821-4d49-94e8-9295df6a2c08">
