@@ -986,7 +986,7 @@ When a consumer requests a message from the queue it can wait for messages from 
 long polling decreases the number of API calls, messages get processed at the end of the wait period, higher efficiency
 the wait time can be 1-20s, its better than short polling
 
-SQS Extended client
+SQS Extended client library:
 library that uses an s3 bucket to send messages higher than 256kb, the queue sends a message telling the consumer to get the larger message from the s3
 
 Must know API
@@ -1003,7 +1003,8 @@ Deduplication methods: if u send the same message twice within 5 minutes it gets
 - Explicit-body, if 2 messages with explicit body are found it gets discarded
 
 FIFO queue Message grouping:
-We can give the queue messages a MessageGroupID, so it gets in the same queue but gets processed by different consumers,
+We can give the queue messages a MessageGroupID, so it gets in the same queue but gets processed by different consumers, 
+USED TO ORDER THE MESSAGES, SO EACH MESSAGE IS PROCESSED IN THE ORDER IT IS RECEIVED
 so we can have type A, B, C ecc... messages and each one type gets processed by different consumers
 
 # SNS
@@ -1312,6 +1313,8 @@ DB connection strings
 S3 bucket ecc....
 Passwords, encrypted with KMS
 
+Lambda all console.log() statements are automatically sent to CloudWatch.
+
 # DynamoDB
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/60590f72-b4e5-4b77-b546-237a679894c6">
 
@@ -1413,7 +1416,7 @@ With lambda for table -> DynamoDB Stream -> AWS Lambda event mapping source poll
 
 DynamoDB TTL: time to live delete item after an expiry timestamp. Ex to delete session data. It takes up to 48hrs after the TTL for it to get deleted.
 
-DynamoDB Transactions: all-or-nothing operations. 
+DynamoDB Transactions: all-or-nothing operations. THE QUERY IS TRANSACTIONAL NOT THE TABLE, You dont need to update the table
 In read mode it can be consistent/strong consistent/"transactional"
 in write mode it can be standard/"transactional"
 consumes 2x WCUS and RCU
@@ -1612,7 +1615,9 @@ With Cognito user pools, or OIDC auth.
 
 Cognito Identity pools (federated identities): AWS credentials to users to access AWS resources directly, temporary
 credentials by logging in with public providers (amazon, google, apple, Facebook), or users in an Amazon Cognito pool.
-we can also allow for unauthenticated guess access.  
+
+WE CAN ALSO ALLOW FOR UNAUTHENTICATEDS GUEST ACCESS With Amazon Cognito with unauthenticated access enabled.
+
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/9af0fe7d-94c5-4a2b-a5fe-c132c533bf99">
 
 # Step functions  
