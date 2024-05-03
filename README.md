@@ -101,7 +101,8 @@ Access keys are generated with the AWS console, users manage their keys and are 
 
 IAM Roles:
 some AWS services will need to perform actions on your behalf, ex: you give permissions to your EC2 instance to do stuff on your AWS.
-to do so you need to assign a ROLE to EC2
+to do so you need to assign a ROLE to EC2.
+If the application server is running on-premises you cannot assign an IAM role
 
 IAM security tools:
 - IAM Credentials report (list of account user status and credentials)
@@ -423,9 +424,10 @@ in-memory database with high-performance low latency
 - efficient if data changes slowly
 - Lazy loading / Cache-Aside / Lazy Population architecture: cache hit / cache miss depending if the data is in ElastiCache, if not get from RDS and write it to cache for further searches.
 - write through architecture: write to cache when there is a modification to the DB
-Redis: Supports various data structures such as strings, hashes, lists, sets, sorted sets, bitmaps... You can use Amazon Elasticache for Redis Sorted Sets
-to easily implement a dashboard with the ability to sort or rank the cached datasets.
-Memcached: Primarily supports string-based keys and values; does not support advanced data structures.
+Redis: Supports more complex data structures, You can use Amazon Elasticache for Redis Sorted Sets to implement a dashboard with the ability to sort or rank the cached datasets.
+session state data be maintained externally, whilst keeping latency at the LOWEST possible value (like DSD): The two options presented in the answers are Amazon
+DynamoDB and Amazon ElastiCache Redis. ElastiCache will provide the lowest latency as it is an in-memory database.
+Memcached: Primarily supports string-based keys and values; does not support advanced data structures. Supports multi-threading
 
 
 Cache eviction:
@@ -771,7 +773,8 @@ just run EC2 tasks, automatic scaling, is fully managed
   connect all incoming connections to the same port.
 - Fargate ephemeral storage tied to lifecycle, shared between containers
 - ECS task placement is automatically handled
-
+- Charge you for running tasks rather than running container instances
+  
 Load balancer integration
 we can run an ALB for different instances with tasks
 
@@ -824,8 +827,8 @@ metadata JSON tells how to run Docker containers like AMI for ECS
 - IAM roles: task definition, each tasks in a service gets this role, you can define different roles per service
 - logging config
 - network info
-- Data volumes: share data between containers in the same task definition, so like some task can write to a path, and a logging task can read from it and save them.
-  for EC2 instance storage, for Fargate ephemeral storage tied to lifecycle.
+- Data volumes: share data between containers, Specify both containers in the definition. Mount a shared volume, so like some task can write to a path, and a logging task can read from it and save them.
+  for EC2 instance storage, for Fargate ephemeral storage tied to lifecycle. Create one task definition.
 
 Amazon ECR
 elastic container registry, used to store and manage docker images on AWS
@@ -1002,6 +1005,7 @@ SQS Long polling
 When a consumer requests a message from the queue it can wait for messages from queue to arrive if there are none in the queue, this is called long polling
 long polling decreases the number of API calls, messages get processed at the end of the wait period, higher efficiency
 the wait time can be 1-20s, its better than short polling
+to enable: Set the ReceiveMessage API with a WaitTimeSeconds of 1-20s
 
 SQS Extended client library:
 library that uses an s3 bucket to send messages higher than 256kb, the queue sends a message telling the consumer to get the larger message from the s3
@@ -1209,7 +1213,11 @@ API Gateway: to create Rest API
 Kinesis: data transformation on the fly
 DynamoDB and S3: triggers for when something happens in DB
 CloudFront: lambda edge
+
 CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule.
+When your resources change state, they automatically send events into an event stream. You can create rules that match selected events in the stream and route
+them to your AWS Lambda function to take action. Like ex: associate Lambda function with CodePipeline
+
 CloudWatch Logs: stream the logs where we want
 SNS: React to notification
 SQS: process queue messages
