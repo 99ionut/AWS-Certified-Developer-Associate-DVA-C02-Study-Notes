@@ -775,6 +775,10 @@ just run EC2 tasks, automatic scaling, is fully managed
 Load balancer integration
 we can run an ALB for different instances with tasks
 
+Cluster same port:
+set the host port number to 0 and ECS will automatically assign an available
+port. We also need to assign port 80 to the container port so that the web service is able to run.
+
 Data volumes
 we can use EFS file system onto ECS to have a file system for all tasks, tasks running in any AZ will share the same data in the EFS. 
 Fargate + EFS = serverless, you cant mount s3 as a file system here
@@ -913,7 +917,9 @@ template components:
 - description
 - resources: are the core of your CloudFormation template, represent the components that will be created, res. can refer each other
 - parameters: they are a way to provide inputs to your AWS CF template (ex choose type of ec2, password...)
-- mapping: fixed vars within CF template ex (dev vs prod)
+- mapping: fixed vars within CF template ex (dev vs prod) The optional Mappings section matches a key to a corresponding set of named values. For example, if you want to set values
+  based on a region, you can create a mapping that uses the region name as a key and contains the values you want to specify for
+  each specific region
 - outputs: output the vars such as VPC ID and subnet ID to network stack
 - conditions: control the creation of res. based on conditions ex: what region u deploy in
 - Instrinct functions (the most important):
@@ -1273,7 +1279,7 @@ if you need persistence space, use S3
 
 Lambda Layers:
 custom runtimes for not supported languages, or create a layer to externalize dependencies to reuse them without having to repackage them to deploy, because the lambda can
-reference these layers.
+reference these layers. ONYL FOR LIBRARIES, NOT DB keys ecc... use ENV. Variables for those.
 
 File System Mounting:
 Can access EFS if running in VPC, it's a config to mount EFS file system to local directory at initialization, it uses EFS access points.
@@ -1389,7 +1395,9 @@ Basic Operations:
 - Reading Data: 
   - GetItem: read based on Primary Key (hash / hash + range), eventually consistent (default) / strongly, ProjectionExpression to read only certain attributes
   - Query: Based on Partition key value (required) , and optional sort key values (=,<,> ec...), FilterExpression additional filtering after query for non-key attributes
-  - Scan: get the entire table and filter out on your application (inefficient). supports parallel scans for faster results.
+  - Scan: get the entire table and filter out on your application (inefficient).
+    supports parallel scans for faster results.
+    To minimize the impact of the scan on the provisioned throughput Set a smaller page size for the scan
  
 - Deleting Data:
   - Delete an individual item
@@ -1587,7 +1595,7 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
   green). Rollback / deploy capability. Gradual deploy control (AllAtOnce, HalfAtATime,OneAtTime,Custom, Blue-green).
   AppSpe.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance.
   un order of the hooks for in-place deployments: ApplicationStop -> BeforeInstall -> AfterInstall -> ApplicationStart
-  defined the deployment actions in a file AppSpec.yml
+  defined the deployment actions in a file AppSpec.yml. Hooks allowed: BeforeAllowTraffic > AfterAllowTraffic
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">  
 
