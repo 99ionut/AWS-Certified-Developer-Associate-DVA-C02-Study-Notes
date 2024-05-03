@@ -1097,6 +1097,9 @@ Send notifications for Events
   EC2 instance metrics every 5 min, there is a "detailed monitoring" for a cost you get every 1 minute. By default no log from EC2,
   need to setup an "agent" to push them. "CloudWatch Unified Agent" allows you to get more granular extra data from EC2 instead of the default ones
   You can define Custom Metrics, using the API PutMetricData
+
+  Metric filters define the terms and patterns to look for in log data as it is sent to CloudWatch Logs, then it turns metric filters log data into numerical
+  CloudWatch metrics that you can graph or set an alarm on.
 - Logs:
   - log groups: name representing the application
   - log stream, instance within application
@@ -1113,6 +1116,7 @@ Send notifications for Events
   - Trigger Auto Scaling
   - Send SNS notification (here we can attach lambda and do anything)
   we can use Composite alarms to monitor multiple metrics at a time, useful to filter "alarm noise"
+
 
 Cloudwatch Synthetics scripts that monitor APIs, URLs, Website workflow ecc... and check the availability and correct operation of these elements
 reproduces what customers do on a website for example, access to Headless chrome
@@ -1464,7 +1468,9 @@ It integrates with / can call:
   used in real-time apps like chat, collab platforms, multiplayer games.
   Client connects to API Gateway, it gives a Connection ID, lambda uses logic and stores in DB the connection ID,
   it uses a Connection URL Callback to send data to client. You can use Routing to reroute to a specific backend when
-  the connection is open (for example to do CRUD different backends) 
+  the connection is open (for example to do CRUD different backends)
+
+Mapping templates: ex: You can transform the incoming JSON into a valid XML message for the SOAP backend interface using mapping templates
 
 3 ways to deploy (called Endpoint Types)
 - Edge-Optimized (default): for global clients,  Requests are routed through CloudFront Edge locations (improve latency)
