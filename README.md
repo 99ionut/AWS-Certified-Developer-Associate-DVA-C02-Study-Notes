@@ -301,20 +301,23 @@ what it does:
 4 types:
 - classic load balancer: deprecated
 
-- application load balancer: routs https, websocket traffic
+- application load balancer (ALB): routs https, websocket traffic
   -  load bal. to multiple http apps. across machines (target group), ec2 instances/ec2 tasks/lambda
   -  load bal. to multiple apps on the same machine (containers)
   -  supports route routing / query strings like example.com/users
   -  we can do stuff like if the request is ?=mobile it redirects to a specific instance otherwise if ?=desktop to
      different one
+  - You can register your Lambda functions as targets and configure a listener rule to forward requests to the target group for your
+    Lambda function. When the load balancer forwards the request to a target group with a Lambda function as a target, it invokes
+    your Lambda function and passes the content of the request to the Lambda function, in JSON format.
 
-- network load balancer: forwards TCP UDP LTS traffic
+- network load balancer (NLB): forwards TCP UDP LTS traffic
   - works like app. load balancer, we redirect to certain target groups
   - redirects to target EC2 instances
   - redirects to IP addresses
   - supports TCP,HTTP,HTTPS health checks
     
-- gateway load balancer: operates at layer 3 network layer, scale and manage 3rd party virtual applications
+- gateway load balancer (GLB): operates at layer 3 network layer, scale and manage 3rd party virtual applications
   for example firewalls, intrusion detection system, inspection system... for example if u want your traffic to be
   inspected before it reaches EC2
   - GENEVE protocol 6081
@@ -513,7 +516,7 @@ VPC endpoints
 allow to connect to AWS services using a private network instead of public network
 
 connect on-premise site with VPC
-VPN encrypted conn over public connection
+VPN encrypted connection over public connection, tunnel to VPC from a location OUTSIDE of AWS, you cant use them in a subnet for example
 Direct connection: physical connection to AWS
 
 3 tier solution architecture
@@ -645,6 +648,9 @@ S3 performance
 - s3 transfer acceleration
 - byte-range fetch: request a specific range of bytes in a file to speed up downloads (only partial data)
 - SQL server-side filtering, the server sends data already filtered
+
+- S3 static websites use the HTTP protocol only and you cannot enable HTTPS. To enable HTTPS connections to your S3 static website,
+  use an Amazon CloudFront distribution that is configured with an SSL/TLS certificate. This will ensure encrypted in-transit as per the requirements
 
 # CloudFront CND
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/eee7115d-40b2-432c-8b06-0d267cd3e9cc">
@@ -886,6 +892,11 @@ EB migration:
 for example ELB can't be changed (only configured) after cloning, so we need to migrate:
 create a new env. with the same config except LB (cant clone)
 deploy the app onto new env. Perform a swap.
+
+Your source bundle must meet the following requirements:
+- Consist of a SINGLE ZIP file or WAR file
+- Not exceed 512 MB
+- Not include a parent folder or top-level directory (subdirectories are fine)
 
 # CloudFormation
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/1fe959c9-96f0-4dd9-a07c-82fcd3c052e7">
@@ -1150,9 +1161,12 @@ To enable it:
 modify your code using x-ray SDK then install the xRay daemon or enable AWS integration
 How to instrument your code: instrument = measure the product performance, diagnose errors and write trace information. you use
 the X-Ray SDK. 
-Segments: each app. will send them.
-Trace: segments collected together to form an end-to-end trace.
-Sampling: decrease the amount of requests sent to X-ray. control the amount of data.
+- Segments: each app. will send them.
+- Trace: segments collected together to form an end-to-end trace.
+- Sampling: decrease the amount of requests sent to X-ray. control the amount of data.
+- Metadata tags to record additional data that you want stored in the trace but don't need to use with search.
+- Annotations in AWS X-Ray that can be used with Filter expressions
+- Subsegments provide more granular timing information and details about downstream calls that your application made to fulfill the original request. 
 
 AWS Distro for OpenTelemetry
 AWS-supported distro of the open-source project Open Telemetry
@@ -1215,7 +1229,8 @@ If a unique value exists, then end the action without producing an error.
 If a unique value doesn't exist, then proceed with the action that you originally designed.
 So get ID, check DynamoDB if duplicate, act accordingly
 
-- Event Source Mapping (important?): Kinesis, SQS, DynamoDB, Lambda needs to poll from the source, it doesn't get invoked. Process streams or Queues (SQS)
+- Event Source Mapping (important): Kinesis, SQS, DynamoDB, Lambda needs to poll from the source, it doesn't get invoked. Process streams or Queues (SQS)
+  An event-source mapping must be created on the Lambda side to associate the stream with the Lambda function
 
 Event: JSON contains data the function is going to process 
 Context: methods and properties that provide information about the invocation, function, and environment  
@@ -1455,6 +1470,12 @@ DMS
 Can use identity providers / Cognito to exchange credentials for temporary credentials with roles, and can do operations only on data they own
 
 Enabling DynamoDB Streams on the table allows you to capture and process changes (inserts, updates, deletes) to the table in real-time
+StreamEnabled — Specifies whether a stream is enabled (true) or disabled (false) for the table.
+StreamViewType — Specifies the information that will be written to the stream whenever data in the table is modified:
+- KEYS_ONLY — Only the key attributes of the modified item.
+- NEW_IMAGE — The entire item, as it appears after it was modified.
+- OLD_IMAGE — The entire item, as it appeared before it was modified.
+- NEW_AND_OLD_IMAGES — Both the new and the old images of the item
 
 # API Gateway
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/e272307f-1bfe-4156-8f98-dbba2b4c4cd8">
@@ -1566,6 +1587,7 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
   green). Rollback / deploy capability. Gradual deploy control (AllAtOnce, HalfAtATime,OneAtTime,Custom, Blue-green).
   AppSpe.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance.
   un order of the hooks for in-place deployments: ApplicationStop -> BeforeInstall -> AfterInstall -> ApplicationStart
+  defined the deployment actions in a file AppSpec.yml
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">  
 
