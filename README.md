@@ -644,6 +644,10 @@ Storage classes:
   - 12 hrs
 - intelligent tiering
   - move objects between tiers based on usage
+ 
+To avoid throttling in Amazon S3 you must ensure you do not exceed certain limits on a per-prefix basis. You can send 3,500
+PUT/COPY/POST/DELETE or 5,500 GET/HEAD (read) requests per second per prefix in an Amazon S3 bucket. There are no limits to the
+number of prefixes that you can have in your bucket
 
 durability: how many times an object is going to be lost 9.99 11 9s  
 availability: how readily a service is: 99.99% not available for 53min
@@ -1306,7 +1310,8 @@ used for: website security, SEO, intelligent Route, real-time image transformati
 Lambda are launched in a VPC outside of yours, in a VPC managed by AWS so it can't access your VPC resources.
 But you can deploy it in your own VPC using AWSLambdaVPCAccessExecutionRole
 Lambda in a public subnet doesn't have access to internet or public IP, if you want you need to:
-By default it doesn't have access to the internet in your private VPC, so you need to give it access with NAT Gateway / instance.
+By default it doesn't have access to the internet in your private VPC, so you need to give it access with NAT Gateway / instance, YOU CANT CONNECT IT DIRECTLY TO
+INTERNET GATEWAY.
 Or you can use a VPC endpoint to privately access AWS services without NAT.  
 <img width="300" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/489bec1f-22e1-4e14-9e26-058ed41dc987">
 
