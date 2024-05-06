@@ -465,6 +465,12 @@ Route 53 records contains:
   - A maps hostname to ipv4
   - AAAA maps hostname to ipv6
   - CNAME Point a hostname to another hostname, works if you have a non-root domain (something.domain.com). provides a domain name for it, such as d111111abcdef8.cloudfront.net. Instead of using this provided domain name, you can use an alternate domain name (also known as a CNAME).
+ 
+To ensure ongoing connectivity the Developer needs to use an Elastic IP address for the EC2 instance and DNS A record as this is
+the only type of static, public IP address you can assign to an Amazon EC2 instance.
+- Public – public address that is assigned automatically to instances in public subnets and reassigned if instance is stopped/started.
+- Private – private address assigned automatically to all instances.
+- Elastic IP – public address that is static.
 
 To use your own domain name, such as www.example.com
   - Alias: Point a hostname to AWS resource, works with root name (ELB, CloudFront, API Gateway, s3, VPC)
@@ -1672,6 +1678,8 @@ Only 2 commands to deploy to AWS (sam package and sam deploy)
 can use CodeDeploy to deploy lambda functions
 Can help you run Lambda, API Gateway, DynamoDB
 AWS toolkits: ide plugin allows you to run build test Lambda functions with AWS SAM.
+
+
 
 <img width="500" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bde587c1-1ff8-47b3-8b14-3d5df83b8d8f">
 
