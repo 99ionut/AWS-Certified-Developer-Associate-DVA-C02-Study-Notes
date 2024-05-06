@@ -518,7 +518,7 @@ firewall the controlled traffic from EC2 instances
 stateful return traffic is automatically allowed
 
 VPC flow logs
-capture info about IP traffic 
+capture info about IP traffic from network interfaces, log data can be published to Amazon CloudWatch Logs or Amazon S3
 
 VPC peering: connect 2 VPCs privately
 must not have overlapping CIDR
@@ -1802,7 +1802,7 @@ symmetric and asymmetric. Spread across multiple AZ, great for aval and durabili
 
 AWS SSM Patameter store:
 Secure storage for your configs and secrets, optional encryption using KMS. Security through IAM, notification with EventBridge, version tracking for changes inside.
-Parameter policies can have TTL
+Parameter policies can have TTL, DOES NOT SUPPORT KEY ROTATION
 
 AWS Secrets Manager:
 meant for storing secrets, newer than SSM, allows to force rotation of secrets every x days. Integrated with RDS, meant for RDS so in the exam if u see its Secret Manager.
