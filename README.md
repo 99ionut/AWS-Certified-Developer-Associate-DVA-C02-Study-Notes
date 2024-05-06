@@ -200,6 +200,9 @@ EC2 Instance metadata IMDS
 allows aws EC2 instances to learn about themselves without using an aws role for that
 HTTP..../latest/meta-data
 you can retrieve info about the EC2 but not the IAM policy ex: know the public IPv4 address
+
+Use EC2 instance profiles is a container for an IAM role that you can use to pass role information to an EC2 instance when the instance
+starts. This is a secure way to authorize and EC2 instance to access AWS services.
  
 # EC2 Storage
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/e04b234a-8821-4d49-94e8-9295df6a2c08">
@@ -802,7 +805,8 @@ automatically increase / decrease tasks
 we can scale on CPU / Memory / ALB requests
 ECS services to scale underlying EC2 instances:
 - ECS Cluster Capacity Provider is what is used to automatically provision and scale the infrastructure,
-  adds EC2 when you are missing capacity (CPU, RAM) (recommended)
+  adds EC2 when you are missing capacity (CPU, RAM) (recommended) this is used to scale the cluster
+  container instances, not the number of tasks. To scale nr of tasks Create an ECS Service with Auto Scaling and attach an Elastic Load Balancer
 - Auto scaling group scaling, scale based on CPU utilization
 we can scale using
 - target tracking based on a target value from Cloudwatch metric
