@@ -45,6 +45,12 @@ Operational overhead is the cost of the day-to-day operation of the service in q
 
 Port 3306 is the default port used for the MySQL protocol
 
+resource group:
+If you work with multiple resources, you might find it useful to manage them as a group rather
+than move from one AWS service to another for each task. maintain separate sets of resources for the alpha, beta, and release
+stages. Each version runs on Amazon EC2 and uses an Elastic Load Balancer.
+create a single page to view and manage all of the resources 
+
 # IAM
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/3d22a197-c740-4bcb-bc14-38ea11d542e7">
 
@@ -603,6 +609,9 @@ can force encryption with bucket policy
   ex: adding watermark specific for the user, resizing, converting the data
 
 S3 can host static websites and have the accessible public with a policy
+Enable public access and grant everyone the s3:GetObject permissions
+Upload an index document and enter the name of the index document when enabling static website hosting
+The error file is optional
 
 you can version your files, it's enabled at the bucket level, instead of overwriting it creates a new version
 you can enable s3 versioning to have objects that when are deleted are hidden and can be recovered
