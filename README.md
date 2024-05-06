@@ -90,7 +90,7 @@ Inline vs Managed policies:
 
 Permission to Pass a Role:
 you need the iam:PassRole permission, roles can only be passed to what their trust allows
-
+The "trust policy" defines which resource can assume the role, and under which condition
 
 Defense mechanisms:
 - password policy (length/special chars/numbers/pass expiration, prevent reuse)
