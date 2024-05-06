@@ -654,6 +654,17 @@ S3 performance
 - S3 static websites use the HTTP protocol only and you cannot enable HTTPS. To enable HTTPS connections to your S3 static website,
   use an Amazon CloudFront distribution that is configured with an SSL/TLS certificate. This will ensure encrypted in-transit as per the requirements
 
+syntax to represents to Object
+- s3:// dctlabs/Development/Projects.xls this is the full path to a file including the bucket name and object key
+- Development/Projects.xls subfolders/direct name rapresents an Object key 
+- "Project=Blue" is an example of an object tag. You can use object tagging to categorize storage. Each tag is a key-value pair.
+- "arn:aws:s3:::dctlabs" is the Amazon Resource Name (ARN) of a bucket.
+  (ARNs) uniquely identify AWS resources. We require an ARN when you need to specify a resource unambiguously across all of AWS,
+  such as in IAM policies, Amazon Relational Database Service (Amazon RDS) tags, and API calls.
+  arn:partition:service:region:account-id:resource-id
+  arn:partition:service:region:account-id:resource-type/resource-id
+  arn:partition:service:region:account-id:resource-type:resource-id
+
 # CloudFront CND
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/eee7115d-40b2-432c-8b06-0d267cd3e9cc">
 
@@ -830,6 +841,9 @@ metadata JSON tells how to run Docker containers like AMI for ECS
 - Data volumes: share data between containers, Specify both containers in the definition. Mount a shared volume, so like some task can write to a path, and a logging task can read from it and save them.
   for EC2 instance storage, for Fargate ephemeral storage tied to lifecycle. Create one task definition.
 
+ECS Cluster queries are expressions that enable you to group objects. For example, you can control the placement of tasks onto groups container instances by attributes
+such as Availability Zone, instance type, or custom metadata. 
+
 Amazon ECR
 elastic container registry, used to store and manage docker images on AWS
 private repo for your account or public repo using ECR public gallery
@@ -962,6 +976,12 @@ CRUD stacks across multiple accounts and regions with a single operation, the de
 CF Dynamic references:
 Reference external vals stored in System Manager, Parameter Store and Secrets Manager within Cloud Formation templates. 
 for ex. get the RDS DB instance master password from secret manager. 
+
+CF Template settings:
+- Mappings section matches a key to a corresponding set of named values: ex if you want to set values based on region
+- Metadata section to include arbitrary JSON or YAML objects thatprovide details about the template.
+- Parameters enable you to input custom values to your template each time you create or update a stack.
+- Conditions section contains statements that define the circumstances under which entities are created or configured
 
 # SQS
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/986a4ac4-0e84-4b1a-8731-f06774f3b7ae">
@@ -1138,6 +1158,7 @@ Send notifications for Events
   - Send SNS notification (here we can attach lambda and do anything)
   we can use Composite alarms to monitor multiple metrics at a time, useful to filter "alarm noise"
 
+There are two types of API logging in CloudWatch: execution logging and access logging.
 
 Cloudwatch Synthetics scripts that monitor APIs, URLs, Website workflow ecc... and check the availability and correct operation of these elements
 reproduces what customers do on a website for example, access to Headless chrome
@@ -1168,7 +1189,7 @@ understand where the error is
 It uses tracing, each component dealing with the request adds its own "trace"
 IAM, KMS
 To enable it:
-modify your code using x-ray SDK then install the xRay daemon or enable AWS integration
+modify your code using x-ray SDK then install the xRay daemon or enable AWS integration .ebextensions/xray-daemon.config file to the source code to enable the X-Ray daemon
 How to instrument your code: instrument = measure the product performance, diagnose errors and write trace information. you use
 the X-Ray SDK. 
 - Segments: each app. will send them.
@@ -1567,7 +1588,7 @@ CloudWatch Metrics: Metrics based on stages, CacheHitCount & CacheMissCount, Cou
 (time between request and response from the backend), Latency (time between request and sending response to user), 
 4XXError (client side) 5XXError (server side)
 
-CORS: must be enabled if u want to receive calls from another domain
+CORS: must be enabled if you want to receive calls from another domain
 
 # CICD 
 
@@ -1648,7 +1669,7 @@ Construct hub: 3rd party and open source from community CDKs.
 give users an identity to interact with web or mobile apps (outside of AWS) so in exam if they say
 "hundreds of users", "mobile users", "authenticate with SAML"
 
-Cognito user pool (CUP): create a serverless DB of your users. sign-in function for app users. 
+Cognito user pool (CUP): are for AUTHENTICATION (identify verification). create a serverless DB of your users. sign-in function for app users. 
 Username / email / password / MFA / phone verify. / login with Google (federate identity). block users compromised. 
 when they login they get back a JSON web toke JST. 
 CUP can invoke Lambda on triggers. 
@@ -1657,8 +1678,9 @@ Offers Adaptive Authentication: block sign-ins or require MFA if the login is su
 We can integrate it with API Gateway and ALB (offload the auth. to the load balancer) we can use 2 ways to auth:
 With Cognito user pools, or OIDC auth.
 
-Cognito Identity pools (federated identities): AWS credentials to users to access AWS resources directly, temporary
+Cognito Identity pools (federated identities): are for AUTHORIZATUION (access control) AWS credentials to users to access AWS resources directly, temporary
 credentials by logging in with public providers (amazon, google, apple, Facebook), or users in an Amazon Cognito pool.
+
 
 WE CAN ALSO ALLOW FOR UNAUTHENTICATEDS GUEST ACCESS With Amazon Cognito with unauthenticated access enabled.
 
