@@ -1471,10 +1471,12 @@ Local Secondary Index LSI
 Alternative sort key for table (same as partition key) based on sort key = scalar attribute (String, Number, Binary) + up to 5 local secondary indexes per table
 must be defined at table creation time.
 ex: give me all the games that have been played by this user between 2021 and 2023. We have a different sort key thanks to LSI  
+With a local secondary index you can have a different sort key but the partition key is the same.
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/4cb1c79c-c587-4ab8-b635-f573ac1fd9c7">  
 
 Global secondary index (GSI)
 Alternative Primary Key (hash / hash+range)  
+Contains a selection of attributes from the base table, but they are organized by a primary key that is different from that of the table.
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/01541488-4980-4905-8c41-e73febf490a8">  
 
 Optimistic Locking:
@@ -1561,8 +1563,9 @@ Can Authenticate users with:
 - Resource policies: Allow for cross-account access combined with IAM security, or for specific IP Addresses, or VPC
   endpoint.
 - Cognito user pools(for external users) users sign in with Congnito first which provides token
-- Custom Authorizer (Lambda Authorizer) Token-Bsesd auth. the lambda if auth is correct returns an IAM policy that will
-  be cached
+- Custom Authorizer (Lambda Authorizer) Token-Basesd auth. the lambda if auth is correct returns an IAM policy that will
+  be cached. if you want to implement a custom authorization scheme that uses a bearer token authentication
+  strategy such as OAuth or SAML, or that uses request parameters to determine the caller's identity. (TOKEN authorizer e REQUEST authorizer)
 
 - Custom Domain Name HTTPS: security through integration with AWS Certificate Manager (ACM)
   
