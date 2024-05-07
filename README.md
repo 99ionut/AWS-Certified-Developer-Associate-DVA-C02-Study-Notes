@@ -102,7 +102,15 @@ To access AWS:
   - to use CLI with MFA you need to create a temporary session, you do so with the STS GetSessionToken API
   - the CLI looks for credentials in this order: Command line, Env. Variable CLI credential file, CLI config file, Container cred. Instance profile cred.
 - SDK (access keys)
-  - looks for credentials in this order: Java system properties, Env. variab. The default credential profile file. ECS container. instance profile credentials.
+  - looks for credentials in this order:
+    - Environment variables
+    - Java system properties
+    - The default credential profile file.
+    - ECS container credentials 
+    - instance profile credentials (EC2 instances)
+      For ex: the AWS SDK for Java will find credentials stored in environment variables (where its allowed)
+      before it checks for instance provide credentials (where its not allowd) and will allow access to
+      extra S3 buckets.
 Access keys are generated with the AWS console, users manage their keys and are secret like passwords.
 
 IAM Roles:
