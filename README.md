@@ -438,6 +438,8 @@ session state data be maintained externally, whilst keeping latency at the LOWES
 DynamoDB and Amazon ElastiCache Redis. ElastiCache will provide the lowest latency as it is an in-memory database.
 Memcached: Primarily supports string-based keys and values; does not support advanced data structures. Supports multi-threading
 
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/84dafa7c-cfac-4a5c-934e-636a2badf4ed">
+
 
 Cache eviction:
 - you delete item explicitly
@@ -775,6 +777,12 @@ Docker VS VMs
 resources are shared with the host, many containers on one server, they can be managed by ECS, EKS, ECR, Fargate  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/25b17b94-3cab-4d38-b615-95f0e1fe9864">
 
+Docker platforms for Elastic Beanstalk You specify images by name in the "Dockerrun.aws.json" file and save 
+it in the root of your source directory.
+
+Docker builds images automatically by reading the instructions from "Dockerfile" which is a text file named Dockerfile
+that contains all commands, in order, needed to build a given image.
+
 # ECS
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/7701684b-84d8-4979-bf61-f32db171ac1a">
 
@@ -857,7 +865,7 @@ ECS task definition
 metadata JSON tells how to run Docker containers like AMI for ECS
 - port binding
 - CPU / memory
-- environment variables: hard coded like URLs, SSM parameters (eg API keys, shared configs). You fetch either from SSM parameter store or Secrets manager
+- environment variables: hard coded like URLs, SSM parameters (eg API keys, shared configs). You fetch either from SSM   parameter store or Secrets manager
 - IAM roles: task definition, each tasks in a service gets this role, you can define different roles per service
 - logging config
 - network info
@@ -1256,6 +1264,8 @@ mag 15min execution
 runs on-demand when it gets invoked
 scaling is automated
 pay just for request and compute time
+Burst Concurrency Limits: 500-3000 (default 1000) If you invoke the function again while 
+the first event is being processed
 
 Main integrations: 
 API Gateway: to create Rest API
@@ -1420,7 +1430,7 @@ Control the R/W capacity modes:
 - Provisioned mode (default): specify the r/w per second you need to plan your capacity beforehand, you pay for what is going to be provisioned
   - RCU read capacity units: represent one strongly consistent read per second or 2 eventually consistent read per second, for an item up to 4KB
     - read eventually consistently: if we read right after a write data could be old cuz it hasn't replicated you from the copy we are reading from
-    - read strongly consistently: read the data correctly for sure, uses TWICE the RCUs
+    - Eventually consistanc consume Half the RCUs, divide by 2
     ex: 10 strongly consistent reads per second with item 4KB = 10RCUs
     ex: 16 eventually consistent read per second with item size 12KB = (16/2) * (12/4) = 24RCUs
     ex: 10 strongy consistant reads per second with item size 6 KB = 10 * (8/4) because 6 gets rounded to 8KB
@@ -1597,6 +1607,8 @@ Integration types:
   if ecc.. We can use it to convert from JSON (REST APIs) to XML (SOAP APIs) 
 - AWS_PROXY (lambda proxy) incoming requests from the client is input data to lambda without changing the data,
   the function handles all logic
+- HTTP_PROXY Same as AWS_PROXY, requests passed directly to the backend, without modification, for API
+  or HTTP endpoints.
 
 It has integration with Open API spec. (it's a common way to define REST APIs, using API defined as code.
 
@@ -1683,7 +1695,7 @@ Only 2 commands to deploy to AWS (sam package and sam deploy)
 can use CodeDeploy to deploy lambda functions
 Can help you run Lambda, API Gateway, DynamoDB
 AWS toolkits: ide plugin allows you to run build test Lambda functions with AWS SAM.
-
+EASIER THAN CLOUDFORMATION use for exam.
 
 
 <img width="500" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bde587c1-1ff8-47b3-8b14-3d5df83b8d8f">
@@ -1822,6 +1834,10 @@ Parameter policies can have TTL, DOES NOT SUPPORT KEY ROTATION
 AWS Secrets Manager:
 meant for storing secrets, newer than SSM, allows to force rotation of secrets every x days. Integrated with RDS, meant for RDS so in the exam if u see its Secret Manager.
 You can replicate secrets across multiple regions, and replicas sync. 
+
+AWS Systems Manager Parameter Store: 
+lower cost than Secrets Manager, doesnt have automatic rotation. If exams asks for lower cost or app handles
+rotation use this
 
 AWS Nitro Enclaves:
 process sensitive data in an isolated computer environment, only authorized code can be running, fully isolated VMs. 
