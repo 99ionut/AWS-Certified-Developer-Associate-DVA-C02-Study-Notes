@@ -69,7 +69,7 @@ Consists of:
 - "Id": id for the policy (optional)
 - "Statement": required
   - "Sid": identifier (optional)
-  - "Effect": allow/deny access to certain APIs
+  - "Effect": allow/deny access to certain APIs, ex: "ec2:StartInstances"
   - "Principal": account/user/role it's applied to
   - "Action": API calls that will be allowed / denied based on the effect
   - "Resource": list of res. to which the action is applied
@@ -1183,6 +1183,9 @@ Send notifications for Events
 
 There are two types of API logging in CloudWatch: execution logging and access logging.
 
+Namespace is a container for CloudWatch metrics. Metrics in different namespaces are isolated from each other, so that
+metrics from different applications are not mistakenly aggregated into the same statistics.
+
 Cloudwatch Synthetics scripts that monitor APIs, URLs, Website workflow ecc... and check the availability and correct operation of these elements
 reproduces what customers do on a website for example, access to Headless chrome
 
@@ -1221,6 +1224,8 @@ the X-Ray SDK.
 - Metadata tags to record additional data that you want stored in the trace but don't need to use with search.
 - Annotations in AWS X-Ray that can be used with Filter expressions
 - Subsegments provide more granular timing information and details about downstream calls that your application made to fulfill the original request. 
+
+GetTraceSummaries you can search for segments
 
 AWS Distro for OpenTelemetry
 AWS-supported distro of the open-source project Open Telemetry
