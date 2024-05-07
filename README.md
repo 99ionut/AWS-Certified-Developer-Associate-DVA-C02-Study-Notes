@@ -605,7 +605,8 @@ can force encryption with bucket policy
 - CORS: cross-origin resource sharing
   it's a security in web browsers to allow requests from other website origins
   (popular question) if a client makes a cross-origin request on our S3 bucket we need to enable the correct CORS headers
-
+  "Cross Origin Resource Sharing" must be enabled on the resources that shares
+  
 - MFA delete
   require MFA when deleting an object
 
