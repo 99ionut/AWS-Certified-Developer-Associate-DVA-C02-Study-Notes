@@ -707,6 +707,13 @@ DDoS protection integrates with shield
 It integrates with ANY HTTP backend you want, S3, app load balancer, EC2, S3 website
 Client asks to Edge location (cache), if it doesn't have it the edge location gets it from the origin
 
+If you want In-flight encryption select these settings of Origin Protocol and Veiwer Protocol
+
+<img width="241" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2ddcc116-6b9b-49b0-9bc9-8f7fd65e4ce7">
+
+<img width="307" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/62c2db31-7806-4536-a120-c2662186b8e0">
+
+
 CloudFront vs something like S3 replication
 CloudFront:
 - is global edge network
