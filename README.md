@@ -1706,6 +1706,8 @@ It offers a Hosted authentication UI that you can use in your apps.
 Offers Adaptive Authentication: block sign-ins or require MFA if the login is suspicious.
 We can integrate it with API Gateway and ALB (offload the auth. to the load balancer) we can use 2 ways to auth:
 With Cognito user pools, or OIDC auth.
+you can add sign-up and sign-in to mobile and web apps and it also offers a user directory so 
+user accounts can be created directly within the user pool. Users also have the ability to reset their passwords
 
 Cognito Identity pools (federated identities): are for AUTHORIZATUION (access control) AWS credentials to users to access AWS resources directly, temporary
 credentials by logging in with public providers (amazon, google, apple, Facebook), or users in an Amazon Cognito pool.
