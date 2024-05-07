@@ -1622,6 +1622,7 @@ each stage has its own config. parameters. Stages are kept and can be rolled bac
 Stage variables: like Env. variables (config) but for API Gateway, use them for often changing values
 so it prevents redeployment every time. A common use defining to which Lambda function it points
 and when you deploy V2 change a % of traffic to the new one changing the Stage Var. (Canary Deployment)
+Also used to implement and run different versions for testing purposes
 
 Integration types:
 - Mock: API Gateway returns a response without sending the request to the backend
