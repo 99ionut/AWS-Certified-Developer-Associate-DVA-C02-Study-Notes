@@ -921,6 +921,8 @@ deployment mode:
 single instance: great for dev
 High availability with load balancer: great for production
 
+You can add AWS Elastic Beanstalk configuration files (.ebextensions FOLDER) to your web application's source code to configure your environment and customize the AWS resources that it contains. YAML- or JSON-formatted documents with a .config file extension that you place in a folder named .ebextensions and deploy
+
 Deploy options for updates:
 - All at once, deploy the new v all in one go but it has a bit of downtime  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/28d406a4-c6d7-4b02-84cb-74e1349db53b">
@@ -931,7 +933,7 @@ Deploy options for updates:
 - Rolling with additional batches: like rolling but actively starts new instances to switch, so it has all the capacity when needed  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2cb0caf7-d0db-43b9-ad76-f62eeb576408">
   
-- immutable: deploys all to new instances the switches everything at once when it's ready  
+- immutable: deploys all to new instances the switches everything at once when it's ready (QUICKEST ROLLBACK IF FAILURE, but longest deploymeny, zero downtime)
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc51490f-db72-457f-8968-4b756dcd4f67">
   
 - blue green: create a new environment and test, and switch when ready  
@@ -968,6 +970,7 @@ can create a template in a Manual way: edit them in Cloud Formation Designer or 
 automated way: using AWS CLI 
 
 YAMS and JSON are languages you can write CF templates
+"aws cloudformation deploy" then "sam deploy" commands
 
 template components:
 - template version
@@ -1128,7 +1131,7 @@ Easy to collect/process/analyze streaming data in real-time, such as Application
   - once data is inserted in Kinesis it can't be deleted (immutability)
   - Capacity modes: prevision mode: fixed nr of shards, scale manually with API, you pay per shard provisioned per hour
   - Capacity modes: on-demand mode no need per provision or manage the capacity, scale based on throughput during the last 30 days, pay per stream per hour
-  - Security: encryption at rest, in flight with HTTPS, IAM policies, VPC endpoints
+  - Security: encryption at rest (AWS KMS customer master key (CMK)), in flight with HTTPS, IAM policies, VPC endpoints
   Producers: SDK, Kinesis Producer Library KPL, Kinesis Agent, monitor log files.
   ProvisionedThroughputExceeded: too many inputs in a shard, solution: use highly distributed partition key, retries with exponential backoff, increase shards
 
@@ -1177,6 +1180,8 @@ Send notifications for Events
   for every service in AWS, it's a variable to monitor ex CPU, networking, they have timestamps and you can create dashboards with them
   EC2 instance metrics every 5 min, there is a "detailed monitoring" for a cost you get every 1 minute. By default no log from EC2,
   need to setup an "agent" to push them. "CloudWatch Unified Agent" allows you to get more granular extra data from EC2 instead of the default ones
+  If you need granularity higher than detailed monitoring which is 1min, use High resolution, with data at a granularity
+  of 1 second, 5 seconds, 10 seconds, 30 seconds, or any multiple of 60 seconds.
   You can define Custom Metrics, using the API PutMetricData
 
   Metric filters define the terms and patterns to look for in log data as it is sent to CloudWatch Logs, then it turns metric filters log data into numerical
@@ -1455,6 +1460,9 @@ Control the R/W capacity modes:
 Data is stored in partitions: primary keys go through hash to know which partition they go to, WCU and RCU are going to be evenly spread across partitions
 
 Throttling: reasons: Hot keys (one partition read too many times ex popular items), Hot partitions, very large items, the solution is Exponential backoff, 
+hot partition due to the order date being used as the partition key and this is causing writes to be
+throttled. solution to ensure the writes are more evenly distributed in this scenario is to add a random
+number suffix to the partition key values.
 distribute partition keys, if RCU issue use DynamoDB Accelerator DAX
 
 Basic Operations:
@@ -1658,6 +1666,9 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 - CodePipeline: automate pipeline. Visual workflow tool to orchestrate CICD. We can control the Source / build / test /
   deplot / invoke stages. If a stage fails pipeline stops. You can create events for failed pipelines / events with
   CloudWatch events.
+  you can add an "APPROVAL ACTION" to a stage in a pipeline at the point where you want the pipeline
+  execution to stop so that someone with the required AWS Identity and Access Management permissions can approve or reject
+  the action.
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bc65a9a7-7ddf-4d4c-86a5-fe9e9a28747e">  
 
@@ -1738,6 +1749,8 @@ user accounts can be created directly within the user pool. Users also have the 
 Cognito Identity pools (federated identities): are for AUTHORIZATUION (access control) AWS credentials to users to access AWS resources directly, temporary
 credentials by logging in with public providers (amazon, google, apple, Facebook), or users in an Amazon Cognito pool.
 
+Amazon Cognito Sync: creates a local cache for the identity data. Your app talks to this local cache when it reads and
+writes keys. So even when you are offline. When the synchronize method is called, changes from the service are pulled to the device, changes are available to other devices to synchronize.
 
 WE CAN ALSO ALLOW FOR UNAUTHENTICATEDS GUEST ACCESS With Amazon Cognito with unauthenticated access enabled.
 
@@ -1827,7 +1840,10 @@ how encrypt / decrypt works:
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ad7a1c71-5da4-42ab-9e64-62d9d40a57a1">
 
-Envelope Encryption: KMS has a limit of 4kb, if you want more, use Envelope Encryption which corresponds to GenerateDataKey API
+Envelope Encryption: KMS has a limit of 4kb, if you want more, use Envelope Encryption which corresponds to
+GenerateDataKey API. 
+GenerateDataKey: obtain an encryption key from KMS that we can then use within the function
+code to encrypt the file. This ensures that the file is encrypted BEFORE it is uploaded to Amazon S3.
 
 KMS limits: ThrottlingException, to respond use Exponential backoff, all services that use KMS share a quota across all regions and accounts. we can use DKE caching
 or you can request quota increase through API or AWS support. 
