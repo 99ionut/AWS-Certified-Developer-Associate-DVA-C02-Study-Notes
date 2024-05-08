@@ -1083,10 +1083,14 @@ Debug the DLQ, fix your code, use the "Redrive to Source" to put the DLQ message
 SQS Delay queue:  
 Delay a messages so cosumers dont see it immediately, up to 15 min, or per message individually, default is 0
 
+SQS Short polling:  
+Querying only a subset of its servers to determine whether any
+messages are available for a response.
+
 SQS Long polling:  
 When a consumer requests a message from the queue it can wait for messages from queue to arrive if there are none in the queue, this is called long polling  
 long polling decreases the number of API calls, messages get processed at the end of the wait period, higher efficiency  
-the wait time can be 1-20s, its better than short polling  
+the wait time can be 1-20s, its better than short polling. IT RETURNS MESSAGES AS SOON AS THEY BECOME AVAILABLE:
 to enable: Set the ReceiveMessage API with a WaitTimeSeconds of 1-20s
 
 SQS Extended client library:  
