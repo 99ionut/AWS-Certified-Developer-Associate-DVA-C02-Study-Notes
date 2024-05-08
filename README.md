@@ -1292,40 +1292,40 @@ pay just for request and compute time
 Burst Concurrency Limits: 500-3000 (default 1000) If you invoke the function again while 
 the first event is being processed
 
-Main integrations: 
-API Gateway: to create Rest API
-Kinesis: data transformation on the fly
-DynamoDB and S3: triggers for when something happens in DB
-CloudFront: lambda edge
+Main integrations:  
+API Gateway: to create Rest API  
+Kinesis: data transformation on the fly  
+DynamoDB and S3: triggers for when something happens in DB  
+CloudFront: lambda edge  
 
-CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule.
-When your resources change state, they automatically send events into an event stream. You can create rules that match selected events in the stream and route
-them to your AWS Lambda function to take action. Like ex: associate Lambda function with CodePipeline
+CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule.  
+When your resources change state, they automatically send events into an event stream. You can create rules that match selected events in the stream and route  
+them to your AWS Lambda function to take action. Like ex: associate Lambda function with CodePipeline  
 
-CloudWatch Logs: stream the logs where we want
-SNS: React to notification
-SQS: process queue messages
+CloudWatch Logs: stream the logs where we want  
+SNS: React to notification  
+SQS: process queue messages  
 Cognito: react for example to logins  
 ALB: HTTP client call to ALB -> ALB converts HTTP to JSON request and invokes Lambda synchronously  
 <img width="200" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/858dd518-f375-44a1-bd80-0a1c2abc0613">
 
 <img width="200" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5976dd42-d6d8-4e95-aa0b-433917a1184b">
 
-Ways to process data:
+Ways to process data:  
 - Synchronous invocation: happens when using CLI, SDK, API Gateway, ALB, Cognito, step functions, CloudFront (all user-invoked or service-invoked services)
-it means you are waiting for the result and the result will be returned to you, errors must be handled client side ex button to retry
+  it means you are waiting for the result and the result will be returned to you, errors must be handled client side ex button to retry
 
 - Asynchronous invocation: S3, SNS, CloudWatch events ecc..
-The events are placed in an EventQueue for the lambda to consume, if the vent fails it retries it 3 times, after 1 min and after 2 min
+The events are placed in an EventQueue for the lambda to consume, if the vent fails it retries it 3 times, after 1 min and after 2 min  
 which means your code needs to be Idempotent so it shouldn't break if it retries. We can define a DLQ dead letter queue with SNS or SQS for failed processes
-strategy to do this:
-Extract the value of a unique attribute of the input event. (For example, a transaction or purchase ID.)
-2.Check if the attribute value exists in a control database. (For example, an Amazon DynamoDB table.)
-3.Depending on the results, complete the following step:
-If a unique value exists, then end the action without producing an error.
--or-
-If a unique value doesn't exist, then proceed with the action that you originally designed.
-So get ID, check DynamoDB if duplicate, act accordingly
+strategy to do this:  
+Extract the value of a unique attribute of the input event. (For example, a transaction or purchase ID.)  
+2.Check if the attribute value exists in a control database. (For example, an Amazon DynamoDB table.)  
+3.Depending on the results, complete the following step:  
+If a unique value exists, then end the action without producing an error.  
+-or-   
+If a unique value doesn't exist, then proceed with the action that you originally designed.  
+So get ID, check DynamoDB if duplicate, act accordingly  
 
 - Event Source Mapping (important): Kinesis, SQS, DynamoDB, Lambda needs to poll from the source, it doesn't get invoked. Process streams or Queues (SQS)
   An event-source mapping must be created on the Lambda side to associate the stream with the Lambda function
