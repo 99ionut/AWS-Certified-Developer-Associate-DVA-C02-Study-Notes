@@ -814,7 +814,7 @@ If you decide to use an "EC2 launch type" (EC2 inside ECS and ECS agent with doc
 - Load balancing: Dynamic host port mapping, each task has a different random port,
   the ELB finds the correct ports automatically even if random. You must allow on the EC2 instance security group any port from the ALB security group
 - for EC2 instance storage to share data between tasks
-- ECS Task Placement:
+- ECS Task Placement Strategy:
   when a task of EC2 is launched, ECS must determinate where in which EC2 to place it for memory and CPU availability
   to assist you, you can define a Task placement strategy and task placement constraints
   - Binpack: Place tasks based on the LEAST available amount of CPU or memory, cost saving so it uses the least possible amount of EC2s
@@ -1032,6 +1032,10 @@ CF Template settings:
 - Metadata section to include arbitrary JSON or YAML objects thatprovide details about the template.
 - Parameters enable you to input custom values to your template each time you create or update a stack.
 - Conditions section contains statements that define the circumstances under which entities are created or configured
+
+CF Deploy a Lambda 2 options:
+- write the code directly inside the CloudFormation template in the json
+- Upload a ZIP file containing the function code to Amazon S3, then add a reference to it in an AWS::Lambda::Function
 
 # SQS
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/986a4ac4-0e84-4b1a-8731-f06774f3b7ae">
@@ -1336,6 +1340,11 @@ Lambda Execution Role (IAM Role) Policy to AWS services to ex. event source mapp
 Lambda Resource base policies: To give other accounts and AWS services to use and invoke Lambda resources
 
 EnvironmentVariables: Key/value pairs in String form, adjust the function behavior without updating code. Like a config file.
+features to customize how environment variables are encrypted:
+- Key configuration: On a per-function basis, configure Lambda to use an encryption key that you create (CMKs),
+  if you dont config lambda creates automatically Lambda uses an AWS managed CMK
+- Encryption helpers: The Lambda console lets you encrypt environment variable values client side, before sending
+  them (preventing secrets from being displayed unencrypted in the Lambda console, or Lambda API)
 
 Logging and monitoring:
 CloudWatch logs: lambda logs are stored there if function has the policy
