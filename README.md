@@ -490,7 +490,7 @@ To use your own domain name, such as www.example.com
 - value: 128.241.223.111
 - routing policy: how r53 responds to queries
   - Simple, route traffic to a single resource, if multiple values (IP addresses) are returned the client chooses a random one
-  - Weighted: control the % of the requests that go to each resource
+  - Weighted: routing policy control the % of the requests that go to each resource
   - Failover: done with health checks, if one is not healthy, switch
   - Latency-based: redirect to the resource that has the least latency
   - Geolocation: based on where the user is located
@@ -1149,7 +1149,7 @@ Easy to collect/process/analyze streaming data in real-time, such as Application
   after it reaches KDS it gets send a consumer, with the Partition Key, Data Blob, and Sequence Nr.
   Partition key hashed a unique ID you pass, and it always sends the data from that provider to the same shard. Multiple hashes from multiple
   sources can be sent to the same stream, so it's distributed. 
-  - Retention of messages 1-365 days
+  - Retention of messages 1-365 days (by default 24hrs, if app takes more to process it gets lost)
   - because of this: ability to reprocess data
   - once data is inserted in Kinesis it can't be deleted (immutability)
   - Capacity modes: prevision mode: fixed nr of shards, scale manually with API, you pay per shard provisioned per hour
@@ -1532,7 +1532,7 @@ Basic Operations:
 
  You can batch operations to reduce API calls, it will be done in parallel for efficiency  
  - BatchWriteItem: up to 25 PutItem / DeleteItem
- - BatchGetItem: up to 100 items.
+ - BatchGetItem: up to 100 items, max 16MB.
 
 PartiQL: do SQL-compatible query (no joins) if all you know is SQL. You can select, CRUD, and supports batch operations.
 
@@ -1718,9 +1718,9 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f0d2d3dc-08c8-4b10-a775-e59e55911a99">  
 
 - CodeDeploy: automate deploy code to EC2 / lambda (help automate with traffic shift linear / canary) / ECS (only Blue-
-  green). Rollback / deploy capability. Gradual deploy control (AllAtOnce, HalfAtATime,OneAtTime,Custom, Blue-green).
-  AppSpe.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance.
-  un order of the hooks for in-place deployments: ApplicationStop -> BeforeInstall -> AfterInstall -> ApplicationStart
+  green). Rollback / deploy capability. Gradual deploy control (AllAtOnce, HalfAtATime,OneAtTime,Custom, Blue-green).  
+  AppSpe.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance.  
+  an order of the hooks for in-place deployments: ApplicationStop -> BeforeInstall -> AfterInstall -> ApplicationStart
   defined the deployment actions in a file AppSpec.yml. Hooks allowed: BeforeAllowTraffic > AfterAllowTraffic
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">  
@@ -1742,11 +1742,15 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f2e46532-12c0-4f01-b0c9-b549809d651e">
 
 Serverless application model basically a shortcut to cloud formation, says how the app should be deployed and should behave  
-framework for dev and deploy serverless applications.  
-All config is in YAMAL code, generating complex CloudFormation from simple SAM YAML file  
-Only 2 commands to deploy to AWS (sam package and sam deploy)  
-can use CodeDeploy to deploy lambda functions  
-Can help you run Lambda, API Gateway, DynamoDB  
+- framework for development and deploy serverless applications.  
+- All config is in YAMAL code, generating complex CloudFormation from simple SAM YAML file  
+- Only 2 commands to deploy to AWS (sam package and sam deploy)  
+- can use CodeDeploy to deploy lambda functions  
+- Can help you run Lambda, API Gateway, DynamoDB
+
+AWS SAM CLI lets you LOCALLY build, test, and debug serverless applications that are defined by AWS SAM templates.  
+for ex. provides a Lambda-like execution environment locally
+
 AWS toolkits: ide plugin allows you to run build test Lambda functions with AWS SAM.  
 EASIER THAN CLOUDFORMATION use for exam.
 
