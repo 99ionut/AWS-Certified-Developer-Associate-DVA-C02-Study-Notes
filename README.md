@@ -210,6 +210,9 @@ purchasing options:
   - reserve on-demand instance capacity for any duration, you have access to ec2 capacity when you need it
   - no time commitment
 
+EC2 user data:  
+information that is parsed when the EC2 instances are launched. ex: run a shell script on Amazon EC2 instances each time they are launched
+
 EC2 Instance metadata IMDS  
 allows aws EC2 instances to learn about themselves without using an aws role for that  
 HTTP..../latest/meta-data  
@@ -683,7 +686,7 @@ S3 bucket -> Amazon EVent Bridge -> rules -> services
 
 S3 performance  
 - can speed up upload by using multi-part upload
-- s3 transfer acceleration
+- s3 transfer acceleration: fast, easy, and secure transfers of files over long distances between your client and and S3
 - byte-range fetch: request a specific range of bytes in a file to speed up downloads (only partial data)
 - SQL server-side filtering, the server sends data already filtered
 
@@ -1007,6 +1010,9 @@ if a stack creation fails you have the option to default: everything rolls back,
 CF StackSets:  
 enabling you to create, update, or delete stacks across multiple ACCOUNTS and REGIONS with a single operation.
 
+CF Change Set:  
+summary of proposed changes to an AWS CloudFormation stack without implementing the changes in production 
+
 CF Service Role:  
 IAM role that allows CloudFormation to CRUD resources, gives users the ability to CRUD even if they don't have permission to work with the resources in the stack
 
@@ -1218,6 +1224,7 @@ Send notifications for Events
   - logs encrypted by default, you can use your own KMS
   - "CloudWatch Logs Insight" used to query the logs
   - "CloudWatch metric filter" filter expressions (ex. count "ERROR" in logs) to trigger alarms
+  - "CloudWatch Logs agent" collect local logs from the instances and upload them to CloudWatch 
 - Alarms:
   used to trigger notifications. status OK ISUFFICIENT_DATA ALARM
   it can do 3 things
