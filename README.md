@@ -1285,28 +1285,27 @@ You can have Event Bridge integration ex. User changes IAM Role -> CloudTrail ->
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/eba57b02-7f3d-479b-adc4-f2e0feb4e258">
 
 Serverless: just deploy code without provisioning / managing servers.  
-Virtual function no server to manage  
-max 15min execution  
-runs on-demand when it gets invoked  
-scaling is automated  
-pay just for request and compute time  
-Burst Concurrency Limits: 500-3000 (default 1000) If you invoke the function again while   
-the first event is being processed  
+- Virtual function no server to manage  
+- max 15min execution  
+- runs on-demand when it gets invoked  
+- scaling is automated  
+- pay just for request and compute time  
+- Burst Concurrency Limits: 500-3000 (default 1000) If you invoke the function again while   
+- the first event is being processed  
 
 Main integrations:  
-API Gateway: to create Rest API  
-Kinesis: data transformation on the fly  
-DynamoDB and S3: triggers for when something happens in DB  
-CloudFront: lambda edge  
-
-CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule.  
+- API Gateway: to create Rest API  
+- Kinesis: data transformation on the fly  
+- DynamoDB and S3: triggers for when something happens in DB  
+- CloudFront: lambda edge  
+- CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule.  
 When your resources change state, they automatically send events into an event stream. You can create rules that match selected events in the stream and route  
 them to your AWS Lambda function to take action. Like ex: associate Lambda function with CodePipeline  
 
 CloudWatch Logs: stream the logs where we want  
-SNS: React to notification  
-SQS: process queue messages  
-Cognito: react for example to logins  
+- SNS: React to notification  
+- SQS: process queue messages  
+- Cognito: react for example to logins  
 ALB: HTTP client call to ALB -> ALB converts HTTP to JSON request and invokes Lambda synchronously  
 <img width="200" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/858dd518-f375-44a1-bd80-0a1c2abc0613">
 
