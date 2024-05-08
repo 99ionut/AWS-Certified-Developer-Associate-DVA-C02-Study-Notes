@@ -1308,7 +1308,7 @@ Main integrations:
 - Kinesis: data transformation on the fly  
 - DynamoDB and S3: triggers for when something happens in DB  
 - CloudFront: lambda edge  
-- CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule.  
+- CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule or Create an Amazon CloudWatch Events rule that is scheduled to run every x minutes.    
 When your resources change state, they automatically send events into an event stream. You can create rules that match selected events in the stream and route  
 them to your AWS Lambda function to take action. Like ex: associate Lambda function with CodePipeline  
 
