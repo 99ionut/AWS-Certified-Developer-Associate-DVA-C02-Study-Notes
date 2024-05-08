@@ -1001,6 +1001,9 @@ template components:
 CF Rollbacks:  
 if a stack creation fails you have the option to default: everything rolls back, or to disable rollback to troubleshoot
 
+CF StackSets:  
+enabling you to create, update, or delete stacks across multiple ACCOUNTS and REGIONS with a single operation.
+
 CF Service Role:  
 IAM role that allows CloudFormation to CRUD resources, gives users the ability to CRUD even if they don't have permission to work with the resources in the stack
 
