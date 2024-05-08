@@ -1286,7 +1286,7 @@ You can have Event Bridge integration ex. User changes IAM Role -> CloudTrail ->
 
 Serverless: just deploy code without provisioning / managing servers.  
 Virtual function no server to manage  
-mag 15min execution  
+max 15min execution  
 runs on-demand when it gets invoked  
 scaling is automated  
 pay just for request and compute time  
