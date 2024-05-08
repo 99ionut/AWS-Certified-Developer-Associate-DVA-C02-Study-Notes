@@ -602,6 +602,9 @@ security:
     
 can force encryption with bucket policy
 
+SecureTransport:
+policy permission to limit access by IP addresses or require that data must be encrypted in transit (HTTPS).
+
 - CORS: cross-origin resource sharing
   it's a security in web browsers to allow requests from other website origins
   (popular question) if a client makes a cross-origin request on our S3 bucket we need to enable the correct CORS headers
@@ -1485,6 +1488,10 @@ hot partition due to the order date being used as the partition key and this is 
 throttled. solution to ensure the writes are more evenly distributed in this scenario is to add a random  
 number suffix to the partition key values.  
 distribute partition keys, if RCU issue use DynamoDB Accelerator DAX  
+
+Limit parameter:  
+To control the amount of data returned per request, Limit parameter. Helps prevent situations where one  
+worker consumes all of the provisioned throughput, at the expense of all other workers.  
 
 Basic Operations:
 - Writing Data:
