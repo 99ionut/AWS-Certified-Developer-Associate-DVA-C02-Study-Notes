@@ -1706,7 +1706,9 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bc65a9a7-7ddf-4d4c-86a5-fe9e9a28747e">  
 
 - CodeCommit: store the code, Versioning control using a version control system. Its fully managed, SSH/HTTPS auth.
-  IAM Policies, encryption at rest with AWS KMS, in transit, 
+  IAM Policies, encryption at rest with AWS KMS, in transit
+  Example lambda to commit / i think other services as well to commit. The Dev can use AWS SDK to instantiate a CodeCommit client. The client can then be used with  
+  put_file which adds or updates a file in a branch in an AWS CodeCommit repo.
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc98d861-4d4f-4ab7-90fd-260eda8be962">  
 
