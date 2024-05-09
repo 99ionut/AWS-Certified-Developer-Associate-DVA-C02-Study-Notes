@@ -449,6 +449,7 @@ in-memory database with high-performance low latency
 - cached data may be eventually consistent
 - efficient if data changes slowly
 - Lazy loading / Cache-Aside / Lazy Population architecture: cache hit / cache miss depending if the data is in ElastiCache, if not get from RDS and write it to cache for further searches.
+  When your application needs to read data from the database, it checks the cache first to determine whether the data is available.
   Loads the data into the cache only when necessary (if a cache miss occurs).
   Lazy loading avoids filling up the cache with data that won’t be requested.
   cache can become stale if Lazy Loading is implemented without other strategies (such as TTL).
@@ -1533,7 +1534,8 @@ Basic Operations:
     attribute_exist / attribute_not_exist / attribute_type / contains / begins_with / IN and between / size (2 concurrent write could fail because 1 updates and the other
     finds the new data and doesn't match so the second one fails)
   - atomic writes: one says increase by 1, the other increase by 2, at the end the result is 3, both writes succeed
-  - batch writes: Write / update many items at a time  
+  - batch writes: Write / update many items at a time
+  - TransactWriteitems: multiple items Transactional all-or-nothing write.
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/d5a35a98-dbf1-4cac-a847-e70c3bfcb9bb">  
  
 - Reading Data: 
@@ -1754,9 +1756,10 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 
 - CodeDeploy: automate deploy code to EC2 / lambda (help automate with traffic shift linear / canary) / ECS (only Blue-
   green). Rollback / deploy capability. Gradual deploy control (AllAtOnce, HalfAtATime,OneAtTime,Custom, Blue-green).  
-  AppSpe.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance.  
-  an order of the hooks for in-place deployments: ApplicationStop -> BeforeInstall -> AfterInstall -> ApplicationStart
-  defined the deployment actions in a file AppSpec.yml. Hooks allowed: BeforeAllowTraffic > AfterAllowTraffic
+  - AppSpec.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance.  
+  - an order of the hooks for in-place deployments: ApplicationStop -> BeforeInstall -> AfterInstall -> ApplicationStart
+  - defined the deployment actions in a file AppSpec.yml. Hooks allowed: BeforeAllowTraffic > AfterAllowTraffic  
+  - it can pull code boundle from S3
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">  
 
