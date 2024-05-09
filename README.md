@@ -447,6 +447,9 @@ in-memory database with high-performance low latency
 - cached data may be eventually consistent
 - efficient if data changes slowly
 - Lazy loading / Cache-Aside / Lazy Population architecture: cache hit / cache miss depending if the data is in ElastiCache, if not get from RDS and write it to cache for further searches.
+  Loads the data into the cache only when necessary (if a cache miss occurs).
+  Lazy loading avoids filling up the cache with data that won’t be requested.
+  cache can become stale if Lazy Loading is implemented without other strategies (such as TTL).
 - write through architecture: write to cache when there is a modification to the DB  
 Redis: Supports more complex data structures, You can use Amazon Elasticache for Redis Sorted Sets to implement a dashboard with the ability to sort or rank the cached datasets.  
 session state data be maintained externally, whilst keeping latency at the LOWEST possible value (like DSD): The two options presented in the answers are Amazon  
@@ -1118,7 +1121,7 @@ Must know API:
 - ChangeMessageVisibility: change message timeout  
 
 FIFO queue:  
-Deduplication methods: if u send the same message twice within 5 minutes it gets discarded  
+Deduplication methods: if you send the same message twice within 5 minutes it gets discarded  
 - Content-body SHA256, if 2 are found it discards
 - Explicit-body, if 2 messages with explicit body are found it gets discarded
 
@@ -1221,10 +1224,12 @@ Send notifications for Events
 - Metrics:
   for every service in AWS, it's a variable to monitor ex CPU, networking, they have timestamps and you can create dashboards with them
   EC2 instance metrics every 5 min, there is a "detailed monitoring" for a cost you get every 1 minute. By default no log from EC2,
-  need to setup an "agent" to push them. "CloudWatch Unified Agent" allows you to get more granular extra data from EC2 instead of the default ones
-  If you need granularity higher than detailed monitoring which is 1min, use High resolution, with data at a granularity
+- need to setup an "agent" to push them. "CloudWatch Unified Agent" allows you to get more granular extra data from EC2   instead of the default ones
+- If you need granularity higher than detailed monitoring which is 1min, use High resolution, with data at a granularity
   of 1 second, 5 seconds, 10 seconds, 30 seconds, or any multiple of 60 seconds.
-  You can define Custom Metrics, using the API PutMetricData
+- You can define Custom Metrics, using the API PutMetricData
+  - The "--dimensions" parameter further clarifies what the metric is and what data it
+    stores. You can have up to 10 dimensions in one metric, and each dimension is defined by a name and value pair
 
   Metric filters define the terms and patterns to look for in log data as it is sent to CloudWatch Logs, then it turns metric filters log data into numerical
   CloudWatch metrics that you can graph or set an alarm on.
@@ -1828,7 +1833,7 @@ WE CAN ALSO ALLOW FOR UNAUTHENTICATEDS GUEST ACCESS With Amazon Cognito with una
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a419bce9-9dd6-4b93-92fd-59d51c9d550a">
 
 perform many simple tasks, process this data through multiple business rules and transformations.  
-Model your workflow as state machines (one per workflow) for order fulfillment, data processing, web app... any workflow  
+Model your workflow as state machines (one per workflow) using Amazon States Language for order fulfillment, data processing, web app... any workflow  
 Write in JSON, visualized. In task states you can invoke AWS services, like lambda, do dynamoDB stuff ecc...  
 States can be: Choice (test condition) / fail or succeed / Pass (pass data with no work) / Wait / Map state /  
 PARALLEL STEP - begin parallel branches of execution.  
@@ -1908,6 +1913,8 @@ decrypt ecc...
 how encrypt / decrypt works:  
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ad7a1c71-5da4-42ab-9e64-62d9d40a57a1">
+
+Envelope Encryption: Encrypt plaintext data with a data key and then encrypt the data key with a top-level plaintext master key.  
 
 Envelope Encryption: KMS has a limit of 4kb, if you want more, use Envelope Encryption which corresponds to  
 GenerateDataKey API.   
