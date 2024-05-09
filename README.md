@@ -1157,6 +1157,8 @@ Easy to collect/process/analyze streaming data in real-time, such as Application
 - Kinesis Data Streams: capture, process and store data streams
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5c8f258e-1e14-4a5f-95a5-685f309db280">
 
+
+
   is a way to stream big data in your systems (ingest data at scale), is made of multiple "Shards" per stream (can be used to scale up or down),
   data will be split to Client. it sends a record to the stream that is made out of Partition Key and Data Blob (max 1MB)
   after it reaches KDS it gets send a consumer, with the Partition Key, Data Blob, and Sequence Nr.
@@ -1171,13 +1173,17 @@ Easy to collect/process/analyze streaming data in real-time, such as Application
   Producers: SDK, Kinesis Producer Library KPL, Kinesis Agent, monitor log files.
   ProvisionedThroughputExceeded: too many inputs in a shard, solution: use highly distributed partition key, retries with exponential backoff, increase shards
 
-  Consumers: custom with SDK, Kinesis Client Library, Lambda ecc... can have multiple consumers getting from the same shards.
-  Shared fan out consumer: max 2mb/s split between all consumers of a shard (pool model)
-  Enhanced fan-out Consumer: 2mb/s per consumer per shard by subscribing (push model to subscribers)
+Consumers: custom with SDK, Kinesis Client Library, Lambda ecc... can have multiple consumers getting from the same shards.
+Shared fan out consumer: max 2mb/s split between all consumers of a shard (pool model)
+Enhanced fan-out Consumer: 2mb/s per consumer per shard by subscribing (push model to subscribers)
 
-  Kinesis Client Library KLC
-  Java library that helps read records from Kinesis Data Stream with distributed apps. sharing the read workload.
-  Each shard is to be read by only one KCL instance, 4 shards = max 4KCL instances, 8 = 8 instances
+Kinesis Producer Library (KPL):
+simplifies producer application development, allowing developers to
+achieve high write throughput to a Kinesis data stream. helps you write to a Kinesis data stream.
+
+Kinesis Client Library KLC:
+Java library that helps read records from Kinesis Data Stream with distributed apps. sharing the read workload.
+Each shard is to be read by only one KCL instance, 4 shards = max 4KCL instances, 8 = 8 instances
 
   Kinesis operations:
   - shard splitting: increase the stream capacity: used to divide "Hot shards"
