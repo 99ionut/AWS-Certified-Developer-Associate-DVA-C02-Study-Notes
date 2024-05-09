@@ -1797,26 +1797,27 @@ Construct hub: 3rd party and open source from community CDKs.
 # Cognito
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/17343071-a6ff-4e38-a0f3-a8a9a40080ae">
 
-give users an identity to interact with web or mobile apps (outside of AWS) so in exam if they say  
-"hundreds of users", "mobile users", "authenticate with SAML"
+give users an identity to interact with web or mobile apps (outside of AWS)   
+IMPORTANT in exam if they say "hundreds of users", "mobile users", "authenticate with SAML"
 
 Cognito user pool (CUP):   
-are for AUTHENTICATION (identify verification). create a serverless DB of your users. sign-in function for app users.   
-Username / email / password / MFA / phone verify. / login with Google (federate identity). block users compromised.   
-when they login they get back a JSON web toke JST.   
-CUP can invoke Lambda on triggers.  
-It offers a Hosted authentication UI that you can use in your apps.  
-Offers Adaptive Authentication: block sign-ins or require MFA if the login is suspicious.  
-We can integrate it with API Gateway and ALB (offload the auth. to the load balancer) we can use 2 ways to auth:  
-With Cognito user pools, or OIDC auth.  
-you can add sign-up and sign-in to mobile and web apps and it also offers a user directory so   
-user accounts can be created directly within the user pool. Users also have the ability to reset their passwords  
+- are for AUTHENTICATION (identify verification). create a serverless DB of your users. sign-in function for app users.   
+  Username / email / password / MFA / phone verify. / login with Google (federate identity). block users compromised.   
+- when they login they get back a JSON web toke JST.   
+- CUP can invoke Lambda on triggers.  
+- It offers a Hosted authentication UI that you can use in your apps.  
+- Offers Adaptive Authentication: block sign-ins or require MFA if the login is suspicious.  
+- We can integrate it with API Gateway and ALB (offload the auth. to the load balancer) we can use 2 ways to auth:  
+  With Cognito user pools, or OIDC auth.  
+- you can add sign-up and sign-in to mobile and web apps and it also offers a user directory so   
+  user accounts can be created directly within the user pool. Users also have the ability to reset their passwords  
 
 Cognito Identity pools (federated identities):  
 are for AUTHORIZATUION (access control) AWS credentials to users to access AWS resources directly, temporary  
 credentials by logging in with public providers (amazon, google, apple, Facebook), or users in an Amazon Cognito pool.  
 
-Amazon Cognito Sync: creates a local cache for the identity data. Your app talks to this local cache when it reads and  
+Amazon Cognito Sync:  
+creates a local cache for the identity data. Your app talks to this local cache when it reads and  
 writes keys. So even when you are offline. When the synchronize method is called, changes from the service are pulled to the device, changes are available to other devices to synchronize.  
 
 WE CAN ALSO ALLOW FOR UNAUTHENTICATEDS GUEST ACCESS With Amazon Cognito with unauthenticated access enabled.  
@@ -1838,17 +1839,17 @@ Error handling: we can have retry or catch (transit to failure path)
 
 Wait for task token: allows you to pause step function until a task token is returned. by appending .waitForTaskToken  
 
-Activity task: allows you to have the task work performed by an Activity worker (Apps on EC2 / Lambda / mobile device...)  
+Activity task:  
+allows you to have the task work performed by an Activity worker (Apps on EC2 / Lambda / mobile device...)  
 after it sends a SendTaskSuccess or SendTaskFailure. To set how long it should run TiemoutSettings, periodic send beat  
 with SendTaskHeartBeat 
 
 2 types of workflows:  
 - Standard (default):  
-max duration 1 year  
-price by nr of states  
-used for non-idempotent actions (same request leads to the same system state, and no action is unintentionally  
-executed more than once) like payment process.
-
+  max duration 1 year  
+  price by nr of states  
+  used for non-idempotent actions (same request leads to the same system state, and no action is unintentionally  
+  executed more than once) like payment process.
 - Express:
   up to 5 min, higher capacity, billed by nr of executions, duration and memory consumption. used for IoT data ingestion,
   streaming Data, mobile app backends.
