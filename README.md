@@ -758,13 +758,16 @@ allowlist: if you are on the list of approved countries
 blocklist prevents user fron entering from banned countries  
 
 Signed URL / signed cookie  
-Signed URL = access to individual files ( one URL per file )  
+Signed URL = access to individual files ( one URL per file ) To restrict access to content 
 Signed Cookies = access to multiple files at once  
 for example premium private users who paid for shared content  
 we can use a URL / Cookie we attach to the policy that includes:  
 - url expiration
 - ip range
 - who is the trusted signer
+
+- For S3 you can create a special CloudFront user called an origin access identity (OAI) and associate it with your distribution. Then you configure permissions
+  so that CloudFront can use the OAI to access and serve files to your users.
 
 CloudFront signed URL vs S3 pre-signed URL  
 pre-signed you have access to directly the S3 without being able to use Cloudfront, it issues a request simulating the person who pre-signed the URL
