@@ -123,13 +123,17 @@ IAM security tools:
 - IAM Accesso advisor (shows the permissions granted to a user and when were last accessed)  
 
 IAM Best practices: 
+- Remove Account Access Key for the root account
+- Use Temporary Security Credentials (IAM Roles) Instead of Long-Term Access Keys.
 - don't use the root account except setup
 - one phisical user per AWS user
 - Assign users to groups and give permissions to groups, not each user
 - Strong password policy
 - MFA
-- create and use Roles for giving perms. to AWS services
+- Don't embed access keys directly into code.
+- Use different access keys for different applications.
 - Use access keys for CLI and SDK
+- Remove unused access keys.
 - audit permissions w/ Credential report and IAM access advisor
 
 Shared reponsability model:  
@@ -1562,10 +1566,12 @@ Contains a selection of attributes from the base table, but they are organized b
 Optimistic Locking:  
 "conditional writes" ensure the item hasn't changed before you update/delete it, each item has an attribute that acts as a version number. 
 
-DynamoDB DAX: Fully managed highly aval. seamless i-memory cache for DynamoDB, fully secure, microseconds cached reads and queries. Doesnt require   
+DynamoDB DAX: 
+Fully managed highly aval. seamless i-memory cache for DynamoDB, fully secure, microseconds cached reads and queries. Doesnt require   
 application logic modification because compatible with existing DynamoDB APIs. Solves the "hot key" problem so too many reads.   
 
-DynamoDB Streams: ordered stream of item level modifications (CRUD), streams can be sent to kinesis, Lamba.   
+DynamoDB Streams: 
+ordered stream of item level modifications (CRUD), streams can be sent to kinesis, Lamba.   
 use cases: react to changes in real-time ex: send welcome email to users, analytics, insert in derivate tables  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/1f266a95-fd6f-474a-ab9a-2ca2036e5ea4">  
 With lambda for table -> DynamoDB Stream -> AWS Lambda event mapping source polls from it
@@ -1613,6 +1619,10 @@ StreamViewType — Specifies the information that will be written to the stream 
 - NEW_IMAGE — The entire item, as it appears after it was modified.
 - OLD_IMAGE — The entire item, as it appeared before it was modified.
 - NEW_AND_OLD_IMAGES — Both the new and the old images of the item
+
+Permissions to allow uaccess to CERTAIN items and attributes:  
+Restrict access to specific items based on certain primary key values  
+identity-based policy that restricts access TO AN ENTIRE TABLE, not specific items  
 
 # API Gateway
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/e272307f-1bfe-4156-8f98-dbba2b4c4cd8">
