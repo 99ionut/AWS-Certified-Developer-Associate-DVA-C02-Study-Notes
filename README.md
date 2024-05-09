@@ -111,7 +111,9 @@ To access AWS:
       For ex: the AWS SDK for Java will find credentials stored in environment variables (where its allowed)
       before it checks for instance provide credentials (where its not allowd) and will allow access to
       extra S3 buckets.  
-Access keys are generated with the AWS console, users manage their keys and are secret like passwords.
+
+Access keys are generated with the AWS console, users manage their keys and are secret like passwords.  
+connecting programmatically to AWS resources: Access key ID + Secret access key
 
 IAM Roles:  
 some AWS services will need to perform actions on your behalf, ex: you give permissions to your EC2 instance to do stuff on your AWS.  
