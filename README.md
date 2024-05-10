@@ -144,7 +144,7 @@ You know.
 AWS STS  
 Security token service: allows to grant limited and temp access to aws resources (up to 1hr)  
 Define an IAM role, define its principals, use AWS STS to impersonate the IAM Role (AssumeRole API), Get the temp. credentials  
-- AssumeRole: Assume roles within your account or cross-account  
+- AssumeRole: Assume roles within your account or cross-account, ex: use with cross-account to get temporary access to resources in a second account  
 - GetSessionToken: for STS with MFA, from a user or AWS account root user. it returns Access ID, Secret Key, Session Token, Expiration date.
 - GetCallerIdentityt: return details about the IAM user or role used in the API call
 - DecodeAuthorizationMessage: decode error message when AWS API is denied.
@@ -960,7 +960,7 @@ Deploy options for updates:
 - Rolling with additional batches: like rolling but actively starts new instances to switch, so it has all the capacity when needed  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2cb0caf7-d0db-43b9-ad76-f62eeb576408">
   
-- immutable: deploys all to new instances the switches everything at once when it's ready (QUICKEST ROLLBACK IF FAILURE, but longest deploymeny, zero downtime)
+- immutable: deploys all to new instances the switches everything at once when it's ready (QUICKEST ROLLBACK IF FAILURE, but longest deploymeny, zero downtime)  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc51490f-db72-457f-8968-4b756dcd4f67">
   
 - blue green: create a new environment and test, and switch when ready  
