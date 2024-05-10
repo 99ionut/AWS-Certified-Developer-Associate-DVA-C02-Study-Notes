@@ -1094,7 +1094,7 @@ inflight encryption with HTTPS API
 SQS Message Visibility Timeout:  
 After a message is polled by a consumer it becomes invisible to other consumers, it has 30s to process it,  
 if the message hasn't been deleted cuz not processed yet, it will be put back in the queue and be processed twice, if u need more than 30s to process it  
-use the "ChangeMessageVisibility" API to change the timeout time
+use the "ChangeMessageVisibility" API to change the timeout time to increase the value of VisibilityTimeout
 
 SQS Dead Letter queues (DLQ):  
 We can set a threshold to how many times a message can go back into the queue because a consumer fails to process it, after the "MaximumReceives" threshold  
@@ -1752,8 +1752,9 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 - CodeBuild: Build and test code. The build instructions are in buildspec.yml (must be at root of code like .git).
   Logs can be used in S3 / cloudwatch. we can use CloudWatch Metrics to monitor build statistics.
   Detect failed build and triggers / alarms.
-  Don't store codefuild secrets as plaintext in env. vars. Instead environment vars can reference parameters store parameters, or secrets manager secrets. 
-
+  Don't store codefuild secrets as plaintext in env. vars. Instead environment vars can reference parameters store parameters, or secrets manager secrets.   
+  build logs of the failed phase in the last build attempt in the AWS CodeBuild project build history  
+  
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f0d2d3dc-08c8-4b10-a775-e59e55911a99">  
 
 - CodeDeploy: automate deploy code to EC2 / lambda (help automate with traffic shift linear / canary) / ECS (only Blue-
