@@ -226,6 +226,8 @@ you can retrieve info about the EC2 but not the IAM policy ex: know the public I
 
 Use EC2 instance profiles is a container for an IAM role that you can use to pass role information to an EC2 instance when the instance  
 starts. This is a secure way to authorize and EC2 instance to access AWS services.  
+
+"--dry-run" argument Checks whether you have the required  permissions  for  the  action, without actually making the request  
  
 # EC2 Storage
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/e04b234a-8821-4d49-94e8-9295df6a2c08">
