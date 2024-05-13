@@ -51,6 +51,13 @@ than move from one AWS service to another for each task. maintain separate sets 
 stages. Each version runs on Amazon EC2 and uses an Elastic Load Balancer.
 create a single page to view and manage all of the resources 
 
+AWS Global Accelerator is a networking service that helps you improve the availability, performance, and security of your  
+public applications. Global Accelerator provides two global static public IPs that act as a fixed entry point to your  
+application endpoints, such as Application Load Balancers, Network Load Balancers, Amazon Elastic Compute Cloud (EC2)  
+instances, and elastic IPs.   
+good fit for non-HTTP use cases, such as gaming (UDP), IoT (MQTT), or Voice over IP, as well as for HTTP use cases that  
+specifically require static IP addresses or deterministic, fast regional failover.  
+
 # IAM
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/3d22a197-c740-4bcb-bc14-38ea11d542e7">
 
@@ -786,13 +793,19 @@ pre-signed you have access to directly the S3 without being able to use Cloudfro
 
 Signed URL process:  
 2 types of signers, either a trusted key group ( recommended ) or an AWS account that contains a key pair (not recommended)  
-create one of more trusted key groups, the public key is used in the URL, the private key is used by your app.
+- create one of more trusted key groups, the public key is used in the URL, the private key is used by your app.
+- When you create a signer, the public key is with CloudFront and private key is used to sign a portion of URL  
+- When you use the root user to manage CloudFront key pairs, you can only have up to two active CloudFront key  
+  pairs per AWS account  
+
 
 Pricing:  
 the cost of data out per edge location varies  
 you can reduce the number of edge locations for cost reduction using the 3 Cloudfront price classes
 
 multiple origins:  
+CloudFront with multiple origins to serve both static and dynamic content at low latency to global users  
+can help access the static and dynamic content while keeping the data latency low  
 route to different kinds of origins based on the content type or path  
 for example /API/* requests from ALB, /* requests from S3 bucket
 
@@ -824,6 +837,9 @@ that contains all commands, in order, needed to build a given image.
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/7701684b-84d8-4979-bf61-f32db171ac1a">
 
 ### Elastic container service
+
+ECS agent facilitates the communication between your container instances and Amazon ECS  
+/etc/ecs/ecs.config contains cluster Parameter values, like cluster name.  
 
 EC2 Launch type:  
 to launch a container = to launch an ECS task  
@@ -928,6 +944,13 @@ It's Cloud agnostic so it can be used in any cloud, use it if your company / ano
 You create EKS nodes with tasks inside, they can be: Managed node groups (auto-scaling, on-demand ec..) by AWS or Self-Managed Nodes.  
 EKS data volume supports EBS, EFS, FSx, by specifying a StorageClass. It uses a Container Storage Interface CSI, to be able to use them  
 
+You terminated the container instance while it was in STOPPED state, that lead to this synchronization issues,  
+container instance isn't automatically removed from the cluster.  
+If you terminate a container instance in the RUNNING state, that container instance is automatically removed,  
+or deregistered, from the cluster.   
+
+
+
 # Beanstalk
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2902359b-4e68-430a-b99a-a9da6e41c116">
 
@@ -1010,7 +1033,8 @@ template components:
   based on a region, you can create a mapping that uses the region name as a key and contains the values you want to specify for
   each specific region
 - outputs: output the vars such as VPC ID and subnet ID to network stack
-- conditions: control the creation of res. based on conditions ex: what region u deploy in
+- conditions: control the creation of res. based on conditions ex: what region you deploy in
+  (Parameters section can't be associated with Conditions)
 - Instrinct functions (the most important):
   - Ref: returns the instance ID
   - GetAtt: returns the value of a specific attribute, ex: when creating and EBS vol you want to get the AZ of the EC2
@@ -1181,16 +1205,17 @@ Easy to collect/process/analyze streaming data in real-time, such as Application
   Producers: SDK, Kinesis Producer Library KPL, Kinesis Agent, monitor log files.
   ProvisionedThroughputExceeded: too many inputs in a shard, solution: use highly distributed partition key, retries with exponential backoff, increase shards
 
-Consumers: custom with SDK, Kinesis Client Library, Lambda ecc... can have multiple consumers getting from the same shards.
-Shared fan out consumer: max 2mb/s split between all consumers of a shard (pool model)
-Enhanced fan-out Consumer: 2mb/s per consumer per shard by subscribing (push model to subscribers)
+Consumers:  
+custom with SDK, Kinesis Client Library, Lambda ecc... can have multiple consumers getting from the same shards.  
+Shared fan out consumer: max 2mb/s split between all consumers of a shard (pool model)  
+Enhanced fan-out Consumer: 2mb/s per consumer per shard by subscribing (push model to subscribers)  
 
-Kinesis Producer Library (KPL):
-simplifies producer application development, allowing developers to
+Kinesis Producer Library (KPL):  
+simplifies producer application development, allowing developers to  
 achieve high write throughput to a Kinesis data stream. helps you write to a Kinesis data stream.
 
-Kinesis Client Library KLC:
-Java library that helps read records from Kinesis Data Stream with distributed apps. sharing the read workload.
+Kinesis Client Library KLC:  
+Java library that helps read records from Kinesis Data Stream with distributed apps. sharing the read workload.  
 Each shard is to be read by only one KCL instance, 4 shards = max 4KCL instances, 8 = 8 instances
 
   Kinesis operations:
@@ -1200,25 +1225,25 @@ Each shard is to be read by only one KCL instance, 4 shards = max 4KCL instances
 - Kinesis Data Firehouse:
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/41492d0c-faaa-4e15-8d66-c1bd21b45c8c">
 
-  Managed (ingest data at scale) used to load data into specific services, streams into ASW data stores near real-time, fully managed serverless.
-  Takes data from producers / kinesis data stream. And Batch writes data into destinations to:
-  (to know)(S3, Redshift, Amazon Open Search, 3rd party destinations, HTTP endpoints) custom destinations
-  it can first transform the data by compressing/converting ecc.. or custom with Lambda
-  it has auto scaling not like KDS, there is no storage so no replay capability.
+  Managed (ingest data at scale) used to load data into specific services, streams into ASW data stores near real-time, fully managed serverless.  
+  Takes data from producers / kinesis data stream. And Batch writes data into destinations to:  
+  (to know)(S3, Redshift, Amazon Open Search, 3rd party destinations, HTTP endpoints) custom destinations (cant process just load data)  
+  it can first transform the data by compressing/converting ecc.. or custom with Lambda  
+  it has auto scaling not like KDS, there is no storage so no replay capability.  
   
 - Kinesis Data Analytics:
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/fb8c6601-9e33-4380-b85e-e160cb48ef3d">
 
-  analyze data Streams for SQL, fully managed.
-  It can read either from KDS or KDF, and apply SQL statements to perform real-time analytics + can add s3 to join data
-  it can then send the data to KDS (that can do real-time processing of the data) or KDF ( that can send it to S3, Redshift, other)
+  analyze data Streams for SQL, fully managed.  
+  It can read either from KDS or KDF, and apply SQL statements to perform real-time analytics + can add s3 to join data  
+  it can then send the data to KDS (that can do real-time processing of the data) or KDF ( that can send it to S3, Redshift, other)  
 
-  Analyze data for Apache Flink:
-  For managed clusters, it can read data from multiple sources at a time
+  Analyze data for Apache Flink:  
+  For managed clusters, it can read data from multiple sources at a time  
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a364a0e5-ad38-4286-9a42-7f7bf9491009">
 
-Monitoring / troubleshooting / logs
+Monitoring / troubleshooting / logs  
 
 # CloudWatch
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/b5813ebd-7021-4505-abbf-ec18af030d43">
@@ -1228,7 +1253,7 @@ collect, monitor and analyze and store Logs
 Send notifications for Events  
 - Metrics:
   for every service in AWS, it's a variable to monitor ex CPU, networking, they have timestamps and you can create dashboards with them
-  EC2 instance metrics every 5 min, there is a "detailed monitoring" for a cost you get every 1 minute. By default no log from EC2,
+  EC2 instance metrics every 5 min, there is a "detailed monitoring" for a cost you get every 1 minute. By default no log from EC2,  
 - need to setup an "agent" to push them. "CloudWatch Unified Agent" allows you to get more granular extra data from EC2   instead of the default ones
 - If you need granularity higher than detailed monitoring which is 1min, use High resolution, with data at a granularity
   of 1 second, 5 seconds, 10 seconds, 30 seconds, or any multiple of 60 seconds.
@@ -1236,7 +1261,7 @@ Send notifications for Events
   - The "--dimensions" parameter further clarifies what the metric is and what data it
     stores. You can have up to 10 dimensions in one metric, and each dimension is defined by a name and value pair
 
-  Metric filters define the terms and patterns to look for in log data as it is sent to CloudWatch Logs, then it turns metric filters log data into numerical
+  Metric filters define the terms and patterns to look for in log data as it is sent to CloudWatch Logs, then it turns metric filters log data into numerical  
   CloudWatch metrics that you can graph or set an alarm on.
 - Logs:
   - log groups: name representing the application
@@ -1276,8 +1301,8 @@ Safely validate features by serving them only to a small % of users. Use feature
 - schedule scripts / cron jobs in the cloud
 - react to event pattern ex: IAm user signing in -> send email with SNS, it can also trigger lambda, step function, kinesis ecc..,
   or if CodeBuild Fails, if an EC2 is started, if S3 upload ecc...  
-It's the default event bus for AWS services, it can react to events from 3rd party "Partner Event bus", or custom Apps "Custom Event Bus"
-You can archive events or replay archived events
+It's the default event bus for AWS services, it can react to events from 3rd party "Partner Event bus", or custom Apps "Custom Event Bus"  
+You can archive events or replay archived events  
 Resource-based Policy can deny events from other AWS acc, or aggregate from multiple acc. into one using "Multi-Account aggregation"
   
 # X-Ray
@@ -1299,7 +1324,7 @@ How to instrument your code: instrument = measure the product performance, diagn
 - Annotations in AWS X-Ray that can be used with Filter expressions
 - Subsegments provide more granular timing information and details about downstream calls that your application made to fulfill the original request. 
 
-GetTraceSummaries you can search for segments
+GetTraceSummaries you can search for segments  
 
 AWS Distro for OpenTelemetry:  
 AWS-supported distro of the open-source project Open Telemetry  
@@ -1744,8 +1769,9 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 
 - CodeCommit: store the code, Versioning control using a version control system. Its fully managed, SSH/HTTPS auth.
   IAM Policies, encryption at rest with AWS KMS, in transit
-  Example lambda to commit / i think other services as well to commit. The Dev can use AWS SDK to instantiate a CodeCommit client. The client can then be used with  
-  put_file which adds or updates a file in a branch in an AWS CodeCommit repo.
+  - Example lambda to commit / i think other services as well to commit. The Dev can use AWS SDK to instantiate a CodeCommit client. The client can then be used with  
+    put_file which adds or updates a file in a branch in an AWS CodeCommit repo.
+  - connections to AWS CodeCommit repos with IAM user, configure Git credentials for CodeCommit in the IAM console  
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc98d861-4d4f-4ab7-90fd-260eda8be962">  
 
@@ -1804,8 +1830,13 @@ EASIER THAN CLOUDFORMATION use for exam.
 Cloud development Kit:  
 define cloud infrastructure using familiar language, code gets compiled into CloudFormation model (Json/Yaml)  
 You can deploy infrastructure and application code together, if it doesn't compile you don't get either of them.  
+
+Create the app from a "template provided by AWS CDK" -> Add code to the app to create resources within stacks ->  
+Build the app (optional) -> Synthesize one or more stacks in the app -> Deploy stack(s) to your AWS account  
+
 CDK Construct: library collection of constructs for every AWS resource.  
-Construct hub: 3rd party and open source from community CDKs.
+Construct hub: 3rd party and open source from community CDKs.  
+
 
 # Cognito
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/17343071-a6ff-4e38-a0f3-a8a9a40080ae">
