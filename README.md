@@ -239,7 +239,7 @@ starts. This is a secure way to authorize and EC2 instance to access AWS service
 # EC2 Storage
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/e04b234a-8821-4d49-94e8-9295df6a2c08">
 
-EBS (elastic block store) network drive you can attach to your drive while they run:
+EBS (elastic block store) network drive you can attach to your drive while they run: / block-level storage service
   - persistent data, only mounted to 1 ec2 at the time
   - locked to only 1 AZ at the time
   - network drive so a bit latency to communicate (not physical drive)
@@ -289,7 +289,8 @@ EC2 instance store:
 # EFS
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/02c35483-16c1-4347-833b-cafe9c6dc073">
 
-Elastic file system (network file system can be mounted on many EC2)
+Elastic file system (network file system can be mounted on many EC2) / file storage service (not object storage service
+or block-level storage service)
   - they work with EC2 in multiple AZs
   - high availability, pay-per-use
   - security group to control access to EFS
@@ -352,6 +353,7 @@ what it does:
   - redirects to target EC2 instances
   - redirects to IP addresses
   - supports TCP,HTTP,HTTPS health checks
+  - capture the user's source IP address and source port 
     
 - gateway load balancer (GLB): operates at layer 3 network layer, scale and manage 3rd party virtual applications
   for example firewalls, intrusion detection system, inspection system... for example if u want your traffic to be
@@ -379,7 +381,7 @@ EC2 security group allows traffic only from the load balancer, so in routing tab
 # Auto scaling group
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/f861c0d3-3b2a-4546-a6fd-2ab0a6252823">
 
-in cloud u can get rid or add servers quickly  
+in cloud you can get rid or add servers quickly  
 the goal of ASG is to   
 - scale out (add EC2) to match increase in load
 - scale in (rem. EC2) to match decrease in load
@@ -394,6 +396,9 @@ Scaling policies:
 - simple / step scaling: when a CloudWatch alarm is triggered
 - scheduled scaling: anticipate scaling based on pattern
 - predictive scaling: pattern that repeat based on forecast
+
+An Auto Scaling group has a maximum capacity of 3, a current capacity of 2, and a scaling policy that adds 3 instances  
+Amazon EC2 Auto Scaling adds only 1 instance to the group.  
 
 Instance refresh:  
 if you want to update the launch template, as scaling happens old instances get terminated and new ones  
@@ -416,8 +421,12 @@ Managed DB service, uses SQL, because its managed, rather than EC2 own DB:
   - failover if disaster recovery
   - replicas can be used for multi-AZ disaster recovery (THEY ARE NOT READ REPLICAS)
   - one DNS name, automatic failover
-  - sync replication 
-- scaling capability / Auto scaling
+  - sync replication
+  - Amazon RDS applies operating system updates by following these steps:
+    Perform maintenance on the standby.
+    Promote the standby to primary.
+    Perform maintenance on the old primary, which becomes the new standby.
+- can enable AUTO SCALING!
 - storage backed by EBS
 
 RDS proxy:  
@@ -554,6 +563,7 @@ is stateless return traffic must be explicitly allowed
 security group: only the allowed rule  
 firewall the controlled traffic from EC2 instances   
 stateful return traffic is automatically allowed  
+timeout errors if no access allowed  
 
 VPC flow logs:  
 capture info about IP traffic from network interfaces, log data can be published to Amazon CloudWatch Logs or Amazon S3
@@ -585,7 +595,7 @@ WordPress on AWS
 Used for everything, is the backbone for a lot of internet stuff  
 backup and storage, disaster recovery, archive, hybrid cloud storage, app hosting, media hosting, data lakes and big data, sw delivery, static website  
 
-store objects (files) in "buckets"  
+store objects (files) in "buckets" / object storage service
 must have unique name  
 defined at the region level ( not global level)  
 
@@ -971,6 +981,9 @@ Example of architectures:
 deployment mode:  
 single instance: great for dev  
 High availability with load balancer: great for production  
+AWS Elastic Beanstalk makes it easy to create new environments for your application. You can create and manage  
+separate environments for development, testing, and production use, and you can deploy any version of your application  
+to any environment  
 
 You can add AWS Elastic Beanstalk configuration files (.ebextensions FOLDER) to your web application's source code to configure your environment and customize   
 the AWS resources that it contains. YAML- or JSON-formatted documents with a .config file extension that you place in a folder named .ebextensions and deploy  
@@ -999,7 +1012,7 @@ Elastic Beanstalk CLI, helpful in automating pipelines
 EB Lifecycle policy: policy to remove old versions  
 
 EB extensions: a file in the .ebextentions/ directory in our code that can configure all the parameters you find in the web UI  
-Because it uses CloudFormation under the hood, the extensions provision any service you want.  
+Because it uses CloudFormation UNDER THE HOOD, the extensions provision any service you want.  
 
 EB cloning: clones an environment. with the exact config. useful for "test" versions of app. After cloning u can change settings.  
 
@@ -1704,7 +1717,9 @@ Can Authenticate users with:
 Deployment Stages:  
 After Making a change must be deployed it or else changes wont apply, its done through "stages"  
 each stage has its own config. parameters. Stages are kept and can be rolled back if needed  
-<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/8baded8a-55ea-461e-8980-df53eb2cebc8">
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/8baded8a-55ea-461e-8980-df53eb2cebc8">  
+Update stage variable value from the stage name of test to that of prod: Update stage variable value from the stage  
+name of test to that of prod  
 
 Stage variables: like Env. variables (config) but for API Gateway, use them for often changing values  
 so it prevents redeployment every time. A common use defining to which Lambda function it points  
@@ -1814,6 +1829,9 @@ Serverless application model basically a shortcut to cloud formation, says how t
 - Only 2 commands to deploy to AWS (sam package and sam deploy)  
 - can use CodeDeploy to deploy lambda functions  
 - Can help you run Lambda, API Gateway, DynamoDB
+
+Relies on CloudFormation templates to work!! SAM templates are an extension of AWS CloudFormation templates,  
+with some additional components that make them easier to work with
 
 AWS SAM CLI lets you LOCALLY build, test, and debug serverless applications that are defined by AWS SAM templates.  
 for ex. provides a Lambda-like execution environment locally
