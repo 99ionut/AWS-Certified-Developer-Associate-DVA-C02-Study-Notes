@@ -837,7 +837,8 @@ Docker VS VMs
 resources are shared with the host, many containers on one server, they can be managed by ECS, EKS, ECR, Fargate  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/25b17b94-3cab-4d38-b615-95f0e1fe9864">
 
-Docker platforms for Elastic Beanstalk You specify images by name in the "Dockerrun.aws.json" file and save   
+Elastic Beanstalk uses the "docker-compose.yml" file to pull and run your image if you are using Docker Compose.  
+Otherwise Docker platforms for Elastic Beanstalk You specify images by name in the "Dockerrun.aws.json" file and save   
 it in the root of your source directory.
 
 Docker builds images automatically by reading the instructions from "Dockerfile" which is a text file named Dockerfile  
