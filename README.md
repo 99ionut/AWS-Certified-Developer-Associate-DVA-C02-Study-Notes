@@ -1612,7 +1612,7 @@ PartiQL: do SQL-compatible query (no joins) if all you know is SQL. You can sele
 
 Local Secondary Index LSI:  
 Alternative sort key for table (same as partition key) based on sort key = scalar attribute (String, Number, Binary) + up to 5 local secondary indexes per table  
-must be defined at table creation time.  
+must be defined at table creation time. !! 
 ex: give me all the games that have been played by this user between 2021 and 2023. We have a different sort key thanks to LSI  
 With a local secondary index you can have a different sort key but the partition key is the same.  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/4cb1c79c-c587-4ab8-b635-f573ac1fd9c7">  
@@ -1859,6 +1859,9 @@ Build the app (optional) -> Synthesize one or more stacks in the app -> Deploy s
 CDK Construct: library collection of constructs for every AWS resource.  
 Construct hub: 3rd party and open source from community CDKs.  
 
+The developer can test a specific Lambda function locally by running the CDK SYNTH command to synthesize the AWS CDK  
+application into an AWS CloudFormation template  
+
 
 # Cognito
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/17343071-a6ff-4e38-a0f3-a8a9a40080ae">
@@ -1941,6 +1944,7 @@ With Amplify, developers can easily connect their repositories, such as AWS Code
 Like EB for mobile and web apps. Gives us Data Storage, auth, ml, frontend libraries.  
 gives you Authentication out of the box with Cognito.  
 gives you Data Store out of the box with AppSync and DynamoDB  
+amplify.yml build  
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a3f6a3a4-f326-4f00-a43c-4a1af6226434">
 
@@ -2000,6 +2004,9 @@ You can replicate secrets across multiple regions, and replicas sync.
 AWS Systems Manager Parameter Store:  
 lower cost than Secrets Manager, doesnt have automatic rotation. If exams asks for lower cost or app handles  
 rotation use this
+incorporate Systems Manager Parameter Store value into the CloudFormation template: 
+- if plaintext: SSM dynamic reference
+- if secureString: SSM-Secure dynamic reference
 
 AWS Nitro Enclaves:  
 process sensitive data in an isolated computer environment, only authorized code can be running, fully isolated VMs. 
