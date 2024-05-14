@@ -345,8 +345,12 @@ what it does:
   -  we can do stuff like if the request is ?=mobile it redirects to a specific instance otherwise if ?=desktop to
      different one
   - You can register your Lambda functions as targets and configure a listener rule to forward requests to the target group for your
-    Lambda function. When the load balancer forwards the request to a target group with a Lambda function as a target, it invokes
-    your Lambda function and passes the content of the request to the Lambda function, in JSON format.
+    Lambda function. When the load balancer forwards the request to a target group with a Lambda function as a target, it invokes  
+    your Lambda function and passes the content of the request to the Lambda function, in JSON format.  
+    X-Forwarded-Proto: protocol (HTTP/HTTPS)  
+    X-Forwarded-Host: original Host header requested by the client  
+    X-Forwarded-For: original IP address of a client  
+    X-Forwarded-Port header: original port that the client used to connect  
 
 - network load balancer (NLB): forwards TCP UDP LTS traffic
   - works like app. load balancer, we redirect to certain target groups
@@ -940,7 +944,7 @@ ECS Cluster queries are expressions that enable you to group objects. For exampl
 such as Availability Zone, instance type, or custom metadata. 
 
 Amazon ECR:  
-elastic container registry, used to store and manage docker images on AWS  
+elastic container registry, used to store and manage docker images on AWS (IT CAN HOST THEM)    
 private repo for your account or public repo using ECR public gallery  
 IAM role to EC2 instance to pull ECR repository  
 
@@ -1084,7 +1088,7 @@ CF Stack policies:
 JSON doc that defines the update actions that are allowed on specific res. during stack update.
 
 CF Custom resources:  
-define res. not yet supported, custom res from 3rd party. They are integrations backed by lambda functions
+define resources not yet supported, custom resources from 3rd party. They are integrations backed by lambda functions
 
 CF stack sets:  
 CRUD stacks across multiple accounts and regions with a single operation, the developer can deploy the same CloudFormation stack to   
@@ -1103,6 +1107,13 @@ CF Template settings:
 CF Deploy a Lambda 2 options:
 - write the code directly inside the CloudFormation template in the json
 - Upload a ZIP file containing the function code to Amazon S3, then add a reference to it in an AWS::Lambda::Function
+
+CF pseudo-parameter:
+predefined values by AWS CF:
+AWS::AccountId
+AWS::StackName
+AWS::Region <--
+ecc...
 
 # SQS
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/986a4ac4-0e84-4b1a-8731-f06774f3b7ae">
@@ -1925,7 +1936,9 @@ with SendTaskHeartBeat
   - Async (At least once execution guarantee) Don't wait for results, ex message services you don't wait for a response.
     must manage independence to manage that if it runs twice you don't have twice the effects.
   - Sync (At most once execution guarantee) Wait for workflow to complete. When you need an immediate response. At-most
-    because if there is a failure it doesn't automatically restart, it's up to your logic.
+    because if there is a failure it doesn't automatically restart, it's up to your logic.  
+
+"DefinitionSubstitution" entries allow the state machine to include resources that are declared in the AWS SAM template file or CF template  
 
 AWS App sync:  
 
