@@ -1316,7 +1316,10 @@ Safely validate features by serving them only to a small % of users. Use feature
 - react to event pattern ex: IAm user signing in -> send email with SNS, it can also trigger lambda, step function, kinesis ecc..,
   or if CodeBuild Fails, if an EC2 is started, if S3 upload ecc...  
 It's the default event bus for AWS services, it can react to events from 3rd party "Partner Event bus", or custom Apps "Custom Event Bus"  
-You can archive events or replay archived events  
+You can archive events or replay archived events.
+
+eventbridge event buses in one (target) account can be a target of another event rule in a source account.
+
 Resource-based Policy can deny events from other AWS acc, or aggregate from multiple acc. into one using "Multi-Account aggregation"
   
 # X-Ray
