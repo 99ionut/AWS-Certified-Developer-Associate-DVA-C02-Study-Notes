@@ -1616,7 +1616,8 @@ Basic Operations:
   - Backup and restore into a new table
   - Scan + PutItem 
 
- You can batch operations to reduce API calls, it will be done in parallel for efficiency  
+ You can batch operations to reduce API calls, it will be done in parallel for efficiency, it can fail if throttling  
+ and if the table doesnt have enought Read/Write Capacity
  - BatchWriteItem: up to 25 PutItem / DeleteItem
  - BatchGetItem: up to 100 items, max 16MB.
 
