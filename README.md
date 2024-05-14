@@ -1718,9 +1718,9 @@ Mapping templates: ex: You can transform the incoming JSON into a valid XML mess
 
 Security:   
 Can Authenticate users with:  
-- IAM roles (for internal apps) create and IAM policy auth and attach to User/Role, IAM credentials are signed
+- IAM roles (for INTERNAL apps) create and IAM policy auth and attach to User/Role, IAM credentials are signed
   in the headers.
-- Resource policies: Allow for cross-account access combined with IAM security, or for specific IP Addresses, or VPC
+- Resource policies: Allow for CROSS ACCOUNT access combined with IAM security, or for specific IP Addresses, or VPC
   endpoint.
 - Cognito user pools(for external users) users sign in with Congnito first which provides token
 - Custom Authorizer (Lambda Authorizer) Token-Basesd auth. the lambda if auth is correct returns an IAM policy that will
