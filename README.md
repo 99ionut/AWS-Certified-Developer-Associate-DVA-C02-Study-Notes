@@ -1531,7 +1531,9 @@ DB connection strings
 S3 bucket ecc....  
 Passwords, encrypted with KMS  
 
-Lambda all console.log() statements are automatically sent to CloudWatch.
+Lambda all console.log() statements are automatically sent to CloudWatch.  
+
+You can Invoke functions with test events, also events can be shared between IAM users and be editable.  
 
 # DynamoDB
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/60590f72-b4e5-4b77-b546-237a679894c6">
