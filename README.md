@@ -107,10 +107,10 @@ Defense mechanisms:
 
 To access AWS:
 - AWS management console (pw + MFA)
-- CLI (access keys)
+- CLI (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)
   - to use CLI with MFA you need to create a temporary session, you do so with the STS GetSessionToken API
   - the CLI looks for credentials in this order: Command line, Env. Variable CLI credential file, CLI config file, Container cred. Instance profile cred.
-- SDK (access keys)
+- SDK (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)
   - looks for credentials in this order:
     - Environment variables
     - Java system properties
