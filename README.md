@@ -1899,7 +1899,9 @@ Cognito user pool (CUP):
 - We can integrate it with API Gateway and ALB (offload the auth. to the load balancer) we can use 2 ways to auth:  
   With Cognito user pools, or OIDC auth.  
 - you can add sign-up and sign-in to mobile and web apps and it also offers a user directory so   
-  user accounts can be created directly within the user pool. Users also have the ability to reset their passwords  
+  user accounts can be created directly within the user pool. Users also have the ability to reset their passwords
+- You can add social identity providers (IdPs) (SPID), are based on OpenID, they reqire the "Client ID" & "client Secret"
+  to work 
 
 Cognito Identity pools (federated identities):  
 are for AUTHORIZATUION (access control) AWS credentials to users to access AWS resources directly, temporary  
