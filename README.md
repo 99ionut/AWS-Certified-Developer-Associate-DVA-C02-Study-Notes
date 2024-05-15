@@ -98,6 +98,8 @@ Inline vs Managed policies:
 Permission to Pass a Role:
 you need the iam:PassRole permission, roles can only be passed to what their trust allows  
 The "trust policy" defines which resource can assume the role, and under which condition
+The "Resource based" Policy can deny events from other AWS acc, or aggregate from multiple acc. into one using "Multi-Account aggregation"
+The "access policy" when the user attempted to log in by using the provided credentials for the role
 
 Defense mechanisms:
 - password policy (length/special chars/numbers/pass expiration, prevent reuse)
@@ -463,6 +465,7 @@ both RDS and Aurora:
 Elastic cache:  
 redis / memcached  
 in-memory database with high-performance low latency  
+- is an in-memory KEY-VALUE store that has no way to deliver static HTTP content
 - common query will be cached
 - it's managed, so aws takes care of the usual stuff
 - Application queries ElastiCache, if available gets from there, otherwise query RDS and store in ElastiCache
@@ -631,6 +634,8 @@ security:
   - SSE-C server-side encryption with customer-provided keys
     - AWS does not store the key you provide
     - must use HTTPS
+    - The GetObject API call must specify the customer-provided encryption key that is used to initially encrypt the data  
+      and the Object key
 - encrypt the objects client-side
   - encryption and decryption outside of AWS
 - encryption in transit
@@ -991,7 +996,7 @@ separate environments for development, testing, and production use, and you can 
 to any environment  
 
 You can add AWS Elastic Beanstalk configuration files (.ebextensions FOLDER) to your web application's source code to configure your environment and customize   
-the AWS resources that it contains. YAML- or JSON-formatted documents with a .config file extension that you place in a folder named .ebextensions and deploy  
+the AWS resources that it contains. YAML or JSON-formatted documents with a .CONFIG file extension that you place in a folder named .ebextensions and deploy  
 
 Deploy options for updates:  
 - All at once, deploy the new v all in one go but it has a bit of downtime  
@@ -1813,6 +1818,7 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
   Detect failed build and triggers / alarms.
   Don't store codefuild secrets as plaintext in env. vars. Instead environment vars can reference parameters store parameters, or secrets manager secrets.   
   build logs of the failed phase in the last build attempt in the AWS CodeBuild project build history  
+  CodePipeline stage can run many CodeBuild actions (not stages) in parallel.  
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f0d2d3dc-08c8-4b10-a775-e59e55911a99">  
 
@@ -1969,7 +1975,8 @@ amplify.yml build
 # AWS Security
 in flight TLS / SSL will be encrypted before sending and decrypted after. prevents MITM man-in-the-middle attack.   
 Server-Side encryption: Data is encrypted after being recieved by the server, decrypted before being sent. It's stored in an encrypted for thanks to a key.  
-Client-Side encryption: data in encrypt. by the client and never decrypted by server.  
+Client-Side encryption: data in encrypt. by the client and never decrypted by server. Client-side encryption with  
+customer-managed encryption keys allows you to select either symmetric or asymmetric keys.  
 
 # KMS 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/471d117e-2e6a-4390-a241-b0a00c50934e">
