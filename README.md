@@ -1176,7 +1176,7 @@ Must know API:
 - PurgeQUeue, deletes all messages  
 - SendMEssage, RecieveMessage, DeleteMessage  
 - MaxNumberOfMessages (for receiving) def. 1 max 10  
-- RevieceMessageWaitTimeSeconds: Long Polling  
+- ReceiveMessageWaitTimeSeconds: Long Polling  
 - ChangeMessageVisibility: change message timeout  
 
 FIFO queue:  
