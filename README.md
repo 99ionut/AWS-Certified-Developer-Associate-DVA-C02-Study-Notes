@@ -81,6 +81,9 @@ Consists of:
   - "Action": API calls that will be allowed / denied based on the effect
   - "Resource": list of res. to which the action is applied
   - "Condition": when it's applied (optional)
+ 
+You can use Signature Version 4 to sign the API requests, to give API access in one AWS account to users in a different AWS account, also use  
+resource policy on the resource you are trying to access...  
 
 If there are 2 policies one the same resource Deny and one Allow, the Deny wins.
 If IAM policy + S3 policy, the UNION of those creates the Total Policy Evaluated, so if you remove one the other one remains
@@ -1987,6 +1990,8 @@ AWS Amplify Hosting.
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a3f6a3a4-f326-4f00-a43c-4a1af6226434">
 
+AWS AppSync:  
+build scalable applications that require real-time updates on a range of data sources, including Amazon DynamoDB.  
 
 ---
 # AWS Security
