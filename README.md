@@ -720,7 +720,8 @@ lifecycles rules:
 
 S3 Event notifications:  
 like generating thumbnails of images uploaded to s3  
-S3 bucket -> Amazon EVent Bridge -> rules -> services  
+S3 bucket -> Amazon Event Bridge -> rules -> services  
+S3 event notifications can directly invoke a Lambda function, you dont necessarely need Event Bridge  
 
 S3 performance  
 - can speed up upload by using multi-part upload
@@ -1002,13 +1003,13 @@ Deploy options for updates:
 - All at once, deploy the new v all in one go but it has a bit of downtime  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/28d406a4-c6d7-4b02-84cb-74e1349db53b">
   
-- Rolling: update a few instances at a time (at one point it funs at a smaller capacity  
+- Rolling: update a few instances at a time (at one point it runs at a smaller capacity)  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a16b4ed3-21aa-48a3-b73b-96fe01d23ddb">
   
 - Rolling with additional batches: like rolling but actively starts new instances to switch, so it has all the capacity when needed  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2cb0caf7-d0db-43b9-ad76-f62eeb576408">
   
-- immutable: deploys all to new instances the switches everything at once when it's ready (QUICKEST ROLLBACK IF FAILURE, but longest deploymeny, zero downtime)  
+- immutable: deploys all to new instances the switches everything at once when it's ready (QUICKEST ROLLBACK IF FAILURE, but longest deploymeny, zero downtime, CHEAPER THAN ROLLING WITH ADDITIONAL BATCHES)  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc51490f-db72-457f-8968-4b756dcd4f67">
   
 - blue green: create a new environment and test, and switch when ready  
@@ -1348,7 +1349,9 @@ understand where the error is
 It uses tracing, each component dealing with the request adds its own "trace"  
 IAM, KMS  
 To enable it:  
-modify your code using x-ray SDK then install the xRay daemon or enable AWS integration .ebextensions/xray-daemon.config file to the source code to enable the X-Ray daemon  
+modify your code using x-ray SDK then install the xRay daemon or enable AWS integration .ebextensions/xray-daemon.config file to the source code to enable the X-Ray daemon 
+You can only use X-ray with Fargate as a "SIDE CAR" because there is not EC2 image
+
 How to instrument your code: instrument = measure the product performance, diagnose errors and write trace information. you use the X-Ray SDK.  
 - Segments: each app. will send them.
 - Trace: segments collected together to form an end-to-end trace.
@@ -1766,9 +1769,11 @@ It has integration with Open API spec. (it's a common way to define REST APIs, u
 Can config API Gateway to perform validation so if the data structure doesn't correspond to a schema returns 400-error  
 (reduces nr of calls made)
 
-Caching API responses: reduces the nr of calls made, default TTL is 300s, min 0 max 1hr  
+Caching API responses:  
+reduces the nr of calls made, default TTL is 300s, min 0 max 1hr  
 Caches are different for every stage. We can invalidate the Cache immediately and flush it, or the user can do that  
-with max-age=0 if it has the IAM Auth. 
+with max-age=0 if it has the IAM Auth.  
+We can CHOOSE to Cache only a type of request/response for example only POST  
 
 You can make your API available for money to customers. We can config how much and fast they can access them, how many calls  
 possible, use API Keys to identify them, callers pass the key in x-api-key header.  
@@ -1798,7 +1803,7 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/7e9b3b94-9646-401f-a808-3bac71924293">
 
 - CodePipeline: automate pipeline. Visual workflow tool to orchestrate CICD. We can control the Source / build / test /
-  deplot / invoke stages. If a stage fails pipeline stops. You can create events for failed pipelines / events with
+  deploy / invoke stages. If a stage fails pipeline stops. You can create events for failed pipelines / events with
   CloudWatch events.
   you can add an "APPROVAL ACTION" to a stage in a pipeline at the point where you want the pipeline
   execution to stop so that someone with the required AWS Identity and Access Management permissions can approve or reject
@@ -1865,6 +1870,10 @@ for ex. provides a Lambda-like execution environment locally
 AWS toolkits: ide plugin allows you to run build test Lambda functions with AWS SAM.  
 EASIER THAN CLOUDFORMATION use for exam.
 
+The "AutoPublishAlias" property enables AWS SAM to automatically create and update a Lambda alias that points to the latest version of the function (like after a Canary deployment)  
+
+SAM local "start-api" subcommand allows you to run your serverless application locally for quick development and testing.  
+For example it creates a local HTTP server that acts as a proxy for API Gateway and invokes your Lambda functions based on the AWS SAM template.    
 
 <img width="500" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bde587c1-1ff8-47b3-8b14-3d5df83b8d8f">
 
