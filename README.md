@@ -1416,7 +1416,8 @@ Ways to process data:
 - Synchronous invocation: happens when using CLI, SDK, API Gateway, ALB, Cognito, step functions, CloudFront (all user-invoked or service-invoked services)
   it means you are waiting for the result and the result will be returned to you, errors must be handled client side ex button to retry
 
-- Asynchronous invocation: S3, SNS, CloudWatch events ecc..
+- Asynchronous invocation: S3, SNS, CloudWatch events ecc.. ASYNCHRONOUS = Invoke the Lambda and get a response immediately.
+FROM API GATEWAY "X-Amz-Invocation-Type" header pecifies the invocation type of the Lambda function, and setting it to 'Event' means that the function will be invoked asynchronously  
 The events are placed in an EventQueue for the lambda to consume, if the vent fails it retries it 3 times, after 1 min and after 2 min  
 which means your code needs to be Idempotent so it shouldn't break if it retries. We can define a DLQ dead letter queue with SNS or SQS for failed processes  
 strategy to do this:  
