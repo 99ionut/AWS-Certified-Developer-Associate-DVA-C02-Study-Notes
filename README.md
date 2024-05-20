@@ -466,7 +466,7 @@ both RDS and Aurora:
 - audit logs can be enabled
 
 Elastic cache:  
-redis / memcached  
+Redis / memcached  
 in-memory database with high-performance low latency  
 - is an in-memory KEY-VALUE store that has no way to deliver static HTTP content
 - common query will be cached
@@ -485,7 +485,7 @@ in-memory database with high-performance low latency
 Redis: Supports more complex data structures, You can use Amazon Elasticache for Redis Sorted Sets to implement a dashboard with the ability to sort or rank the cached datasets.  
 session state data be maintained externally, whilst keeping latency at the LOWEST possible value (like DSD): The two options presented in the answers are Amazon  
 DynamoDB and Amazon ElastiCache Redis. ElastiCache will provide the lowest latency as it is an in-memory database.  
-Memcached: Primarily supports string-based keys and values; does not support advanced data structures. Supports multi-threading  
+Memcached: Primarily supports string-based keys and values; does not support advanced data structures. Supports multi-threading, NOT as highly available as Redis   
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/84dafa7c-cfac-4a5c-934e-636a2badf4ed">
 
@@ -728,7 +728,8 @@ S3 event notifications can directly invoke a Lambda function, you dont necessare
 
 S3 performance  
 - can speed up upload by using multi-part upload
-- s3 transfer acceleration: fast, easy, and secure transfers of files over long distances between your client and and S3
+- s3 transfer acceleration: fast, easy, and secure transfers of files over long distances between your client and and S3  
+  name of the bucket used for Transfer Acceleration must be DNS-compliant and must not contain periods (".").
 - byte-range fetch: request a specific range of bytes in a file to speed up downloads (only partial data)
 - SQL server-side filtering, the server sends data already filtered
 
@@ -755,7 +756,8 @@ DDoS protection integrates with shield
 It integrates with ANY HTTP backend you want, S3, app load balancer, EC2, S3 website  
 Client asks to Edge location (cache), if it doesn't have it the edge location gets it from the origin  
 
-If you want In-flight encryption select these settings of Origin Protocol and Veiwer Protocol
+If you want In-flight encryption select these settings of Origin Protocol and Viewer Protocol.  
+IN EXAM IF CloudFront with SSL / Secure connection use this!!!
 
 <img width="241" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2ddcc116-6b9b-49b0-9bc9-8f7fd65e4ce7">
 
@@ -973,7 +975,8 @@ container instance isn't automatically removed from the cluster.
 If you terminate a container instance in the RUNNING state, that container instance is automatically removed,  
 or deregistered, from the cluster.   
 
-
+Container Agent:  
+allows container instances or EC2 to connect to your cluster.  
 
 # Beanstalk
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2902359b-4e68-430a-b99a-a9da6e41c116">
@@ -1039,6 +1042,10 @@ Your source bundle must meet the following requirements:
 - Consist of a SINGLE ZIP file or WAR file
 - Not exceed 512 MB
 - Not include a parent folder or top-level directory (subdirectories are fine)
+
+worker environment:  
+If your application performs operations or workflows that take a long time to complete, you can offload those tasks to a dedicated worker environment.  
+Decoupling your web application front end from a process that performs blocking operations is a common way to ensure that your application stays responsive under load.
 
 # CloudFormation
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/1fe959c9-96f0-4dd9-a07c-82fcd3c052e7">
@@ -1369,6 +1376,11 @@ AWS Distro for OpenTelemetry:
 AWS-supported distro of the open-source project Open Telemetry  
 Collects distributes traces and metrics from your apps. It's like xray but open source.
 
+X-RAY SDK Variables:  
+- _X_AMZN_TRACE_ID: trace ID, and parent segment ID
+- AWS_XRAY_CONTEXT_MISSING: behavior in the event that your function tries to record X-Ray data, but header is not available.
+- AWS_XRAY_DAEMON_ADDRESS: exposes the X-Ray daemon's address  
+
 # CloudTrail
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f112834f-04ad-4f4c-b183-937edb7bd2b7">
 
@@ -1463,6 +1475,7 @@ used for: website security, SEO, intelligent Route, real-time image transformati
   forwards the request to the origin / after it gets the response and returns it to the client). Ex for header manipulation, URL redirects...
 - Lambda@Edge: Used to change CloudFront request / responses to both Origin and Viewer requests. higher package dimensions but slower. do what CloudFront functions
   do but with file system access, handles heavier data so it can use the body of the HTTP request, longer execution, both for viewer and origin.
+  IT CAN AUTHENTICATE / AUTHORIZE Users for PREMIUM pay-wall content.
 
 Lambda are launched in a VPC outside of yours, in a VPC managed by AWS so it can't access your VPC resources.  
 But you can deploy it in your own VPC using AWSLambdaVPCAccessExecutionRole  
@@ -1609,11 +1622,14 @@ Basic Operations:
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/d5a35a98-dbf1-4cac-a847-e70c3bfcb9bb">  
  
 - Reading Data: 
-  - GetItem: read based on Primary Key (hash / hash + range), eventually consistent (default) / strongly, ProjectionExpression to read only certain attributes
+  - GetItem: read based on Primary Key (hash / hash + range), eventually consistent (default) / strongly,
+  - ProjectionExpression to read only certain attributes
   - Query: Based on Partition key value (required) , and optional sort key values (=,<,> ec...), FilterExpression additional filtering after query for non-key attributes
   - Scan: get the entire table and filter out on your application (inefficient).
     supports parallel scans for faster results.
-    To minimize the impact of the scan on the provisioned throughput Set a smaller page size for the scan
+    To minimize the impact of the scan:
+    - on the provisioned throughput Set a smaller page size for the scan
+    - Optimize the table to use query instead of scans for big tables.
  
 - Deleting Data:
   - Delete an individual item
@@ -1662,7 +1678,7 @@ use cases: react to changes in real-time ex: send welcome email to users, analyt
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/1f266a95-fd6f-474a-ab9a-2ca2036e5ea4">  
 With lambda for table -> DynamoDB Stream -> AWS Lambda event mapping source polls from it
 
-DynamoDB TTL: time to live delete item after an expiry timestamp. Ex to delete session data. It takes up to 48hrs after the TTL for it to get deleted.  
+DynamoDB TTL: time to live delete item after an expiry timestamp. Ex to delete session data. It takes up to 48hrs after the TTL for it to get deleted. Or deleted after the user logged out of the system.  
 
 DynamoDB Transactions: all-or-nothing operations. THE QUERY IS TRANSACTIONAL NOT THE TABLE, You dont need to update the table  
 In read mode it can be consistent/strong consistent/"transactional"  
@@ -1724,6 +1740,9 @@ It integrates with / can call:
   it uses a Connection URL Callback to send data to client. You can use Routing to reroute to a specific backend when
   the connection is open (for example to do CRUD different backends)
 
+In AWS API Gateway, API keys by themselves do not grant access to execute an API.  
+They need to be associated with a usage plan, and that usage plan then determines which API stages and methods the API key can access. added to a usage plan by calling the "CreateUsagePlanKey" method!
+
 Mapping templates: ex: You can transform the incoming JSON into a valid XML message for the SOAP backend interface using mapping templates  
 
 3 ways to deploy (called Endpoint Types)  
@@ -1753,9 +1772,9 @@ Update stage variable value from the stage name of test to that of prod: Update 
 name of test to that of prod  
 
 Stage variables: like Env. variables (config) but for API Gateway, use them for often changing values  
-so it prevents redeployment every time. A common use defining to which Lambda function it points  
-and when you deploy V2 change a % of traffic to the new one changing the Stage Var. (Canary Deployment)  
-Also used to implement and run different versions for testing purposes  
+so it prevents redeployment every time. 
+- A common use is defining to which Lambda function it points and when you deploy V2 change a % of traffic to the new one changing the Stage Var. (Canary Deployment)  
+- Also used to implement and run different versions for testing purposes ex: alpha .tutorialsdojo .com endpoint and beta release through the beta .tutorialsdojo .com endpoint
 
 Integration types:  
 - Mock: API Gateway returns a response without sending the request to the backend
@@ -1776,8 +1795,9 @@ Can config API Gateway to perform validation so if the data structure doesn't co
 Caching API responses:  
 reduces the nr of calls made, default TTL is 300s, min 0 max 1hr  
 Caches are different for every stage. We can invalidate the Cache immediately and flush it, or the user can do that  
-with max-age=0 if it has the IAM Auth.  
+with "max-age=0" if it has the IAM Auth.  
 We can CHOOSE to Cache only a type of request/response for example only POST  
+Ticking the "Require authorization" checkbox ensures that not every client can invalidate the API cache  
 
 You can make your API available for money to customers. We can config how much and fast they can access them, how many calls  
 possible, use API Keys to identify them, callers pass the key in x-api-key header.  
@@ -1944,7 +1964,7 @@ PARALLEL STEP - begin parallel branches of execution.
 
 Error handling: we can have retry or catch (transit to failure path)  
 
-Wait for task token: allows you to pause step function until a task token is returned. by appending .waitForTaskToken  
+Wait for task token: allows you to pause step function until a task token is returned. by appending .waitForTaskToken!   
 
 Activity task:  
 allows you to have the task work performed by an Activity worker (Apps on EC2 / Lambda / mobile device...)  
@@ -2030,6 +2050,8 @@ Envelope Encryption: KMS has a limit of 4kb, if you want more, use Envelope Encr
 GenerateDataKey API.   
 GenerateDataKey: obtain an encryption key from KMS that we can then use within the function  
 code to encrypt the file. This ensures that the file is encrypted BEFORE it is uploaded to Amazon S3.
+GenerateDataKeyWithoutPlaintext: returns only the encrypted copy of the data key which you will use for encryption.  
+returns a data key that is encrypted under a customer master key (CMK) that you specify.  
 
 KMS limits: ThrottlingException, to respond use Exponential backoff, all services that use KMS share a quota across all regions and accounts. we can use DKE caching
 or you can request quota increase through API or AWS support. 
