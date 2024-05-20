@@ -1616,9 +1616,11 @@ Control the R/W capacity modes:
     
 - On-demand, no provision pay for what you use but more expensive
 
-Data is stored in partitions: primary keys go through hash to know which partition they go to, WCU and RCU are going to be evenly spread across partitions
+Data is stored in partitions:  
+primary keys go through hash to know which partition they go to, WCU and RCU are going to be evenly spread across partitions
 
-Throttling: reasons: Hot keys (one partition read too many times ex popular items), Hot partitions, very large items, the solution is Exponential backoff,   
+Throttling:  
+reasons: Hot keys (one partition read too many times ex popular items), Hot partitions, very large items, the solution is Exponential backoff,   
 hot partition due to the order date being used as the partition key and this is causing writes to be  
 throttled. solution to ensure the writes are more evenly distributed in this scenario is to add a random  
 number suffix to the partition key values.  
@@ -1629,49 +1631,49 @@ To control the amount of data returned per request, Limit parameter. Helps preve
 worker consumes all of the provisioned throughput, at the expense of all other workers.  
 
 Basic Operations:
-- Writing Data:
-  - PutItem: create a new item or fully replace an old one (same primary key)
-  - UpdateItem: used to edit a few attributes, but it can also edit all of them, it inserts a new item if not exist
-  - Concurrent Writes: the second one overwrites the first one
-  - Conditional Writes: accept a Write / update /delete only if conditions are met
-    attribute_exist / attribute_not_exist / attribute_type / contains / begins_with / IN and between / size (2 concurrent write could fail because 1 updates and the other
-    finds the new data and doesn't match so the second one fails)
-  - atomic writes: one says increase by 1, the other increase by 2, at the end the result is 3, both writes succeed
-  - batch writes: Write / update many items at a time
-  - TransactWriteitems: multiple items Transactional all-or-nothing write.
+Writing Data:
+- PutItem: create a new item or fully replace an old one (same primary key)
+- UpdateItem: used to edit a few attributes, but it can also edit all of them, it inserts a new item if not exist
+- Concurrent Writes: the second one overwrites the first one
+- Conditional Writes: accept a Write / update /delete only if conditions are met
+  attribute_exist / attribute_not_exist / attribute_type / contains / begins_with / IN and between / size (2 concurrent write could fail because 1 updates and the other
+  finds the new data and doesn't match so the second one fails)
+- atomic writes: one says increase by 1, the other increase by 2, at the end the result is 3, both writes succeed
+- batch writes: Write / update many items at a time
+- TransactWriteitems: multiple items Transactional all-or-nothing write.
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/d5a35a98-dbf1-4cac-a847-e70c3bfcb9bb">  
  
-- Reading Data: 
-  - GetItem: read based on Primary Key (hash / hash + range), eventually consistent (default) / strongly,
-  - ProjectionExpression to read only certain attributes
-  - Query: Based on Partition key value (required) , and optional sort key values (=,<,> ec...), FilterExpression additional filtering after query for non-key attributes
-  - Scan: get the entire table and filter out on your application (inefficient).
-    supports parallel scans for faster results.
-    To minimize the impact of the scan:
-    - on the provisioned throughput Set a smaller page size for the scan
-    - Optimize the table to use query instead of scans for big tables.
+Reading Data: 
+- GetItem: read based on Primary Key (hash / hash + range), eventually consistent (default) / strongly,
+- ProjectionExpression to read only certain attributes
+- Query: Based on Partition key value (required) , and optional sort key values (=,<,> ec...), FilterExpression additional filtering after query for non-key attributes
+- Scan: get the entire table and filter out on your application (inefficient).
+  supports parallel scans for faster results.
+  To minimize the impact of the scan:
+  - on the provisioned throughput Set a smaller page size for the scan
+  - Optimize the table to use query instead of scans for big tables.
  
-- Deleting Data:
-  - Delete an individual item
-  - conditional delete
-  - DeleteTable
+Deleting Data:
+- Delete an individual item
+- conditional delete
+- DeleteTable
  
-- Table Cleanup:
-  - scan + deleteItem very slow and expensive
-  - drop table + recreate table fast and cheap
+Table Cleanup:
+- scan + deleteItem very slow and expensive
+- drop table + recreate table fast and cheap
 
-- Copy DynamoDbTable
-  - use AWS Data Pipeline
-  - Backup and restore into a new table
-  - Scan + PutItem 
+Copy DynamoDbTable:
+- use AWS Data Pipeline
+- Backup and restore into a new table
+- Scan + PutItem 
 
  You can batch operations to reduce API calls, it will be done in parallel for efficiency, it can fail if throttling  
  and if the table doesnt have enought Read/Write Capacity
  - BatchWriteItem: up to 25 PutItem / DeleteItem
  - BatchGetItem: up to 100 items, max 16MB.
 
-PartiQL: do SQL-compatible query (no joins) if all you know is SQL. You can select, CRUD, and supports batch operations.
-
+PartiQL:  
+SQL-compatible query (no joins) if all you know is SQL. You can select, CRUD, and supports batch operations.  
 
 Local Secondary Index LSI:  
 Alternative sort key for table (same as partition key) based on sort key = scalar attribute (String, Number, Binary) + up to 5 local secondary indexes per table  
@@ -1692,6 +1694,10 @@ NO APPLICATION PERFORMANCE LOSS. (you dont need to maintain the connection alive
 
 Pessimistic Locking:  
 lock the record for your exclusive use until you have finished with it. This can prevent certain users from reading, updating.   
+
+Atomic counter:  
+Numeric attribute that is incremented when UpdateItem is called, is not accurate because even if the update fails it increments, used for example for users on a website  
+or counts that can have slight miscalcumations.  
 
 DynamoDB DAX: 
 Fully managed highly aval. seamless i-memory cache for DynamoDB, fully secure, microseconds cached reads and queries. Doesnt require   
