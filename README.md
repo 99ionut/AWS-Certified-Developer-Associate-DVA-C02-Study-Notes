@@ -111,7 +111,7 @@ Defense mechanisms:
 To access AWS:
 - AWS management console (pw + MFA)
 - CLI (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)
-  - to use CLI with MFA you need to create a temporary session, you do so with the STS GetSessionToken API
+  - to use CLI with MFA you need to create a temporary session, you do so with the STS GetSessionToken API !! 
   - the CLI looks for credentials in this order: Command line, Env. Variable CLI credential file, CLI config file, Container cred. Instance profile cred.
 - SDK (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)
   - looks for credentials in this order:
@@ -645,9 +645,12 @@ security:
 - encryption in transit
   - SSL/TLS encryption while its being transmitted, using the HTTPS endpoint
     
-can force encryption with bucket policy
+can force encryption with bucket policy  
 
-SecureTransport:
+x-amz-server-side-encryption header to request server-side encryption with S3 Managed keys.  
+x-amz-server-side​-encryption​-customer-algorithm, x-amz-server-side-encryption-customer-key and x-amz-server-side-encryption-customer-key-MD5 headers. Headers for Customer managed keys.  
+
+SecureTransport:  
 policy permission to limit access by IP addresses or require that data must be encrypted in transit (HTTPS).
 
 - CORS: cross-origin resource sharing
@@ -727,9 +730,9 @@ like generating thumbnails of images uploaded to s3
 S3 bucket -> Amazon Event Bridge -> rules -> services  
 S3 event notifications can directly invoke a Lambda function, you dont necessarely need Event Bridge  
 
-S3 performance  
+S3 performance:  
 - can speed up upload by using multi-part upload
-- s3 transfer acceleration: fast, easy, and secure transfers of files over long distances between your client and and S3  
+- S3 transfer acceleration: fast, easy, and secure transfers of files over long distances between your client and and S3  
   name of the bucket used for Transfer Acceleration must be DNS-compliant and must not contain periods (".").
 - byte-range fetch: request a specific range of bytes in a file to speed up downloads (only partial data)
 - SQL server-side filtering, the server sends data already filtered
@@ -1004,7 +1007,7 @@ separate environments for development, testing, and production use, and you can 
 to any environment  
 
 You can add AWS Elastic Beanstalk configuration files (.ebextensions FOLDER) to your web application's source code to configure your environment and customize   
-the AWS resources that it contains. YAML or JSON-formatted documents with a .CONFIG file extension that you place in a folder named .ebextensions and deploy  
+the AWS resources that it contains. YAML or JSON-formatted documents with a .CONFIG file extension that you place in a folder named .ebextensions and deploy (EXCEPT FOR ALREADY-EXISTING "env.yaml" config file for the environment.)  
 
 Deploy options for updates:  
 - All at once, deploy the new v all in one go but it has a bit of downtime  
@@ -1191,7 +1194,7 @@ Must know API:
 - ChangeMessageVisibility: change message timeout  
 
 FIFO queue:  
-Deduplication methods: if you send the same message twice within 5 minutes it gets discarded  
+Deduplication methods: if you send the same message twice within 5 minutes it gets discarded, BY USING "MessageDeduplicationId" PARAMETER.
 - Content-body SHA256, if 2 are found it discards
 - Explicit-body, if 2 messages with explicit body are found it gets discarded
 
@@ -1228,15 +1231,16 @@ JSON policy to filter messages and only send the messages of a filter in a speci
 Easy to collect/process/analyze streaming data in real-time, such as Application logs, metrics, website clickstreams, IoT
 
 - Kinesis Data Streams: capture, process and store data streams
-<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5c8f258e-1e14-4a5f-95a5-685f309db280">
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5c8f258e-1e14-4a5f-95a5-685f309db280">  
 
-
-
-  is a way to stream big data in your systems (ingest data at scale), is made of multiple "Shards" per stream (can be used to scale up or down),
+is a way to stream big data in your systems (ingest data at scale), is made of multiple "Shards" per stream (can be used to scale up or down),
   data will be split to Client. it sends a record to the stream that is made out of Partition Key and Data Blob (max 1MB)
   after it reaches KDS it gets send a consumer, with the Partition Key, Data Blob, and Sequence Nr.
   Partition key hashed a unique ID you pass, and it always sends the data from that provider to the same shard. Multiple hashes from multiple
   sources can be sent to the same stream, so it's distributed. 
+  - Can give an ORDER by using "SequenceNumberForOrdering"
+  - To handle DUPLICATES, you can include a unique ID in each record that you write to the stream, and check if it
+    already exists in DynamoDB when consumer tries to process it. 
   - Retention of messages 1-365 days (by default 24hrs, if app takes more to process it gets lost)
   - because of this: ability to reprocess data
   - once data is inserted in Kinesis it can't be deleted (immutability)
@@ -1253,18 +1257,21 @@ Enhanced fan-out Consumer: 2mb/s per consumer per shard by subscribing (push mod
 
 Kinesis Producer Library (KPL):  
 simplifies producer application development, allowing developers to  
-achieve high write throughput to a Kinesis data stream. helps you write to a Kinesis data stream.
+achieve high write throughput to a Kinesis data stream. helps you write to a Kinesis data stream.  
 
-Kinesis Client Library KLC:  
+Kinesis Client Library (KLC):  
 Java library that helps read records from Kinesis Data Stream with distributed apps. sharing the read workload.  
-Each shard is to be read by only one KCL instance, 4 shards = max 4KCL instances, 8 = 8 instances
+Each shard is to be read by only one KCL instance, 4 shards = max 4KCL instances, 8 = 8 instances  
 
-  Kinesis operations:
-  - shard splitting: increase the stream capacity: used to divide "Hot shards"
-  - Merging shards: decrease capacity and save costs by merging them. both used to scale up and down kinesis
+Kinesis operations:
+- shard splitting: increase the stream capacity: used to divide "Hot shards"
+- Merging shards: decrease capacity and save costs by merging them. both used to scale up and down kinesis
 
-- Kinesis Data Firehouse:
-<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/41492d0c-faaa-4e15-8d66-c1bd21b45c8c">
+Kinesis Adapter:  
+recommended way to consume streams from DynamoDB for real-time processing.  
+
+Kinesis Data Firehouse:  
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/41492d0c-faaa-4e15-8d66-c1bd21b45c8c">  
 
   Managed (ingest data at scale) used to load data into specific services, streams into ASW data stores near real-time, fully managed serverless.  
   Takes data from producers / kinesis data stream. And Batch writes data into destinations to:  
@@ -1322,13 +1329,14 @@ Send notifications for Events
   - Send SNS notification (here we can attach lambda and do anything)
   we can use Composite alarms to monitor multiple metrics at a time, useful to filter "alarm noise"
 
-There are two types of API logging in CloudWatch: execution logging and access logging.
+There are two types of API logging in CloudWatch: execution logging and access logging.  
 
 Namespace is a container for CloudWatch metrics. Metrics in different namespaces are isolated from each other, so that  
-metrics from different applications are not mistakenly aggregated into the same statistics.
+metrics from different applications are not mistakenly aggregated into the same statistics. They are like repositories,
+each namespace = different Cloudwatch with unique metric  
 
 Cloudwatch Synthetics scripts that monitor APIs, URLs, Website workflow ecc... and check the availability and correct operation of these elements  
-reproduces what customers do on a website for example, access to Headless chrome
+reproduces what customers do on a website for example, access to Headless chrome  
 
 Logs encryption:  
 you can encrypt logs with KMS keys, is enabled at the log group level, by associating a CMK with a log group
@@ -1359,8 +1367,9 @@ understand where the error is
 It uses tracing, each component dealing with the request adds its own "trace"  
 IAM, KMS  
 To enable it:  
-modify your code using x-ray SDK then install the xRay daemon or enable AWS integration .ebextensions/xray-daemon.config file to the source code to enable the X-Ray daemon 
-You can only use X-ray with Fargate as a "SIDE CAR" because there is not EC2 image
+modify your code using x-ray SDK then install the xRay daemon or enable AWS integration .ebextensions/xray-daemon.config file to the source code to enable the X-Ray daemon (FOR BEANSTALK ONLY)  
+The X-Ray daemon listens for traffic on UDP port 2000  
+You can only use X-ray with Fargate as a "SIDE CAR" because there is not EC2 image  
 
 How to instrument your code: instrument = measure the product performance, diagnose errors and write trace information. you use the X-Ray SDK.  
 - Segments: each app. will send them.
@@ -1368,9 +1377,14 @@ How to instrument your code: instrument = measure the product performance, diagn
 - Sampling: decrease the amount of requests sent to X-ray. control the amount of data.
 - Metadata tags to record additional data that you want stored in the trace but don't need to use with search.
 - Annotations in AWS X-Ray that can be used with Filter expressions
-- Subsegments provide more granular timing information and details about downstream calls that your application made to fulfill the original request. 
+- Subsegments provide more granular timing information and details about downstream calls that your application made to fulfill the original request.
+  - !! namespace "AWS" for AWS SDK calls; "REMOTE" for other downstream calls.
 
-GetTraceSummaries you can search for segments  
+"GetTraceSummaries":
+you can search for segments, get the list of trace IDs of the application    
+
+"BatchGetTraces":  
+retrieve the list of traces
 
 AWS Distro for OpenTelemetry:  
 AWS-supported distro of the open-source project Open Telemetry  
@@ -1492,7 +1506,9 @@ Execution Context: temporary runtime that initializer external dependencies / se
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/b8e7144f-9bdb-4baa-bd52-29d693aa81f5">
 
 /tmp folder if your function needs to download a big file, max 10GB of disk space.  
-if you need persistence space, use S3
+if you need persistence space, use S3.  
+Data is SAVED in this directory, persists across these retained invocations, making it useful for caching.  
+
 
 Lambda Layers:  
 custom runtimes for not supported languages, or create a layer to externalize dependencies to reuse them without having to repackage them to deploy, because the lambda can  
@@ -1504,8 +1520,10 @@ Can access EFS if running in VPC, it's a config to mount EFS file system to loca
 Concurrency:  
 the more we invoke the more executions up to 1000, we can set a "reserved concurrency" to limit the max amount per each function.  
 if we don't set limit, we can have 1 function taking up all 1000 executions, and have the other functions not being able to start.
+!! Lambda will keep the unreserved concurrency pool at a minimum of 100 concurrent executions, so that functions that do not have specific limits set can still process requests. So, in practice, if your total account limit is 1000, you are limited to allocating 900 to individual functions. So if you have 2 functions that need to have the same concurrency, you can max do 450 and 450.
 
-Cold start and provision concurrency: new instance so all initializations have to start. The first request has a higher latency,  
+Cold start and provision concurrency:  
+new instance so all initializations have to start. The first request has a higher latency,  
 you can use a "provision concurrency" to allocate before the function is invoked in advance so cold start never happens.  
 
 Dependencies:  
@@ -1513,7 +1531,7 @@ to include them, you need to zip dependencies and code all together, if > 50 MB 
 
 Lambda and CloudFormation:  
 inline directly in the CF code for very simple functions, we can't include external dependencies.  
-Through s3, store the Zip in S3 and refer it in CloudFormation code
+Through s3, store the Zip in S3 and refer it in CloudFormation code. (BOTH IN THE "ZIPFILE" PARAMETER in the template)
 
 Lambda Container Images:  
 Deploy Lambda functions as Container images up to 10BG, pack complex and large dependencies in a container, instead of Zip and upload.
@@ -1527,9 +1545,11 @@ ability to return to older versions of the function quickly. A Lambda alias is a
 
 Lambda and CodeDeploy:  
 help automate the traffic shift for Lamba aliases.  
-Linear: glow traffic by x percent every n minutes  
-Canary: x percent then 100%  
-AllAtOnce: Immediate
+CANNOT USE IN-PLACE DEPLOYMENT (just upgrade the code), MUST USE ONE OF THESE, because instances must be stopped and  
+restarted with the new version, only EC2/On-Premises can do it.  
+- Linear: glow traffic by x percent every n minutes  
+- Canary: x percent then 100%  
+- AllAtOnce: Immediate
 
 Lambda function URL:  
 to expose the function as HTTP endpoint without having to use API gateway ecc... can create a unique URL endpoint, access only with public internet  
@@ -1666,11 +1686,16 @@ Contains a selection of attributes from the base table, but they are organized b
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/01541488-4980-4905-8c41-e73febf490a8">  
 
 Optimistic Locking:  
-"conditional writes" ensure the item hasn't changed before you update/delete it, each item has an attribute that acts as a version number. 
+"conditional writes" ensure the item hasn't changed before you update/delete it, each item has an attribute that acts as a version number.  
+read a record, take note of a version, check that the version hasn't changed before you write the record, Or abort.  
+NO APPLICATION PERFORMANCE LOSS. (you dont need to maintain the connection alive always)    
+
+Pessimistic Locking:  
+lock the record for your exclusive use until you have finished with it. This can prevent certain users from reading, updating.   
 
 DynamoDB DAX: 
 Fully managed highly aval. seamless i-memory cache for DynamoDB, fully secure, microseconds cached reads and queries. Doesnt require   
-application logic modification because compatible with existing DynamoDB APIs. Solves the "hot key" problem so too many reads.   
+application logic modification because compatible with existing DynamoDB APIs. Solves the "hot key" problem so too many reads.  
 
 DynamoDB Streams: 
 ordered stream of item level modifications (CRUD), streams can be sent to kinesis, Lamba.   
