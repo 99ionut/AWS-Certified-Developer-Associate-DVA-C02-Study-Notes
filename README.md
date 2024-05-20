@@ -481,7 +481,8 @@ in-memory database with high-performance low latency
   Loads the data into the cache only when necessary (if a cache miss occurs).
   Lazy loading avoids filling up the cache with data that won’t be requested.
   cache can become stale if Lazy Loading is implemented without other strategies (such as TTL).
-- write through architecture: write to cache when there is a modification to the DB  
+- write through architecture: write to cache when there is a modification to the DB
+
 Redis: Supports more complex data structures, You can use Amazon Elasticache for Redis Sorted Sets to implement a dashboard with the ability to sort or rank the cached datasets.  
 session state data be maintained externally, whilst keeping latency at the LOWEST possible value (like DSD): The two options presented in the answers are Amazon  
 DynamoDB and Amazon ElastiCache Redis. ElastiCache will provide the lowest latency as it is an in-memory database.  
@@ -1026,12 +1027,15 @@ Deploy options for updates:
 
 Elastic Beanstalk CLI, helpful in automating pipelines  
 
-EB Lifecycle policy: policy to remove old versions  
+EB Lifecycle policy:  
+policy to remove old versions  
 
-EB extensions: a file in the .ebextentions/ directory in our code that can configure all the parameters you find in the web UI  
+EB extensions:  
+a file in the .ebextentions/ directory in our code that can configure all the parameters you find in the web UI  
 Because it uses CloudFormation UNDER THE HOOD, the extensions provision any service you want.  
 
-EB cloning: clones an environment. with the exact config. useful for "test" versions of app. After cloning u can change settings.  
+EB cloning:  
+clones an environment. with the exact config. useful for "test" versions of app. After cloning u can change settings.  
 
 EB migration:   
 for example ELB can't be changed (only configured) after cloning, so we need to migrate:  
@@ -1080,9 +1084,6 @@ template components:
 CF Rollbacks:  
 if a stack creation fails you have the option to default: everything rolls back, or to disable rollback to troubleshoot
 
-CF StackSets:  
-enabling you to create, update, or delete stacks across multiple ACCOUNTS and REGIONS with a single operation.
-
 CF Change Set:  
 summary of proposed changes to an AWS CloudFormation stack without implementing the changes in production 
 
@@ -1120,16 +1121,16 @@ CF Template settings:
 - Parameters enable you to input custom values to your template each time you create or update a stack.
 - Conditions section contains statements that define the circumstances under which entities are created or configured
 
-CF Deploy a Lambda 2 options:
+CF Deploy a Lambda 2 options:  
 - write the code directly inside the CloudFormation template in the json
 - Upload a ZIP file containing the function code to Amazon S3, then add a reference to it in an AWS::Lambda::Function
 
-CF pseudo-parameter:
-predefined values by AWS CF:
-AWS::AccountId
-AWS::StackName
-AWS::Region <--
-ecc...
+CF pseudo-parameter:  
+predefined values by AWS CF:  
+AWS::AccountId  
+AWS::StackName  
+AWS::Region <--  
+ecc...  
 
 # SQS
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/986a4ac4-0e84-4b1a-8731-f06774f3b7ae">
@@ -1170,8 +1171,7 @@ SQS Delay queue:
 Delay a messages so cosumers dont see it immediately, up to 15 min, or per message individually, default is 0
 
 SQS Short polling:  
-Querying only a subset of its servers to determine whether any
-messages are available for a response.
+Querying only a subset of its servers to determine whether any messages are available for a response.
 
 SQS Long polling:  
 When a consumer requests a message from the queue it can wait for messages from queue to arrive if there are none in the queue, this is called long polling  
@@ -1179,7 +1179,7 @@ long polling decreases the number of API calls, messages get processed at the en
 the wait time can be 1-20s, its better than short polling. IT RETURNS MESSAGES AS SOON AS THEY BECOME AVAILABLE:
 to enable: Set the ReceiveMessage API with a WaitTimeSeconds of 1-20s
 
-SQS Extended client library:  
+SQS Extended client library ECL:  
 library that uses an s3 bucket to send messages higher than 256kb, the queue sends a message telling the consumer to get the larger message from the s3
 
 Must know API:  
