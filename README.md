@@ -365,7 +365,7 @@ what it does:
   - capture the user's source IP address and source port 
     
 - gateway load balancer (GLB): operates at layer 3 network layer, scale and manage 3rd party virtual applications
-  for example firewalls, intrusion detection system, inspection system... for example if u want your traffic to be
+  for example firewalls, intrusion detection system, inspection system... for example if you want your traffic to be
   inspected before it reaches EC2
   - GENEVE protocol 6081
   - target adresses: EC2 / IP adresses
@@ -493,7 +493,7 @@ Memcached: Primarily supports string-based keys and values; does not support adv
 
 Cache eviction:  
 - you delete item explicitly
-- evicted cuz memory is full and not recently used
+- evicted because memory is full and not recently used
 TTL time to live:
 - used for leaderboards / comments / activity streams
 - can range from a few seconds to days
@@ -673,7 +673,7 @@ policy permission to limit access by IP addresses or require that data must be e
   this is done with an access point policy.
 
 - S3 Object lambda
-  if u want to run a function before its being retrieved, use and object lambda access point.
+  if you want to run a function before its being retrieved, use and object lambda access point.
   ex: adding watermark specific for the user, resizing, converting the data
 
 S3 can host static websites and have the accessible public with a policy  
@@ -703,7 +703,7 @@ Storage classes:
   - for disaster recovery / backups
 - One Zone-IA
   - in a single AZ
-  - secondary copy of backup or data u can recreate
+  - secondary copy of backup or data you can recreate
 - Glacier Instant Retrieval
   - millisecond retrieval
 - Glacier flexible retrieval
@@ -1038,7 +1038,7 @@ a file in the .ebextentions/ directory in our code that can configure all the pa
 Because it uses CloudFormation UNDER THE HOOD, the extensions provision any service you want.  
 
 EB cloning:  
-clones an environment. with the exact config. useful for "test" versions of app. After cloning u can change settings.  
+clones an environment. with the exact config. useful for "test" versions of app. After cloning you can change settings.  
 
 EB migration:   
 for example ELB can't be changed (only configured) after cloning, so we need to migrate:  
@@ -1162,7 +1162,7 @@ inflight encryption with HTTPS API
 
 SQS Message Visibility Timeout:  
 After a message is polled by a consumer it becomes invisible to other consumers, it has 30s to process it,  
-if the message hasn't been deleted cuz not processed yet, it will be put back in the queue and be processed twice, if u need more than 30s to process it  
+if the message hasn't been deleted because not processed yet, it will be put back in the queue and be processed twice, if you need more than 30s to process it  
 use the "ChangeMessageVisibility" API to change the timeout time to increase the value of VisibilityTimeout
 
 SQS Dead Letter queues (DLQ):  
@@ -1207,7 +1207,7 @@ so we can have type A, B, C ecc... messages and each one type gets processed by 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ffc2f900-e207-4a4f-b527-f5c8ac5ab1f0">
 
 ### Simple notification system
-if u want to send the message to many receivers at the same time, email, SQS queue, shipping service ecc....  
+if you want to send the message to many receivers at the same time, email, SQS queue, shipping service ecc....  
 It uses the pub/sub method. A buying service publishes the message inside and SNS topic, and subs of the topic listen to the SNS topic notification  
 subs can be Lambda, email, SMS, Kinesis data stream, SQS, HTTP endpoints, and many services
 
@@ -1405,7 +1405,7 @@ History of all events like who deleted something, can put logs into CloudWatch L
 - management events: anything that modifies your res. or aws account (enabled by default)
 - data events: S3 object-level activity ex: S3 GetObject, DeleteObject ecc... or AWS lambda execution activity (all not enabled by default) 
 - Insights events: because of many logs and types, it automatically analizes your logs and detects unusual activity / patterns based on your usual baseline
-event retention: stored for 90 days, if u want longer, send to S3 and use Athena to analyze them.
+event retention: stored for 90 days, if you want longer, send to S3 and use Athena to analyze them.
 
 You can have Event Bridge integration ex. User changes IAM Role -> CloudTrail -> triggers an event -> EventBridge -> SNS email
 
@@ -1602,7 +1602,7 @@ options to choose the primary key
 Control the R/W capacity modes:  
 - Provisioned mode (default): specify the r/w per second you need to plan your capacity beforehand, you pay for what is going to be provisioned
   - RCU read capacity units: represent one strongly consistent read per second or 2 eventually consistent read per second, for an item up to 4KB
-    - read eventually consistently: if we read right after a write data could be old cuz it hasn't replicated you from the copy we are reading from
+    - read eventually consistently: if we read right after a write data could be old because it hasn't replicated you from the copy we are reading from
     - Eventually consistanc consume Half the RCUs, divide by 2
     ex: 10 strongly consistent reads per second with item 4KB = 10RCUs
     ex: 16 eventually consistent read per second with item size 12KB = (16/2) * (12/4) = 24RCUs
@@ -1903,7 +1903,7 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 
 - CodeGuru: Automated code reviews (reviewer) and app performance (codeGuru profiler) with Machine Learning.
 
-- Cloud9: IDE in cloud. can work anywhere in the world if u have internet. 
+- Cloud9: IDE in cloud. can work anywhere in the world if you have internet. 
 
 # SAM
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f2e46532-12c0-4f01-b0c9-b549809d651e">
@@ -2024,7 +2024,7 @@ AWS App sync:
 
 managed service that uses GraphQL: makes it easy for apps to get exactly the data they need. You ask for a field  
 and that is what gets returned. You can combine data from multiple data source types, NoSQL, SQL, HTTP, APIs...  
-You can also use it to get real-time data with WebSocket or MQTT on WebSocket, so if u need a field real-time  
+You can also use it to get real-time data with WebSocket or MQTT on WebSocket, so if you need a field real-time  
 For mobile apps: can be used for local data access and data synchronization.  
 To start uploading a GraphQL query  
 Security: API_KEY, AWS_IAM, OPENID_CONNECT, AWS_COGNITO_POOLS, Https with CF in front.  
@@ -2096,7 +2096,7 @@ Secure storage for your configs and secrets, optional encryption using KMS. Secu
 Parameter policies can have TTL, DOES NOT SUPPORT KEY ROTATION
 
 AWS Secrets Manager:  
-meant for storing secrets, newer than SSM, allows to force rotation of secrets every x days. Integrated with RDS, meant for RDS so in the exam if u see its Secret Manager.  
+meant for storing secrets, newer than SSM, allows to force rotation of secrets every x days. Integrated with RDS, meant for RDS so in the exam if you see its Secret Manager.  
 You can replicate secrets across multiple regions, and replicas sync. 
 
 AWS Systems Manager Parameter Store:  
