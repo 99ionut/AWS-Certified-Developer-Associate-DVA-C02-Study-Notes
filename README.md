@@ -81,6 +81,8 @@ Consists of:
   - "Action": API calls that will be allowed / denied based on the effect
   - "Resource": list of res. to which the action is applied
   - "Condition": when it's applied (optional)
+
+IAM certificate store: if you got your certificate from a third-party CA, import the certificate into ACM or upload it to the IAM certificate store  
  
 You can use Signature Version 4 to sign the API requests, to give API access in one AWS account to users in a different AWS account, also use  
 resource policy on the resource you are trying to access...  
@@ -1194,9 +1196,10 @@ Must know API:
 - ChangeMessageVisibility: change message timeout  
 
 FIFO queue:  
-Deduplication methods: if you send the same message twice within 5 minutes it gets discarded, BY USING "MessageDeduplicationId" PARAMETER.
+Deduplication methods: if you send the same message twice within 5 minutes it gets discarded, BY USING "MessageDeduplicationId" PARAMETER. (ONLY WORKS WITH FIFO QUEUE)
 - Content-body SHA256, if 2 are found it discards
 - Explicit-body, if 2 messages with explicit body are found it gets discarded
+To avoid duplicate STANDARD SQS messages processing, use DynamoDB and check for ID
 
 FIFO queue Message grouping:  
 We can give the queue messages a MessageGroupID, so it gets in the same queue but gets processed by different consumers,   
@@ -1302,7 +1305,7 @@ Send notifications for Events
 - Metrics:
   for every service in AWS, it's a variable to monitor ex CPU, networking, they have timestamps and you can create dashboards with them
   EC2 instance metrics every 5 min, there is a "detailed monitoring" for a cost you get every 1 minute. By default no log from EC2,  
-- need to setup an "agent" to push them. "CloudWatch Unified Agent" allows you to get more granular extra data from EC2   instead of the default ones
+- need to setup an "agent" to push them. "CloudWatch Unified Agent" allows you to get more granular extra data from EC2   instead of the default ones like memory, swap, and disk space utilization (IF IT HAS TO DO WITH RESOURCES)
 - If you need granularity higher than detailed monitoring which is 1min, use High resolution, with data at a granularity
   of 1 second, 5 seconds, 10 seconds, 30 seconds, or any multiple of 60 seconds.
 - You can define Custom Metrics, using the API PutMetricData
@@ -1422,6 +1425,9 @@ Serverless: just deploy code without provisioning / managing servers.
 - pay just for request and compute time  
 - Burst Concurrency Limits: 500-3000 (default 1000) If you invoke the function again while   
 - the first event is being processed  
+
+You can implement an AWS Lambda runtime in any programming language. Include a RUNTIME in your function's deployment  
+package in the form of an executable file named "bootstrap".  
 
 Main integrations:  
 - API Gateway: to create Rest API  
@@ -1662,7 +1668,7 @@ Table Cleanup:
 - scan + deleteItem very slow and expensive
 - drop table + recreate table fast and cheap
 
-Copy DynamoDbTable:
+Copy DynamoDBTable:
 - use AWS Data Pipeline
 - Backup and restore into a new table
 - Scan + PutItem 
@@ -1751,9 +1757,14 @@ StreamViewType — Specifies the information that will be written to the stream 
 - KEYS_ONLY — Only the key attributes of the modified item.
 - NEW_IMAGE — The entire item, as it appears after it was modified.
 - OLD_IMAGE — The entire item, as it appeared before it was modified.
-- NEW_AND_OLD_IMAGES — Both the new and the old images of the item
+- NEW_AND_OLD_IMAGES — Both the new and the old images of the item  
 
-Permissions to allow uaccess to CERTAIN items and attributes:  
+To return the number of WCU consumed by any of these operations, set the "ReturnConsumedCapacity" parameter to one of the following:  
+- TOTAL — returns the total number of write capacity units consumed.  
+- INDEXES — returns the total number of write capacity units consumed, with subtotals for the table and any secondary indexes that were affected by the operation.  
+- NONE — no write capacity details are returned. (This is the default.)  
+
+Permissions to allow access to CERTAIN items and attributes:  
 Restrict access to specific items based on certain primary key values  
 identity-based policy that restricts access TO AN ENTIRE TABLE, not specific items  
 
@@ -1806,6 +1817,7 @@ Stage variables: like Env. variables (config) but for API Gateway, use them for 
 so it prevents redeployment every time. 
 - A common use is defining to which Lambda function it points and when you deploy V2 change a % of traffic to the new one changing the Stage Var. (Canary Deployment)  
 - Also used to implement and run different versions for testing purposes ex: alpha .tutorialsdojo .com endpoint and beta release through the beta .tutorialsdojo .com endpoint
+- You can also use stage variables to pass configuration parameters to a Lambda function through your mapping templates  
 
 Integration types:  
 - Mock: API Gateway returns a response without sending the request to the backend
@@ -1870,7 +1882,10 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
   IAM Policies, encryption at rest with AWS KMS, in transit
   - Example lambda to commit / i think other services as well to commit. The Dev can use AWS SDK to instantiate a CodeCommit client. The client can then be used with  
     put_file which adds or updates a file in a branch in an AWS CodeCommit repo.
-  - connections to AWS CodeCommit repos with IAM user, configure Git credentials for CodeCommit in the IAM console  
+  - connections to AWS CodeCommit repos with IAM user, configure Git credentials for CodeCommit in the IAM console
+  to get access:
+    - Generate HTTPS Git credentials.
+    - Generate new SSH keys and associate the PUBLIC SSH key to each of your developer's IAM user.
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc98d861-4d4f-4ab7-90fd-260eda8be962">  
 
@@ -1883,12 +1898,19 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f0d2d3dc-08c8-4b10-a775-e59e55911a99">  
 
-- CodeDeploy: automate deploy code to EC2 / lambda (help automate with traffic shift linear / canary) / ECS (only Blue-
-  green). Rollback / deploy capability. Gradual deploy control (AllAtOnce, HalfAtATime,OneAtTime,Custom, Blue-green).  
-  - AppSpec.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance.  
-  - an order of the hooks for in-place deployments: ApplicationStop -> BeforeInstall -> AfterInstall -> ApplicationStart
-  - defined the deployment actions in a file AppSpec.yml. Hooks allowed: BeforeAllowTraffic > AfterAllowTraffic  
-  - it can pull code boundle from S3
+- CodeDeploy: automate deploy code to EC2 / lambda (help automate with traffic shift linear / canary)
+  Deploy / Rollback capability:
+  - ECS (only Blue- green)
+  - Gradual deploy control (
+  - AllAtOnce
+  - HalfAtATime
+  - OneAtTime
+  - Custom)
+  - In-place deployments to on-premises servers   
+- AppSpec.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance.  
+- an order of the hooks for in-place deployments: ApplicationStop -> BeforeInstall -> AfterInstall -> ApplicationStart
+- defined the deployment actions in a file AppSpec.yml. Hooks allowed: BeforeAllowTraffic > AfterAllowTraffic  
+- it can pull code boundle from S3
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">  
 
