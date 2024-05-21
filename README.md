@@ -37,6 +37,9 @@ Exponential backoff is used when you get a ThrottlingException, so on each retry
 you must implement the retries on 5xx server errors
 Dont implement retry on 4xx client errors
 
+Single Tenant: A single instance of the software and SUPPORTING INFRASTRUCTURE SERVES A SINGLE CUSTOMER (Dedicated Hosts/Dedicated Instances).  
+With single tenancy, each customer has his or her own independent multi-tenant database and instance of the software. Essentially, there is no sharing happening with this option
+
 AWS Directory Services (AD)
 
 Administrative overhead is the cost of setting up the service. This includes setting up users, security configs, and all the monitoring tools available. These questions usually differentiated themselves by having answers that would show you could setup a given task faster with a tool like cloud formation or beanstalk. They usually have an element of security to them as well.
@@ -525,7 +528,7 @@ terminology:
 Route 53 is an authoritative DNS (you can update the records yourself), and is a Domain registrar  
 Route 53 records contains:  
 - Domain/subdomain name: example.com
-- record type: (must know)
+- record type: (must know): !!
   - A maps hostname to ipv4
   - AAAA maps hostname to ipv6
   - CNAME Point a hostname to another hostname, works if you have a non-root domain (something.domain.com). provides a domain name for it, such as d111111abcdef8.cloudfront.net. Instead of using this provided domain name, you can use an alternate domain name (also known as a CNAME).
@@ -659,7 +662,7 @@ security:
     
 can force encryption with bucket policy  
 
-x-amz-server-side-encryption header to request server-side encryption with S3 Managed keys.  
+x-amz-server-side-encryption, value="AES256" header to request server-side encryption with S3 Managed keys. value="aws:kms" with KMS keys.
 x-amz-server-side​-encryption​-customer-algorithm, x-amz-server-side-encryption-customer-key and x-amz-server-side-encryption-customer-key-MD5 headers. Headers for Customer managed keys.  
 
 SecureTransport:  
@@ -929,11 +932,11 @@ ECS services to scale underlying EC2 instances:
 - ECS Cluster Capacity Provider is what is used to automatically provision and scale the infrastructure,
   adds EC2 when you are missing capacity (CPU, RAM) (recommended) this is used to scale the cluster
   container instances, not the number of tasks. To scale nr of tasks Create an ECS Service with Auto Scaling and attach an Elastic Load Balancer
-- Auto scaling group scaling, scale based on CPU utilization
-we can scale using  
-- target tracking based on a target value from Cloudwatch metric
-- step scaling scale based on a specified Cloudwatch alarm
-- scheduled scaling scale based on a specified date / time
+- AUTO scaling group scaling, scale based on CPU utilization
+we can scale using:  !!
+- TARGET tracking based on a target value from Cloudwatch metric
+- STEP scaling scale based on a specified Cloudwatch alarm
+- SCHEDULED scaling scale based on a specified date / time
 
 ECS Rolling updates:  
 when upgrading from V1 to V2 we can control how many tasks can be started and stopped and in which order in order  
@@ -1025,7 +1028,8 @@ Deploy options for updates:
 - All at once, deploy the new v all in one go but it has a bit of downtime  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/28d406a4-c6d7-4b02-84cb-74e1349db53b">
   
-- Rolling: update a few instances at a time (at one point it runs at a smaller capacity)  
+- Rolling: update a few instances at a time (at one point it runs at a smaller capacity)
+  EB will replace the failed instances with instances running the application version from the most recent successful deployment  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/a16b4ed3-21aa-48a3-b73b-96fe01d23ddb">
   
 - Rolling with additional batches: like rolling but actively starts new instances to switch, so it has all the capacity when needed  
@@ -1092,6 +1096,7 @@ template components:
 - conditions: control the creation of res. based on conditions ex: what region you deploy in
   (Parameters section can't be associated with Conditions)
 - Transform: When you specify a transform, you can use AWS SAM syntax to declare resources in your template.
+  YAML file the "Transform" section in the document represent  it is a Serverless Application Model (SAM) template
 - Instrinct functions (the most important):
   - Ref: returns the instance ID
   - GetAtt: returns the value of a specific attribute, ex: when creating and EBS vol you want to get the AZ of the EC2
@@ -1100,6 +1105,7 @@ template components:
   - Condition Functions: if / and / not / or
   - Base64: convert value to base64
 - Outputs: Describes the values that are returned whenever you view your stack's properties.
+  !! Exported Output Values in CloudFormation must have UNIQUE names within a single REGION
 
 CF Rollbacks:  
 if a stack creation fails you have the option to default: everything rolls back, or to disable rollback to troubleshoot
@@ -2093,6 +2099,9 @@ AWS Amplify Hosting.
 
 AWS AppSync:  
 build scalable applications that require real-time updates on a range of data sources, including Amazon DynamoDB.  
+
+AWS Serverless Application Repository (SAR):  
+SAM Templates, publicly share applications with everyone or privately share them with specific AWS accounts. for example for common infrastrucutres.  
 
 ---
 # AWS Security
