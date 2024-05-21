@@ -82,7 +82,11 @@ Consists of:
   - "Resource": list of res. to which the action is applied
   - "Condition": when it's applied (optional)
 
-IAM certificate store: if you got your certificate from a third-party CA, import the certificate into ACM or upload it to the IAM certificate store  
+IAM Access Analyzer:  
+simplifies inspecting unused access to guide you toward least privilege. The findings highlight unused roles, unused access keys, password.
+
+IAM certificate store:  
+if you got your certificate from a third-party CA, import the certificate into ACM or upload it to the IAM certificate store  
  
 You can use Signature Version 4 to sign the API requests, to give API access in one AWS account to users in a different AWS account, also use  
 resource policy on the resource you are trying to access...  
@@ -175,7 +179,10 @@ Instance types:
 - Storage Optimized (when lots of datasets on local storage, data warehouse, online transaction)
 - HPC optimized
 
-m5.2xlarge: m = class like general purpose, 5 = generation (aws improve over hw over time) 2xlarge = size in instance class (the more cup and memory ecc..)
+m5.2xlarge: m = class like general purpose, 5 = generation (aws improve over hw over time) 2xlarge = size in instance class (the more cup and memory ecc..)  
+
+If you are below a besline you earn burst credits (balance) that you can use for higher throughput later, it gets reset if you perform an immutable/traffic-splitting deploy because it  
+generates new instances.  
 
 Security groups:  
 firewall around EC2, control how traffic is allowed into EC2, they only contain ALLOW rules.   
@@ -401,6 +408,9 @@ the goal of ASG is to
 - ASG launch template contains info on how the new instance should be created
 - it's possible to scale based on CloudWatch alarms metrics
 - after a scaling happens there is a default 300 sec cooldown period
+- cannot span across multiple Regions
+- can contain instances in one or more Availability Zones within the same Region, attempts to distribute instances
+  evenly between the Availability Zones that are enabled for your Auto Scaling group
 
 Scaling policies:  
 - dynamic scaling: based on tracking scaling ex: target to have ASG CPU to stay at 40%
@@ -1067,17 +1077,21 @@ automated way: using AWS CLI
 YAMS and JSON are languages you can write CF templates  
 "aws cloudformation deploy" then "sam deploy" commands  
 
+TODO:
 template components:
-- template version
+- Template version/Format Version 
 - description
+- Metadata: provide additional information about the template.
 - resources: are the core of your CloudFormation template, represent the components that will be created, res. can refer each other
 - parameters: they are a way to provide inputs to your AWS CF template (ex choose type of ec2, password...)
 - mapping: fixed vars within CF template ex (dev vs prod) The optional Mappings section matches a key to a corresponding set of named values. For example, if you want to set values
   based on a region, you can create a mapping that uses the region name as a key and contains the values you want to specify for
-  each specific region
+  each specific region, match then with Fn::FindInMap
+- Rules: Validates a parameter or a combination of parameters during a stack creation
 - outputs: output the vars such as VPC ID and subnet ID to network stack
 - conditions: control the creation of res. based on conditions ex: what region you deploy in
   (Parameters section can't be associated with Conditions)
+- Transform: When you specify a transform, you can use AWS SAM syntax to declare resources in your template.
 - Instrinct functions (the most important):
   - Ref: returns the instance ID
   - GetAtt: returns the value of a specific attribute, ex: when creating and EBS vol you want to get the AZ of the EC2
@@ -1085,6 +1099,7 @@ template components:
   - importValue: import values that are exported in other stacks
   - Condition Functions: if / and / not / or
   - Base64: convert value to base64
+- Outputs: Describes the values that are returned whenever you view your stack's properties.
 
 CF Rollbacks:  
 if a stack creation fails you have the option to default: everything rolls back, or to disable rollback to troubleshoot
@@ -1188,8 +1203,9 @@ SQS Extended client library ECL:
 library that uses an s3 bucket to send messages higher than 256kb, the queue sends a message telling the consumer to get the larger message from the s3
 
 Must know API:  
-- CreateQUeue, Delete queue  
-- PurgeQUeue, deletes all messages  
+- CreateQueue, Delete queue  
+- PurgeQueue: deletes all messages
+- DeleteQueue: Delete queue along with all its contents
 - SendMEssage, RecieveMessage, DeleteMessage  
 - MaxNumberOfMessages (for receiving) def. 1 max 10  
 - ReceiveMessageWaitTimeSeconds: Long Polling  
@@ -1950,7 +1966,16 @@ EASIER THAN CLOUDFORMATION use for exam.
 The "AutoPublishAlias" property enables AWS SAM to automatically create and update a Lambda alias that points to the latest version of the function (like after a Canary deployment)  
 
 SAM local "start-api" subcommand allows you to run your serverless application locally for quick development and testing.  
-For example it creates a local HTTP server that acts as a proxy for API Gateway and invokes your Lambda functions based on the AWS SAM template.    
+For example it creates a local HTTP server that acts as a proxy for API Gateway and invokes your Lambda functions based on the AWS SAM template.  
+
+SAM supports the following resource types:  
+- AWS::Serverless::Api
+- AWS::Serverless::Application
+- AWS::Serverless::Function
+- AWS::Serverless::HttpApi
+- AWS::Serverless::LayerVersion
+- AWS::Serverless::SimpleTable
+- AWS::Serverless::StateMachine
 
 <img width="500" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bde587c1-1ff8-47b3-8b14-3d5df83b8d8f">
 
@@ -1965,7 +1990,10 @@ Create the app from a "template provided by AWS CDK" -> Add code to the app to c
 Build the app (optional) -> Synthesize one or more stacks in the app -> Deploy stack(s) to your AWS account  
 
 CDK Construct: library collection of constructs for every AWS resource.  
+
 Construct hub: 3rd party and open source from community CDKs.  
+
+CDK TEMPLATES.  
 
 The developer can test a specific Lambda function locally by running the CDK SYNTH command to synthesize the AWS CDK (generate CF template)   
 Use SAM LOCAL INVOKE to run the specific Lambda function locally  
@@ -1981,7 +2009,7 @@ IMPORTANT in exam if they say "hundreds of users", "mobile users", "authenticate
 Cognito user pool (CUP):   
 - are for AUTHENTICATION (identify verification). create a serverless DB of your users. sign-in function for app users.   
   Username / email / password / MFA / phone verify. / login with Google (federate identity). block users compromised.   
-- when they login they get back a JSON web toke JST.   
+- when they login they get back a JSON web toke JWT.   
 - CUP can invoke Lambda on triggers.  
 - It offers a Hosted authentication UI that you can use in your apps.  
 - Offers Adaptive Authentication: block sign-ins or require MFA if the login is suspicious.  
