@@ -1934,7 +1934,25 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 - defined the deployment actions in a file AppSpec.yml. Hooks allowed: BeforeAllowTraffic > AfterAllowTraffic  
 - it can pull code boundle from S3
 
-<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">  
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/0c52fbf2-0fee-4e0d-beda-6b7f3e635465">  
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/377e1523-2f19-4a92-90d8-4694879141ab"><img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5656f273-9341-4276-9aa9-b7dd71ad8f65">  
+
+Deployment lifecycle evens, You can specify scripts to run in a hook:  
+- ApplicationStop
+- DownloadBundle: CodeDeploy agent copies the application revision files to a temporary location
+- BeforeInstall: You can use this deployment lifecycle event for preinstall tasks, such as decrypting files and creating a backup of the current version
+- Install: CodeDeploy agent copies the revision files from the temporary location to the final destination folder.
+- AfterInstall: tasks such as configuring your application or changing file permissions.
+- ApplicationStart: restart services that were stopped during ApplicationStop.
+- ValidateService: It is used to verify the deployment was completed successfully. !! 
+- BeforeBlockTraffic: run tasks on instances before they are deregistered from a load balancer.
+- BlockTraffic: internet traffic is blocked from accessing instances that are currently serving traffic
+- AfterBlockTraffic: run tasks on instances after they are deregistered from their respective load balancer.
+- BeforeAllowTraffic: run tasks on instances before they are registered with a load balancer.
+- AllowTraffic: internet traffic is allowed to access instances after a deployment.
+- AfterAllowTraffic: run tasks on instances after they are registered with a load balancer.
+
+<img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">   
 
 - CodeStart / CodeCatalyst: Manage sw dev activities.
 
