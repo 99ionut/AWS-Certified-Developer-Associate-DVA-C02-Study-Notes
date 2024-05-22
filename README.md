@@ -162,13 +162,14 @@ IAM Best practices:
 Shared reponsability model:  
 You know.
 
-AWS STS  
+AWS STS:!!  
 Security token service: allows to grant limited and temp access to aws resources (up to 1hr)  
 Define an IAM role, define its principals, use AWS STS to impersonate the IAM Role (AssumeRole API), Get the temp. credentials  
 - AssumeRole: Assume roles within your account or cross-account, ex: use with cross-account to get temporary access to resources in a second account  
 - GetSessionToken: for STS with MFA, from a user or AWS account root user. it returns Access ID, Secret Key, Session Token, Expiration date.
 - GetCallerIdentityt: return details about the IAM user or role used in the API call
 - DecodeAuthorizationMessage: decode error message when AWS API is denied.
+- CAN'T be used with API GATEWAY AUTHENTICATION.
 
 # EC2 Fundamentals
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/70df717a-6b4b-4bcd-b73c-5371b49c5822">
@@ -1466,7 +1467,7 @@ Serverless: just deploy code without provisioning / managing servers.
 - the first event is being processed  
 
 You can implement an AWS Lambda runtime in any programming language. Include a RUNTIME in your function's deployment  
-package in the form of an executable file named "bootstrap".  
+package in the form of an executable file named "bootstrap" If you want to use it in a CONTAINER. SUPPORTS ONLY LINUX IMAGES NOT HYBRID WINDOWS-LINUX!!    
 
 Main integrations:  
 - API Gateway: to create Rest API  
@@ -1642,7 +1643,7 @@ Each table has a Primary Key, infinite rows, each one has attributes can be null
 
 options to choose the primary key  
 - Hash: unique for each one like "user_id"
-- Partition Key + sort key: "user_id" + "game_id" unique for each item. For example each user can attend multiple games
+- Partition Key + sort key: "user_id" + "game_id" unique for each item. For example each user can attend multiple games  
   so the same partition key is equal in 2 rows but different game_id keys, the combination is unique
 
 Control the R/W capacity modes:  
@@ -1690,7 +1691,8 @@ Writing Data:
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/d5a35a98-dbf1-4cac-a847-e70c3bfcb9bb">  
  
 Reading Data: 
-- GetItem: read based on Primary Key (hash / hash + range), eventually consistent (default) / strongly,
+- GetItem: read based on Primary Key (hash / hash + range), eventually consistent (default) / strongly
+- BOTH PutItem and UpdateItem can add a NEW item. If the item already exists, PutItem will Replace the entire item while UpdateItem will Update only what you passed.
 - ProjectionExpression to read only certain attributes
 - Query: Based on Partition key value (required) , and optional sort key values (=,<,> ec...), FilterExpression additional filtering after query for non-key attributes
 - Scan: get the entire table and filter out on your application (inefficient).
@@ -1730,6 +1732,7 @@ With a local secondary index you can have a different sort key but the partition
 
 Global secondary index (GSI):  
 Alternative Primary Key (hash / hash+range)  
+Can be created after table creation  
 Contains a selection of attributes from the base table, but they are organized by a primary key that is different from that of the table.  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/01541488-4980-4905-8c41-e73febf490a8">  
 
@@ -1745,11 +1748,11 @@ Atomic counter:
 Numeric attribute that is incremented when UpdateItem is called, is not accurate because even if the update fails it increments, used for example for users on a website  
 or counts that can have slight miscalcumations.  
 
-DynamoDB DAX: 
+DynamoDB DAX:  
 Fully managed highly aval. seamless i-memory cache for DynamoDB, fully secure, microseconds cached reads and queries. Doesnt require   
 application logic modification because compatible with existing DynamoDB APIs. Solves the "hot key" problem so too many reads.  
 
-DynamoDB Streams: 
+DynamoDB Streams:  
 ordered stream of item level modifications (CRUD), streams can be sent to kinesis, Lamba.   
 use cases: react to changes in real-time ex: send welcome email to users, analytics, insert in derivate tables  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/1f266a95-fd6f-474a-ab9a-2ca2036e5ea4">  
@@ -1782,14 +1785,14 @@ OR
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5e20f558-9a14-4fb9-9972-01e02c68b8ff">
 
 Security:  
-VPC Endpoints to access without internet  
-Access with IAM  
-encryption KMS, in transit SSL/TLS  
-backup and restore features  
-Global tables, fully replicated multi-region  
-DynamoDB Local dev and test apps locally without the official server  
-DMS  
-Can use identity providers / Cognito to exchange credentials for temporary credentials with roles, and can do operations only on data they own  
+- VPC Endpoints to access without internet  
+- Access with IAM  
+- encryption KMS, in transit SSL/TLS  
+- backup (On-demand, Point-in-time recovery) and restore features, they use S3 to do so but you can't access those buckets
+- Global tables, fully replicated multi-region  
+- DynamoDB Local dev and test apps locally without the official server  
+- DMS  
+- Can use identity providers / Cognito to exchange credentials for temporary credentials with roles, and can do operations only on data they own  
 
 Enabling DynamoDB Streams on the table allows you to capture and process changes (inserts, updates, deletes) to the table in real-time  
 StreamEnabled — Specifies whether a stream is enabled (true) or disabled (false) for the table.  
@@ -2180,14 +2183,13 @@ how encrypt / decrypt works:
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ad7a1c71-5da4-42ab-9e64-62d9d40a57a1">
 
-Envelope Encryption: Encrypt plaintext data with a data key and then encrypt the data key with a top-level plaintext master key.  
-
-Envelope Encryption: KMS has a limit of 4kb, if you want more, use Envelope Encryption which corresponds to  
-GenerateDataKey API.   
-GenerateDataKey: obtain an encryption key from KMS that we can then use within the function  
-code to encrypt the file. This ensures that the file is encrypted BEFORE it is uploaded to Amazon S3.
-GenerateDataKeyWithoutPlaintext: returns only the encrypted copy of the data key which you will use for encryption.  
-returns a data key that is encrypted under a customer master key (CMK) that you specify.  
+Envelope Encryption: Encrypt the plaintext data with a data key and then encrypt the data key with a top-level PLAINTEXT MASTER key.  
+!! Envelope Encryption: KMS has a limit of 4KB, if you want more, use Envelope Encryption which corresponds to  
+- enerateDataKey API.   
+- GenerateDataKey: obtain an encryption key from KMS that we can then use within the function  
+  code to encrypt the file. This ensures that the file is encrypted BEFORE it is uploaded to Amazon S3.
+- GenerateDataKeyWithoutPlaintext: returns only the encrypted copy of the data key which you will use for encryption.  
+  returns a data key that is encrypted under a customer master key (CMK) that you specify.  
 
 KMS limits: ThrottlingException, to respond use Exponential backoff, all services that use KMS share a quota across all regions and accounts. we can use DKE caching
 or you can request quota increase through API or AWS support. 
