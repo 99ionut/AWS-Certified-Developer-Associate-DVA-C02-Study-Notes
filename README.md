@@ -439,7 +439,7 @@ will have the new template, so at the end after a while all instances will have 
 Managed DB service, uses SQL, because its managed, rather than EC2 own DB:  
 - OS patching by AWS
 - continuous backups and restore
-- read replicas: help you scale your reads (not writes)
+- read replicas: help you scale your reads (not writes) (CROSS-REGION)
   - async replications so the reads are "eventually consistent" because if they haven't finished syncing you can read
     old data sometimes
   - up to 15 read replicas
@@ -455,6 +455,7 @@ Managed DB service, uses SQL, because its managed, rather than EC2 own DB:
     Promote the standby to primary.
     Perform maintenance on the old primary, which becomes the new standby.
 - can enable AUTO SCALING!
+- can enable the Automated Backup feature in a multi-AZ deployment
 - storage backed by EBS
 
 RDS proxy:  
@@ -711,6 +712,8 @@ enable versioning
 - SRR same region replication (live replication, log aggregation)
 - buckets can be in different AWS accounts
 - copy is async
+- only replicates the objects added to the bucket AFTER replication is enabled
+- lifecycle actions are not replicated with S3 replication
 
 Storage classes:
 - general purpose
@@ -737,7 +740,7 @@ PUT/COPY/POST/DELETE or 5,500 GET/HEAD (read) requests per second per prefix in 
 number of prefixes that you can have in your bucket
 
 durability: how many times an object is going to be lost 9.99 11 9s  
-availability: how readily a service is: 99.99% not available for 53min
+availability: how readily a service is: 99.99% not available for 53min  
 
 can use lifecycle configurations or move between classes manually  
 lifecycles rules:  
@@ -888,7 +891,7 @@ that contains all commands, in order, needed to build a given image.
 ### Elastic container service
 
 ECS agent facilitates the communication between your container instances and Amazon ECS  
-/etc/ecs/ecs.config contains cluster Parameter values, like cluster name.  
+/etc/ecs/ecs.config contains cluster Parameter values, like cluster name.!!  
 
 EC2 Launch type:  
 to launch a container = to launch an ECS task  
@@ -1209,7 +1212,8 @@ use the "ChangeMessageVisibility" API to change the timeout time to increase the
 SQS Dead Letter queues (DLQ):  
 We can set a threshold to how many times a message can go back into the queue because a consumer fails to process it, after the "MaximumReceives" threshold  
 is exceeded it goes in the deal letter queue. DLQ useful for debugging, messages in there expire after the retention period, so set a higher 14days for the DLQ  
-Debug the DLQ, fix your code, use the "Redrive to Source" to put the DLQ messages back in the Source queue so it can be processed correctly this time
+Debug the DLQ, fix your code, use the "Redrive to Source" to put the DLQ messages back in the Source queue so it can be processed correctly this time  
+Usually makes sense for asynchronous invocations, synchronous recieve the response if failed.
 
 SQS Delay queue:  
 Delay a messages so cosumers dont see it immediately, up to 15 min, or per message individually, default is 0
@@ -1313,7 +1317,7 @@ Kinesis operations:
 Kinesis Adapter:  
 recommended way to consume streams from DynamoDB for real-time processing.  
 
-Kinesis Data Firehouse:  
+Kinesis Data Firehose:  
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/41492d0c-faaa-4e15-8d66-c1bd21b45c8c">  
 
   Managed (ingest data at scale) used to load data into specific services, streams into ASW data stores near real-time, fully managed serverless.  
@@ -1594,6 +1598,7 @@ Lambda and CodeDeploy:
 help automate the traffic shift for Lamba aliases.  
 CANNOT USE IN-PLACE DEPLOYMENT (just upgrade the code), MUST USE ONE OF THESE, because instances must be stopped and  
 restarted with the new version, only EC2/On-Premises can do it.  
+- in-place:
 - Linear: glow traffic by x percent every n minutes  
 - Canary: x percent then 100%  
 - AllAtOnce: Immediate
@@ -1853,8 +1858,7 @@ Deployment Stages:
 After Making a change must be deployed it or else changes wont apply, its done through "stages"  
 each stage has its own config. parameters. Stages are kept and can be rolled back if needed  
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/8baded8a-55ea-461e-8980-df53eb2cebc8">  
-Update stage variable value from the stage name of test to that of prod: Update stage variable value from the stage  
-name of test to that of prod  
+Update stage variable value from the stage name of test to that of prod, to PROMOTE the TEST stage to the PRODUCTION stage. !!
 
 Stage variables: like Environment variables (config) but for API Gateway, use them for often changing values  
 so it prevents redeployment every time. 
@@ -2185,8 +2189,8 @@ how encrypt / decrypt works:
 
 Envelope Encryption: Encrypt the plaintext data with a data key and then encrypt the data key with a top-level PLAINTEXT MASTER key.  
 !! Envelope Encryption: KMS has a limit of 4KB, if you want more, use Envelope Encryption which corresponds to  
-- enerateDataKey API.   
-- GenerateDataKey: obtain an encryption key from KMS that we can then use within the function  
+- "GenerateDataKey" API. Returns a plaintext key and an encrypted copy of a data key. 
+- "GenerateDataKey": obtain an encryption key from KMS that we can then use within the function  
   code to encrypt the file. This ensures that the file is encrypted BEFORE it is uploaded to Amazon S3.
 - GenerateDataKeyWithoutPlaintext: returns only the encrypted copy of the data key which you will use for encryption.  
   returns a data key that is encrypted under a customer master key (CMK) that you specify.  
