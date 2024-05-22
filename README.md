@@ -121,7 +121,7 @@ To access AWS:
 - AWS management console (pw + MFA)
 - CLI (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)
   - to use CLI with MFA you need to create a temporary session, you do so with the STS GetSessionToken API !! 
-  - the CLI looks for credentials in this order: Command line, Env. Variable CLI credential file, CLI config file, Container cred. Instance profile cred.
+  - the CLI looks for credentials in this order: Command line, Environment Variable CLI credential file, CLI config file, Container cred. Instance profile cred.
 - SDK (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)
   - looks for credentials in this order:
     - Environment variables
@@ -216,8 +216,9 @@ purchasing options:
   - pay upfront, partial, no
   - recommended for steady-state usage (like a DB)
   - you can buy / sell it on the marketplace
+  - CAPACITY RESERVATION ONLY FOR AZ type, not Regional type.
     
-- conv. reserved instances
+- convert reserved instances
   - change type but less discount
     
 - savings plan (1-3 years you commit not to type but to amount of workload in dollars)
@@ -229,7 +230,7 @@ purchasing options:
   - not suited for critical jobs
     
 - dedicated instance
-  - when compliance req. or bound sw licenses, or strong regulatory needs
+  - when compliance requests or bound software licenses, or strong regulatory needs
   - on-demand or reserved
   - share host with others
 
@@ -269,6 +270,7 @@ EBS Volume types:
     - cost-effective low latency
     - virtual desktops and test environments
     - gp3 can individually increase IOPS and throughput, for gp2 they are linked together
+    - max: 5.3 TiB IOPS
       
   - io 1 / io 2 "prevision iops": highest performance SSD
     - can be used as boot volume
@@ -350,6 +352,7 @@ what it does:
 - expose a single point of access (DNS) to your app
 - handle failures of instances, using health checks, by using a port and route to check the HTTP response.
   ex response 400 not healthy
+- When it finds that an instance is unhealthy, it TERMINATES that instance and launches a new one.
 
 
 4 types:
@@ -361,10 +364,10 @@ what it does:
   -  supports route routing / query strings like example.com/users
   -  we can do stuff like if the request is ?=mobile it redirects to a specific instance otherwise if ?=desktop to
      different one
-  - You can register your Lambda functions as targets and configure a listener rule to forward requests to the target group for your
+  - You can register your Lambda functions as targets and configure a listener rule to forward requests to the target group for your  
     Lambda function. When the load balancer forwards the request to a target group with a Lambda function as a target, it invokes  
     your Lambda function and passes the content of the request to the Lambda function, in JSON format.  
-    X-Forwarded-Proto: protocol (HTTP/HTTPS)  
+    X-Forwarded-Proto: protocol (HTTP/HTTPS)  !!
     X-Forwarded-Host: original Host header requested by the client  
     X-Forwarded-For: original IP address of a client  
     X-Forwarded-Port header: original port that the client used to connect  
@@ -619,7 +622,7 @@ WordPress on AWS
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/c0ddee13-1fc0-4509-a333-766fd99bd775">
 
 Used for everything, is the backbone for a lot of internet stuff  
-backup and storage, disaster recovery, archive, hybrid cloud storage, app hosting, media hosting, data lakes and big data, sw delivery, static website  
+backup and storage, disaster recovery, archive, hybrid cloud storage, app hosting, media hosting, data lakes and big data, software delivery, static website  
 
 store objects (files) in "buckets" / object storage service
 must have unique name  
@@ -1058,8 +1061,8 @@ clones an environment. with the exact config. useful for "test" versions of app.
 
 EB migration:   
 for example ELB can't be changed (only configured) after cloning, so we need to migrate:  
-create a new env. with the same config except LB (cant clone)  
-deploy the app onto new env. Perform a swap.  
+create a new environment with the same config except LB (cant clone)  
+deploy the app onto new environment Perform a swap.  
 
 Your source bundle must meet the following requirements:  
 - Consist of a SINGLE ZIP file or WAR file
@@ -1081,18 +1084,18 @@ automated way: using AWS CLI
 YAMS and JSON are languages you can write CF templates  
 "aws cloudformation deploy" then "sam deploy" commands  
 
-TODO:
+!!
 template components:
 - Template version/Format Version 
 - description
 - Metadata: provide additional information about the template.
 - resources: are the core of your CloudFormation template, represent the components that will be created, res. can refer each other
 - parameters: they are a way to provide inputs to your AWS CF template (ex choose type of ec2, password...)
-- mapping: fixed vars within CF template ex (dev vs prod) The optional Mappings section matches a key to a corresponding set of named values. For example, if you want to set values
+- mapping: fixed variables within CF template ex (dev vs prod) The optional Mappings section matches a key to a corresponding set of named values. For example, if you want to set values
   based on a region, you can create a mapping that uses the region name as a key and contains the values you want to specify for
   each specific region, match then with Fn::FindInMap
 - Rules: Validates a parameter or a combination of parameters during a stack creation
-- outputs: output the vars such as VPC ID and subnet ID to network stack
+- outputs: output the variables such as VPC ID and subnet ID to network stack
 - conditions: control the creation of res. based on conditions ex: what region you deploy in
   (Parameters section can't be associated with Conditions)
 - Transform: When you specify a transform, you can use AWS SAM syntax to declare resources in your template.
@@ -1157,6 +1160,20 @@ AWS::AccountId
 AWS::StackName  
 AWS::Region <--  
 ecc...  
+
+CloudFormationsupports the following parameter types:
+- String
+- Number: An integer or float
+- List<Number>: An array of integers or floats
+- CommaDelimitedList: array of literal strings that are separated by commas
+- AWS::EC2::KeyPair::KeyName : An Amazon EC2 key pair name
+- AWS::EC2::SecurityGroup::Id : A security group ID
+- AWS::EC2::Subnet::Id : A subnet ID
+- AWS::EC2::VPC::Id : A VPC ID
+- List<AWS::EC2::VPC::Id>: Array of VPC IDs
+- List<AWS::EC2::SecurityGroup::Id>: Array of security group IDs
+- List<AWS::EC2::Subnet::Id>: Array of subnet IDs
+
 
 # SQS
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/986a4ac4-0e84-4b1a-8731-f06774f3b7ae">
@@ -1540,19 +1557,20 @@ Data is SAVED in this directory, persists across these retained invocations, mak
 
 Lambda Layers:  
 custom runtimes for not supported languages, or create a layer to externalize dependencies to reuse them without having to repackage them to deploy, because the lambda can  
-reference these layers. ONYL FOR LIBRARIES, NOT DB keys ecc... use ENV. Variables for those.
+reference these layers. ONLY FOR LIBRARIES, NOT DB keys ecc... use ENVIRONMENT Variables for those.
 
 File System Mounting:  
 Can access EFS if running in VPC, it's a config to mount EFS file system to local directory at initialization, it uses EFS access points.
 
+reserved vs provisioned concurrency !!  
 Concurrency:  
 the more we invoke the more executions up to 1000, we can set a "reserved concurrency" to limit the max amount per each function.  
-if we don't set limit, we can have 1 function taking up all 1000 executions, and have the other functions not being able to start.
-!! Lambda will keep the unreserved concurrency pool at a minimum of 100 concurrent executions, so that functions that do not have specific limits set can still process requests. So, in practice, if your total account limit is 1000, you are limited to allocating 900 to individual functions. So if you have 2 functions that need to have the same concurrency, you can max do 450 and 450.
+if we don't set limit, we can have 1 function taking up all 1000 executions, and have the other functions not being able to start.  
+!! Lambda will keep the unreserved concurrency pool at a minimum of 100 concurrent executions, so that functions that do not have specific limits set can still process requests. So, in practice, if your total account limit is 1000, you are limited to allocating 900 to individual functions. So if you have 2 functions that need to have the same concurrency, you can max do 450 and 450.  
 
 Cold start and provision concurrency:  
 new instance so all initializations have to start. The first request has a higher latency,  
-you can use a "provision concurrency" to allocate before the function is invoked in advance so cold start never happens.  
+you can use a "provision concurrency" to allocate before the function is invoked in advance so cold start never happens. (ex if you want to prepare for a spike you know its going to happen)  
 
 Dependencies:  
 to include them, you need to zip dependencies and code all together, if > 50 MB upload in S3 and reference it.  
@@ -1600,7 +1618,7 @@ Heavy-duty work put it outside the function handler:
 connection to databases  
 initialization of AWS SDK  
 pull in dependencies  
-Use env. variables for stuff that changes frequently:  
+Use environment variables for stuff that changes frequently:  
 DB connection strings  
 S3 bucket ecc....  
 Passwords, encrypted with KMS  
@@ -1835,7 +1853,7 @@ each stage has its own config. parameters. Stages are kept and can be rolled bac
 Update stage variable value from the stage name of test to that of prod: Update stage variable value from the stage  
 name of test to that of prod  
 
-Stage variables: like Env. variables (config) but for API Gateway, use them for often changing values  
+Stage variables: like Environment variables (config) but for API Gateway, use them for often changing values  
 so it prevents redeployment every time. 
 - A common use is defining to which Lambda function it points and when you deploy V2 change a % of traffic to the new one changing the Stage Var. (Canary Deployment)  
 - Also used to implement and run different versions for testing purposes ex: alpha .tutorialsdojo .com endpoint and beta release through the beta .tutorialsdojo .com endpoint
@@ -1866,7 +1884,7 @@ Ticking the "Require authorization" checkbox ensures that not every client can i
 
 You can make your API available for money to customers. We can config how much and fast they can access them, how many calls  
 possible, use API Keys to identify them, callers pass the key in x-api-key header.  
-Throttling default 10000 rps across all API, in case it happens Error 429 too many req.  
+Throttling default 10000 rps across all API, in case it happens Error 429 too many requests.  
 Can set Stage limit and Method limit to increase performance  
 
 CloudWatch Logs: Log contains info about request/response body  
@@ -1886,7 +1904,7 @@ we want to push code in a repo and deploy it to AWS.
 
 CI: Continuous integration, devs will push code to repo, a testing / build checks code, the dev gets feedback and fix bugs  
 we don't need to test the code it's all automatic  
-CD: Continous delivery: Ensures that the sw can be released reliably after the test and build. We ensure deploy  
+CD: Continous delivery: Ensures that the software can be released reliably after the test and build. We ensure deploy  
 happens often and quickly, shift away from "one release every 3 months" to "5 releases a day" 
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/7e9b3b94-9646-401f-a808-3bac71924293">
@@ -1911,10 +1929,9 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc98d861-4d4f-4ab7-90fd-260eda8be962">  
 
-- CodeBuild: Build and test code. The build instructions are in buildspec.yml (must be at root of code like .git).
-  Logs can be used in S3 / cloudwatch. we can use CloudWatch Metrics to monitor build statistics.
-  Detect failed build and triggers / alarms.
-  Don't store codefuild secrets as plaintext in env. vars. Instead environment vars can reference parameters store parameters, or secrets manager secrets.   
+- CodeBuild: Build and test code. The build instructions are in buildspec.yml (must be at root of code like .git).  
+  Logs can be used in S3 + CLOUDWATCH. We can use CloudWatch Metrics to monitor build statistics. TO DETECT FAILED build and triggers / alarms.  !!
+  Don't store codebuild secrets as plaintext in environment variables Instead environment variables can reference parameters store parameters, or secrets manager secrets.   
   build logs of the failed phase in the last build attempt in the AWS CodeBuild project build history  
   CodePipeline stage can run many CodeBuild actions (not stages) in parallel.  
   
@@ -1934,8 +1951,9 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 - defined the deployment actions in a file AppSpec.yml. Hooks allowed: BeforeAllowTraffic > AfterAllowTraffic  
 - it can pull code boundle from S3
 
-<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/0c52fbf2-0fee-4e0d-beda-6b7f3e635465">  
-<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/377e1523-2f19-4a92-90d8-4694879141ab"><img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5656f273-9341-4276-9aa9-b7dd71ad8f65">  
+<img width="450" height="600" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/0c52fbf2-0fee-4e0d-beda-6b7f3e635465">
+<img width="450" height="600" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5656f273-9341-4276-9aa9-b7dd71ad8f65">
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/377e1523-2f19-4a92-90d8-4694879141ab">
 
 Deployment lifecycle evens, You can specify scripts to run in a hook:  
 - ApplicationStop
@@ -1954,11 +1972,11 @@ Deployment lifecycle evens, You can specify scripts to run in a hook:
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">   
 
-- CodeStart / CodeCatalyst: Manage sw dev activities.
+- CodeStart / CodeCatalyst: Manage software dev activities.
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/079e00e5-8737-4a92-b317-8b972e9473f7">  
 
-- CodeArtifact: share sw packages, sw packages depend on each other to be built (code dependencies), storing and
+- CodeArtifact: share software packages, software packages depend on each other to be built (code dependencies), storing and
   getting these dependencies is called artifact management We can use Resource policy to auth different packages.
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/8c76f5b0-bfe0-4f1b-8b03-3c983ecfdbe8">  
@@ -2073,8 +2091,8 @@ Wait for task token: allows you to pause step function until a task token is ret
 
 Activity task:  
 allows you to have the task work performed by an Activity worker (Apps on EC2 / Lambda / mobile device...)  
-after it sends a SendTaskSuccess or SendTaskFailure. To set how long it should run TiemoutSettings, periodic send beat  
-with SendTaskHeartBeat 
+after it sends a "SendTaskSuccess" or "SendTaskFailure". To set how long it should run "TiemoutSettings", periodic send beat  
+with "SendTaskHeartBeat"  
 
 2 types of workflows:  
 - Standard (default):  
@@ -2083,14 +2101,24 @@ with SendTaskHeartBeat
   used for non-idempotent actions (same request leads to the same system state, and no action is unintentionally  
   executed more than once) like payment process.
 - Express:
-  up to 5 min, higher capacity, billed by nr of executions, duration and memory consumption. used for IoT data ingestion,
-  streaming Data, mobile app backends.
+  up to 5 min, higher capacity, billed by nr of executions, duration and memory consumption. used for IoT data ingestion,  
+  streaming Data, mobile app backends.  
   - Async (At least once execution guarantee) Don't wait for results, ex message services you don't wait for a response.
     must manage independence to manage that if it runs twice you don't have twice the effects.
   - Sync (At most once execution guarantee) Wait for workflow to complete. When you need an immediate response. At-most
     because if there is a failure it doesn't automatically restart, it's up to your logic.  
 
 "DefinitionSubstitution" entries allow the state machine to include resources that are declared in the AWS SAM template file or CF template  
+
+Type of states:  
+- Pass: passes its input to its output
+- Task: represents a single unit of work
+- Choice: adds conditional logic to a state
+- Wait: delays the state machine from continuing for a specified time
+- Succeed: STOPS an execution successfully (no NEXT field)
+- Fail: STOPS the execution of the state machine and marks it as a failure, unless it is caught by a Catch block.
+- Parallel: add separate branches of execution
+- Map: run a set of workflow steps for each item in a dataset
 
 AWS App sync:  
 
