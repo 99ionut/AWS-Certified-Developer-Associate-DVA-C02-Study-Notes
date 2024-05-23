@@ -1610,24 +1610,24 @@ can have Resource-based policy, CORS security like S3. we can set AuthTypeNone o
 Lambda and CodeGuru: can be activated from console to get runtime performance insights
 
 Lamba Limits per region:  
-128mb-10gb RAM allocation  
-max execution 15min  
-env var. max 4kb  
-disk capacity /tmp 512MB to 10GB  
-concurrency executions: 1000 (can be increased by support)  
-compressed zip deploy: 50MB  
-size of uncompressed: 250MB  
+- 128mb-10gb RAM allocation  
+- max execution 15min  
+- environment variables max 4kb , unlimited number
+- disk capacity /tmp 512MB to 10GB  
+- concurrency executions: 1000 (can be increased by support)  always 100 reserved for other functions
+- compressed zip deploy: 50MB  
+- size of uncompressed: 250MB  
 
 best practices:  
-never have recursive code.  
-Heavy-duty work put it outside the function handler:  
-connection to databases  
-initialization of AWS SDK  
-pull in dependencies  
-Use environment variables for stuff that changes frequently:  
-DB connection strings  
-S3 bucket ecc....  
-Passwords, encrypted with KMS  
+- never have recursive code.  
+- Heavy-duty work put it outside the function handler:
+  -  connection to databases  
+  -  initialization of AWS SDK  
+  -  pull in dependencies  
+-  Use environment variables for stuff that changes frequently:  
+  -  DB connection strings  
+  -  S3 bucket ecc....  
+- Passwords, encrypted with KMS  
 
 Lambda all console.log() statements are automatically sent to CloudWatch.  
 
