@@ -1919,7 +1919,7 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 - CodePipeline: automate pipeline. Visual workflow tool to orchestrate CICD. We can control the Source / build / test /
   deploy / invoke stages. If a stage fails pipeline stops. You can create events for failed pipelines / events with
   CloudWatch events.
-  you can add an "APPROVAL ACTION" to a stage in a pipeline at the point where you want the pipeline
+  you can add an "APPROVAL ACTION" to a stage in a pipeline at the point where you want the pipeline!! 
   execution to stop so that someone with the required AWS Identity and Access Management permissions can approve or reject
   the action.
   
@@ -2068,7 +2068,7 @@ Cognito user pool (CUP):
 - you can add sign-up and sign-in to mobile and web apps and it also offers a user directory so   
   user accounts can be created directly within the user pool. Users also have the ability to reset their passwords
 - You can add social identity providers (IdPs) (SPID), are based on OpenID, they reqire the "Client ID" & "client Secret"
-  to work 
+  to work!! 
 
 Cognito Identity pools (federated identities):  
 are for AUTHORIZATUION (access control) AWS credentials to users to access AWS resources directly, temporary  
@@ -2207,7 +2207,7 @@ AWS SSM Patameter store:
 Secure storage for your configs and secrets, optional encryption using KMS. Security through IAM, notification with EventBridge, version tracking for changes inside.  
 Parameter policies can have TTL, DOES NOT SUPPORT KEY ROTATION
 
-AWS Secrets Manager:  
+AWS Secrets Manager:!!   
 meant for storing secrets, newer than SSM, allows to force rotation of secrets every x days. Integrated with RDS, meant for RDS so in the exam if you see its Secret Manager.  
 You can replicate secrets across multiple regions, and replicas sync. 
 
