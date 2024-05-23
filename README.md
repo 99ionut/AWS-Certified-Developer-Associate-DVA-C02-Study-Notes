@@ -368,7 +368,7 @@ what it does:
   - You can register your Lambda functions as targets and configure a listener rule to forward requests to the target group for your  
     Lambda function. When the load balancer forwards the request to a target group with a Lambda function as a target, it invokes  
     your Lambda function and passes the content of the request to the Lambda function, in JSON format.  
-    X-Forwarded-Proto: protocol (HTTP/HTTPS)  !!
+    X-Forwarded-Proto: protocol (HTTP/HTTPS)!!  
     X-Forwarded-Host: original Host header requested by the client  
     X-Forwarded-For: original IP address of a client  
     X-Forwarded-Port header: original port that the client used to connect  
