@@ -824,7 +824,7 @@ so the resources must allow traffic from public IP of edge location
 If it's an ELB it must be public, if its EC2 it can be private because there is VPC connection from ELB to EC2  
 
 Geo restriction  
-allowlist: if you are on the list of approved countries  
+allowlist: if you are on the list of approved countries (we can also block using Web ACL in AWS WAF)  
 blocklist prevents user fron entering from banned countries  
 
 Signed URL / signed cookie  
@@ -1045,7 +1045,7 @@ Deploy options for updates:
 - immutable: deploys all to new instances the switches everything at once when it's ready (QUICKEST ROLLBACK IF FAILURE, but longest deploymeny, zero downtime, CHEAPER THAN ROLLING WITH ADDITIONAL BATCHES)  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc51490f-db72-457f-8968-4b756dcd4f67">
   
-- blue green: create a new environment and test, and switch when ready  
+- blue green: create a new environment and test, and switch when ready (complete the code update quickly)  
   <img width="250" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/051954d9-e3eb-4e27-8f85-60f0c180447b">
   
 - traffic splitting: sends a small % of traffic to new deployment  
@@ -1225,7 +1225,7 @@ SQS Long polling:
 When a consumer requests a message from the queue it can wait for messages from queue to arrive if there are none in the queue, this is called long polling  
 long polling decreases the number of API calls, messages get processed at the end of the wait period, higher efficiency  
 the wait time can be 1-20s, its better than short polling. IT RETURNS MESSAGES AS SOON AS THEY BECOME AVAILABLE:
-to enable: Set the ReceiveMessage API with a WaitTimeSeconds of 1-20s
+to enable: Set the ReceiveMessage API with a WaitTimeSeconds of 1-20s!!  
 
 SQS Extended client library ECL:!!    
 library that uses an s3 bucket to send messages higher than 256kb, the queue sends a message telling the consumer to get the larger message from the s3
@@ -1357,7 +1357,7 @@ Send notifications for Events
     stores. You can have up to 10 dimensions in one metric, and each dimension is defined by a name and value pair
 
   Metric filters define the terms and patterns to look for in log data as it is sent to CloudWatch Logs, then it turns metric filters log data into numerical  
-  CloudWatch metrics that you can graph or set an alarm on.
+  CloudWatch metrics that you can graph or set an alarm on. (custom metrics)  
 - Logs:
   - log groups: name representing the application
   - log stream, instance within application
@@ -1622,7 +1622,7 @@ best practices:
 - never have recursive code.  
 - Heavy-duty work put it outside the function handler:
   -  connection to databases  
-  -  initialization of AWS SDK  
+  -  initialization of AWS SDK (The python one is already installed)  
   -  pull in dependencies  
 -  Use environment variables for stuff that changes frequently:  
   -  DB connection strings  
@@ -1703,7 +1703,7 @@ Reading Data:
 - Scan: get the entire table and filter out on your application (inefficient).
   supports parallel scans for faster results.
   To minimize the impact of the scan:
-  - on the provisioned throughput Set a smaller page size for the scan
+  - on the provisioned throughput Set a smaller page size for the scans!!
   - Optimize the table to use query instead of scans for big tables.
  
 Deleting Data:
@@ -2231,7 +2231,7 @@ AWS OpenSearch Service:
 In DynamoDB, query only by primary key or indexes, with open search you can search any field even partially matches. You can perform analytics with the dat  a
 and use OpenSearch Dashboards to visualize it.  
 
-Amazon Athena:  
+Amazon Athena!!:  
 serverless query service to analyze data stored in S3, SQL to query files. Commonly used with QuickSight for reporting / dashboard, used for business intelligence,  
 analysis, report, ecc... Exam if analyzing data in s3 using serverless SQL, use Athena.   
 You can improve its performance using a columnar data for cost-saving, compress data for small retrieval, partition datasets for data you check often.  
