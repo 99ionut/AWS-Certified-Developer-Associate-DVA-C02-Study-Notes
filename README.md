@@ -1194,7 +1194,7 @@ Can have multiple consumers at a time. we can horizontally scale by adding more 
 
 We can enable Auto Scaling, the queue has an ApproximateNumberOfMessages which can be increased by setting a CloudWatch alarm that increases it
 
-SQS has unlimited nr of messages and unlimited throughput, so we can scale fronted and backend independently and decouple them  
+You dont need to scale SQS, it has unlimited nr of messages and unlimited throughput, so we can scale fronted and backend independently and decouple them  
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/59d0b910-d7e0-4381-9a51-42c20d4fcf22">
 
 SQS security:  
@@ -1227,7 +1227,7 @@ long polling decreases the number of API calls, messages get processed at the en
 the wait time can be 1-20s, its better than short polling. IT RETURNS MESSAGES AS SOON AS THEY BECOME AVAILABLE:
 to enable: Set the ReceiveMessage API with a WaitTimeSeconds of 1-20s
 
-SQS Extended client library ECL:  
+SQS Extended client library ECL:!!    
 library that uses an s3 bucket to send messages higher than 256kb, the queue sends a message telling the consumer to get the larger message from the s3
 
 Must know API:  
@@ -1937,10 +1937,11 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc98d861-4d4f-4ab7-90fd-260eda8be962">  
 
 - CodeBuild: Build and test code. The build instructions are in buildspec.yml (must be at root of code like .git).  
-  Logs can be used in S3 + CLOUDWATCH. We can use CloudWatch Metrics to monitor build statistics. TO DETECT FAILED build and triggers / alarms.  !!
+  Logs can be used in S3 + CLOUDWATCH. We can use CloudWatch Metrics to monitor build statistics. TO DETECT FAILED build and triggers / alarms.!!  
   Don't store codebuild secrets as plaintext in environment variables Instead environment variables can reference parameters store parameters, or secrets manager secrets.   
   build logs of the failed phase in the last build attempt in the AWS CodeBuild project build history  
-  CodePipeline stage can run many CodeBuild actions (not stages) in parallel.  
+  CodePipeline stage can run many CodeBuild actions (not stages) in parallel.
+  It Automatically scales.
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f0d2d3dc-08c8-4b10-a775-e59e55911a99">  
 
