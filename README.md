@@ -61,6 +61,9 @@ instances, and elastic IPs.
 good fit for non-HTTP use cases, such as gaming (UDP), IoT (MQTT), or Voice over IP, as well as for HTTP use cases that  
 specifically require static IP addresses or deterministic, fast regional failover.  
 
+Event driven architecture:  
+React to changes from a variety of sources as soon as they happen. Components: Event producers, event routers (EventBridge, SNS), and event consumers.  
+
 # IAM
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/3d22a197-c740-4bcb-bc14-38ea11d542e7">
 
