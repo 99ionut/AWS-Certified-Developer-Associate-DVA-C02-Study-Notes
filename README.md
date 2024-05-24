@@ -1218,7 +1218,8 @@ SQS Dead Letter queues (DLQ):
 We can set a threshold to how many times a message can go back into the queue because a consumer fails to process it, after the "MaximumReceives" threshold  
 is exceeded it goes in the deal letter queue. DLQ useful for debugging, messages in there expire after the retention period, so set a higher 14days for the DLQ  
 Debug the DLQ, fix your code, use the "Redrive to Source" to put the DLQ messages back in the Source queue so it can be processed correctly this time  
-Usually makes sense for asynchronous invocations, synchronous recieve the response if failed.
+Usually makes sense for asynchronous invocations, synchronous recieve the response if failed.  
+Also SNS can have a DLQ  
 
 SQS Delay queue:  
 Delay a messages so cosumers dont see it immediately, up to 15 min, or per message individually, default is 0
@@ -1261,7 +1262,7 @@ so we can have type A, B, C ecc... messages and each one type gets processed by 
 ### Simple notification system
 if you want to send the message to many receivers at the same time, email, SQS queue, shipping service ecc....  
 It uses the pub/sub method. A buying service publishes the message inside and SNS topic, and subs of the topic listen to the SNS topic notification  
-subs can be Lambda, email, SMS, Kinesis data stream, SQS, HTTP endpoints, and many services
+subs can be Lambda, email, SMS, Kinesis data stream, SQS, HTTP endpoints, and many services  
 
 
 SNS security same as SQS:  
