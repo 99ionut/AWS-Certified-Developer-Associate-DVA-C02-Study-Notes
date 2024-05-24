@@ -561,15 +561,17 @@ To use your own domain name, such as www.example.com
   - Geoproximity: based on a value called bias, which is the radius  
 - TTL amount of time the record is cached at DNS resolver
 
-traffic flow: node-based editor allows to config complex routing decision policy 
+Traffic flow:  
+node-based editor allows to config complex routing decision policy 
 
-Health checks are for public resources
-- this allows automated DNS failover
+Health checks:  
+for public resources, uses the "failure threshold" parameter, this allows automated DNS failover (redirect to a secondary IP)  
 
 Route 53 Records TTL:
 - the client will respond with the cached IP if TTL hasn't expired yet.
 
-domain registrar: allows you to buy your domain value (GoDaddy) and they give you usually a way to manage your domain record  
+Domain registrar:  
+allows you to buy your domain value (GoDaddy) and they give you usually a way to manage your domain record  
 but you can use a different one if needed
 
 # VPC
@@ -1898,7 +1900,7 @@ CloudWatch Logs: Log contains info about request/response body
 
 X-Ray: enable tracing to get extra info  
 
-CloudWatch Metrics: Metrics based on stages, CacheHitCount & CacheMissCount, Count (nr of req), IntegrationLatency  
+CloudWatch Metrics: Metrics based on stages, CacheHitCount & CacheMissCount, Count (nr of req), IntegrationLatency!!  
 (time between request and response from the backend), Latency (time between request and sending response to user),   
 4XXError (client side) 5XXError (server side)  
 
@@ -2253,6 +2255,7 @@ Managed Machine learning pattern matching to discover and protect your sensitive
 AWS APPConfig:  
 If you want your config outside of your app instead of shipping it with it. Ex. feature flags, to dynamically disable or enable features on an app. or ip blacklist ecc...  
 without changing the application code.  
+It's AUTOMATICALLY ENCRYPTED + You can add another layer of CMK  
 
 
 
