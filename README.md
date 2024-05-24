@@ -96,6 +96,8 @@ if you got your certificate from a third-party CA, import the certificate into A
  
 You can use Signature Version 4 to sign the API requests, to give API access in one AWS account to users in a different AWS account, also use  
 resource policy on the resource you are trying to access...  
+Insert the signature into a query string parameter referred to as "X-Amz-Signature"
+Incorporate the signature into an HTTP header called "Authorization".  
 
 If there are 2 policies one the same resource Deny and one Allow, the Deny wins.
 If IAM policy + S3 policy, the UNION of those creates the Total Policy Evaluated, so if you remove one the other one remains
