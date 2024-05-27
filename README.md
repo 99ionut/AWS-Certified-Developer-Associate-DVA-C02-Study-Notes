@@ -463,6 +463,9 @@ Managed DB service, uses SQL, because its managed, rather than EC2 own DB:
 - can enable the Automated Backup feature in a multi-AZ deployment
 - storage backed by EBS
 
+Transparent Data Encryption (TDE):  
+automatically encrypts data before it is written to storage, and automatically decrypts data when the data is read from storage.
+
 RDS proxy:  
 fully managed db proxy for RDS  
 - Allows apps to pool and share DB connection, minimizing timeouts, open connections, and reduce stress on DB resources
@@ -1747,6 +1750,8 @@ Global secondary index (GSI):
 Alternative Primary Key (hash / hash+range)  
 Can be created after table creation  
 Contains a selection of attributes from the base table, but they are organized by a primary key that is different from that of the table.  
+Queries or scans on this index consume capacity units from the index, not from the base table.  
+Supports EVENTUAL CONSISTENCY only  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/01541488-4980-4905-8c41-e73febf490a8">  
 
 Optimistic Locking:  
@@ -1882,6 +1887,7 @@ Integration types:
   if ecc.. We can use it to convert from JSON (REST APIs) to XML (SOAP APIs) 
 - AWS_PROXY (lambda proxy) incoming requests from the client is input data to lambda without changing the data,
   the function handles all logic
+- Lambda custom integration (non-proxy): opposite of proxt, specify how the incoming request data is mapped
 - HTTP_PROXY Same as AWS_PROXY, requests passed directly to the backend, without modification, for API
   or HTTP endpoints.
 
@@ -2198,7 +2204,7 @@ how encrypt / decrypt works:
 
 Envelope Encryption: Encrypt the plaintext data with a data key and then encrypt the data key with a top-level PLAINTEXT MASTER key.  
 !! Envelope Encryption: KMS has a limit of 4KB, if you want more, use Envelope Encryption which corresponds to  
-- "GenerateDataKey" API. Returns a plaintext key and an encrypted copy of a data key. 
+- "GenerateDataKey" API. Returns a plaintext key and an encrypted copy of a data key. Erase the plaintext data key from memory and store the encrypted data key alongside the locally encrypted data.  
 - "GenerateDataKey": obtain an encryption key from KMS that we can then use within the function  
   code to encrypt the file. This ensures that the file is encrypted BEFORE it is uploaded to Amazon S3.
 - GenerateDataKeyWithoutPlaintext: returns only the encrypted copy of the data key which you will use for encryption.  
@@ -2243,7 +2249,8 @@ Amazon Athena!!:
 serverless query service to analyze data stored in S3, SQL to query files. Commonly used with QuickSight for reporting / dashboard, used for business intelligence,  
 analysis, report, ecc... Exam if analyzing data in s3 using serverless SQL, use Athena.   
 You can improve its performance using a columnar data for cost-saving, compress data for small retrieval, partition datasets for data you check often.  
-Federated query: you can query data not only on S3, but from anywhere and different types, by using an AWS Lambda.   
+Federated query: you can query data not only on S3, but from anywhere and different types, by using an AWS Lambda.  
+S3 Select: you can use simple structured query language (SQL) statements to filter the contents of Amazon S3 objects and retrieve just the SUBSETS of data that you need  
 
 Amazon Managed Streaming for Apache Kafka (MSK):  
 Alternative for kinesis. 
