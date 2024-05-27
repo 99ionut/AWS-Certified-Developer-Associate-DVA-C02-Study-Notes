@@ -64,6 +64,8 @@ specifically require static IP addresses or deterministic, fast regional failove
 Event driven architecture:  
 React to changes from a variety of sources as soon as they happen. Components: Event producers, event routers (EventBridge, SNS), and event consumers.  
 
+Stateless applications don't "store" data whereas Stateful applications require backing storage
+
 # IAM
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/3d22a197-c740-4bcb-bc14-38ea11d542e7">
 
@@ -113,7 +115,7 @@ Inline vs Managed policies:
 - inline: strict one-to-one if IAM deleted policy deleted
 
 Permission to Pass a Role:
-you need the iam:PassRole permission, roles can only be passed to what their trust allows  
+you need the iam:PassRole permission, roles can only be passed to what their trust allows!!  
 The "trust policy" defines which resource can assume the role, and under which condition
 The "Resource based" Policy can deny events from other AWS acc, or aggregate from multiple acc. into one using "Multi-Account aggregation"
 The "access policy" when the user attempted to log in by using the provided credentials for the role
@@ -171,7 +173,7 @@ AWS STS:!!
 Security token service: allows to grant limited and temp access to aws resources (up to 1hr)  
 Define an IAM role, define its principals, use AWS STS to impersonate the IAM Role (AssumeRole API), Get the temp. credentials  
 - AssumeRole: Assume roles within your account or cross-account, ex: use with cross-account to get temporary access to resources in a second account  
-- GetSessionToken: for STS with MFA, from a user or AWS account root user. it returns Access ID, Secret Key, Session Token, Expiration date.
+- GetSessionToken: for STS with MFA, from a user or AWS account root user. it returns Access ID, Secret Key, Session Token, Expiration date.!!
 - GetCallerIdentityt: return details about the IAM user or role used in the API call
 - DecodeAuthorizationMessage: decode error message when AWS API is denied.
 - CAN'T be used with API GATEWAY AUTHENTICATION.
@@ -889,7 +891,7 @@ resources are shared with the host, many containers on one server, they can be m
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/25b17b94-3cab-4d38-b615-95f0e1fe9864">
 
 Elastic Beanstalk uses the "docker-compose.yml" file to pull and run your image if you are using Docker Compose.  
-Otherwise Docker platforms for Elastic Beanstalk You specify images by name in the "Dockerrun.aws.json" file and save   
+Otherwise Docker platforms for Elastic Beanstalk You specify images by name in the "Dockerrun.aws.json" file and save!!   
 it in the root of your source directory.
 
 Docker builds images automatically by reading the instructions from "Dockerfile" which is a text file named Dockerfile  
@@ -2047,7 +2049,7 @@ SAM supports the following resource types:
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/181c3088-4372-4996-9a5f-fdc502dfa23c">
 
 Cloud development Kit:  
-define cloud infrastructure using familiar language, code gets compiled into CloudFormation model (Json/Yaml)  
+define cloud infrastructure using familiar language, code gets compiled into CloudFormation model (Json/Yaml) example: BUILD A STACK USING PYTHON!!  
 You can deploy infrastructure and application code together, if it doesn't compile you don't get either of them.  
 
 Create the app from a "template provided by AWS CDK" -> Add code to the app to create resources within stacks ->  
@@ -2082,7 +2084,8 @@ Cognito user pool (CUP):
 - you can add sign-up and sign-in to mobile and web apps and it also offers a user directory so   
   user accounts can be created directly within the user pool. Users also have the ability to reset their passwords
 - You can add social identity providers (IdPs) (SPID), are based on OpenID, they reqire the "Client ID" & "client Secret"
-  to work!! 
+  to work!!
+- Is returned for the user to provide a set of temporary, limited-privilege AWS credentials: Cognito ID  
 
 Cognito Identity pools (federated identities):  
 are for AUTHORIZATUION (access control) AWS credentials to users to access AWS resources directly, temporary  
