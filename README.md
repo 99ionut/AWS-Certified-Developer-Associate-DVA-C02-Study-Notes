@@ -679,7 +679,8 @@ security:
     
 can force encryption with bucket policy  
 
-x-amz-server-side-encryption, value="AES256" header to request server-side encryption with S3 Managed keys. value="aws:kms" with KMS keys.
+x-amz-server-side-encryption, value="AES256" header to request server-side encryption with S3 Managed keys.  
+value="aws:kms" with KMS keys.  
 x-amz-server-side​-encryption​-customer-algorithm, x-amz-server-side-encryption-customer-key and x-amz-server-side-encryption-customer-key-MD5 headers. Headers for Customer managed keys.  
 
 SecureTransport:  
