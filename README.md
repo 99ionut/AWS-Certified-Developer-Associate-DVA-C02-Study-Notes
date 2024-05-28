@@ -367,6 +367,8 @@ what it does:
 - classic load balancer: deprecated
 
 - application load balancer (ALB): routs https, websocket traffic
+  -  3 possible target types: Instance, IP and Lambda
+  -  You can NOT specify PUBLICLY routable IP addresses to an ALB
   -  load bal. to multiple http apps. across machines (target group), ec2 instances/ec2 tasks/lambda
   -  load bal. to multiple apps on the same machine (containers)
   -  supports route routing / query strings like example.com/users
@@ -572,7 +574,7 @@ To use your own domain name, such as www.example.com
 - TTL amount of time the record is cached at DNS resolver
 
 Traffic flow:  
-node-based editor allows to config complex routing decision policy 
+node-based editor allows to config complex routing decision policy!!  
 
 Health checks:  
 for public resources, uses the "failure threshold" parameter, this allows automated DNS failover (redirect to a secondary IP)  
@@ -1364,21 +1366,22 @@ Send notifications for Events
   for every service in AWS, it's a variable to monitor ex CPU, networking, they have timestamps and you can create dashboards with them
   EC2 instance metrics every 5 min, there is a "detailed monitoring" for a cost you get every 1 minute. By default no log from EC2,  
 - need to setup an "agent" to push them. "CloudWatch Unified Agent" allows you to get more granular extra data from EC2   instead of the default ones like memory, swap, and disk space utilization (IF IT HAS TO DO WITH RESOURCES)
-- If you need granularity higher than detailed monitoring which is 1min, use High resolution, with data at a granularity
+- If you need granularity higher than detailed monitoring which is 1min, use High resolution, with data at a granularity  
   of 1 second, 5 seconds, 10 seconds, 30 seconds, or any multiple of 60 seconds.
 - You can define Custom Metrics, using the API PutMetricData
-  - The "--dimensions" parameter further clarifies what the metric is and what data it
-    stores. You can have up to 10 dimensions in one metric, and each dimension is defined by a name and value pair
+  - The "--dimensions" parameter further clarifies what the metric is and what data it  
+    stores. You can have up to 10 dimensions in one metric, and each dimension is defined by a name and value pair  
 
   Metric filters define the terms and patterns to look for in log data as it is sent to CloudWatch Logs, then it turns metric filters log data into numerical  
   CloudWatch metrics that you can graph or set an alarm on. (custom metrics)  
 - Logs:
+  - "associate-kms-key" command to use CMK on top of the already default encrypted logs
   - log groups: name representing the application
   - log stream, instance within application
   - log expiration policy
-  - can send logs (export) to multiple sources. Either using S3 Export, export in batch when running the API CreateExportTastk Or
-    Using "CloudWatch log subscription" real-time logs 
-  - logs encrypted by default, you can use your own KMS
+  - can send logs (export) to multiple sources. Either using S3 Export, export in batch when running the API CreateExportTastk Or  
+    Using "CloudWatch log subscription" real-time logs "CloudWatch integration feature with S3"!!  
+  - logs encrypted by default, you can use your own KMS "associate-kms-key" command
   - "CloudWatch Logs Insight" used to query the logs
   - "CloudWatch metric filter" filter expressions (ex. count "ERROR" in logs) to trigger alarms
   - "CloudWatch Logs agent" collect local logs from the instances and upload them to CloudWatch 
@@ -1564,7 +1567,7 @@ Or you can use a VPC endpoint to privately access AWS services without NAT.
 <img width="300" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/489bec1f-22e1-4e14-9e26-058ed41dc987">
 
 Lambda function configuration:  
-Ram from 128MB to 10GB, if you need to increase vCPU you NEED to increase RAM, so if your app is CPU-bound, increase RAM!  
+Ram from 128MB to 10GB, if you need to increase vCPU you NEED to increase RAM, so if your app is CPU-bound, increase RAM! else "Error: Memory Size: 10,240 MB Max Memory Used"   
 Timeout: default 3s, max 15min, if you need more use Fargate, EC2, ECS  
 Execution Context: temporary runtime that initializer external dependencies / services connection ecc.. is maintained for a short period expecting a new invocation ex:  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/b8e7144f-9bdb-4baa-bd52-29d693aa81f5">
@@ -1710,13 +1713,13 @@ Writing Data:
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/d5a35a98-dbf1-4cac-a847-e70c3bfcb9bb">  
  
 Reading Data: 
-- GetItem: read based on Primary Key (hash / hash + range), eventually consistent (default) / strongly
+- GetItem: read based on Primary Key (hash / hash + range), eventually consistent (default) / strongly  
 - BOTH PutItem and UpdateItem can add a NEW item. If the item already exists, PutItem will Replace the entire item while UpdateItem will Update only what you passed.
-- ProjectionExpression to read only certain attributes
+- ProjectionExpression to read only certain (subset of) attributes --projection-expression!!  
 - Query: Based on Partition key value (required) , and optional sort key values (=,<,> ec...), FilterExpression additional filtering after query for non-key attributes
 - Scan: get the entire table and filter out on your application (inefficient).
-  supports parallel scans for faster results.
-  To minimize the impact of the scan:
+  supports parallel scans for faster results.  
+  To minimize the impact of the scan:  
   - on the provisioned throughput Set a smaller page size for the scans!!
   - Optimize the table to use query instead of scans for big tables.
  
@@ -1877,10 +1880,11 @@ each stage has its own config. parameters. Stages are kept and can be rolled bac
 Update stage variable value from the stage name of test to that of prod, to PROMOTE the TEST stage to the PRODUCTION stage. !!
 
 Stage variables: like Environment variables (config) but for API Gateway, use them for often changing values  
-so it prevents redeployment every time. 
-- A common use is defining to which Lambda function it points and when you deploy V2 change a % of traffic to the new one changing the Stage Var. (Canary Deployment)  
+so it prevents redeployment every time.  
+- A common use is defining to which Lambda function it points and when you deploy V2 change a % of traffic to the new one changing the Stage Var. (Canary Deployment)!!  
 - Also used to implement and run different versions for testing purposes ex: alpha .tutorialsdojo .com endpoint and beta release through the beta .tutorialsdojo .com endpoint
-- You can also use stage variables to pass configuration parameters to a Lambda function through your mapping templates  
+- You can also use stage variables to pass configuration parameters to a Lambda function through your mapping templates
+- If you create a stage variable to call a Lambda function through your API, you must add the required permissions. Update your Lambda function's resource-based IAM policy so that it grants invoke permission to the API Gateway
 
 Integration types:  
 - Mock: API Gateway returns a response without sending the request to the backend
@@ -1943,13 +1947,14 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bc65a9a7-7ddf-4d4c-86a5-fe9e9a28747e">  
 
 - CodeCommit: store the code, Versioning control using a version control system. Its fully managed, SSH/HTTPS auth.
-  IAM Policies, encryption at rest with AWS KMS, in transit
+  Repositories are AUTOMATICALLY encrypted at rest  
+  IAM Policies, encryption at rest with AWS KMS, in transit  
   - Example lambda to commit / i think other services as well to commit. The Dev can use AWS SDK to instantiate a CodeCommit client. The client can then be used with  
-    put_file which adds or updates a file in a branch in an AWS CodeCommit repo.
-  - connections to AWS CodeCommit repos with IAM user, configure Git credentials for CodeCommit in the IAM console
-  to get access:
-    - Generate HTTPS Git credentials.
-    - Generate new SSH keys and associate the PUBLIC SSH key to each of your developer's IAM user.
+    put_file which adds or updates a file in a branch in an AWS CodeCommit repo.  
+  - connections to AWS CodeCommit repos with IAM user, configure Git credentials for CodeCommit in the IAM console  
+  to get access:  
+    - Generate HTTPS Git credentials.  
+    - Generate new SSH keys and associate the PUBLIC SSH key to each of your developer's IAM user.  
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc98d861-4d4f-4ab7-90fd-260eda8be962">  
 
@@ -1957,8 +1962,9 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
   Logs can be used in S3 + CLOUDWATCH. We can use CloudWatch Metrics to monitor build statistics. TO DETECT FAILED build and triggers / alarms.!!  
   Don't store codebuild secrets as plaintext in environment variables Instead environment variables can reference parameters store parameters, or secrets manager secrets.   
   build logs of the failed phase in the last build attempt in the AWS CodeBuild project build history  
-  CodePipeline stage can run many CodeBuild actions (not stages) in parallel.
-  It Automatically scales.
+  CodePipeline stage can run many CodeBuild actions (not stages) in parallel.  
+  It Automatically scales.  
+  Because most of the dependent files do not change frequently between builds, you can noticeably reduce your build time by caching dependencies in S3.  
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/f0d2d3dc-08c8-4b10-a775-e59e55911a99">  
 
@@ -1997,12 +2003,12 @@ Deployment lifecycle evens, You can specify scripts to run in a hook:
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">   
 
-- CodeStart / CodeCatalyst: Manage software dev activities.
+- CodeStart / CodeCatalyst: Manage software dev activities. + setup CI/CD pipelines and has a dashboard to overview them!!  
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/079e00e5-8737-4a92-b317-8b972e9473f7">  
 
-- CodeArtifact: share software packages, software packages depend on each other to be built (code dependencies), storing and
-  getting these dependencies is called artifact management We can use Resource policy to auth different packages.
+- CodeArtifact: share software packages, software packages depend on each other to be built (code dependencies), storing and!!  
+  getting these dependencies is called artifact management We can use Resource policy to authorize different packages.
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/8c76f5b0-bfe0-4f1b-8b03-3c983ecfdbe8">  
 
@@ -2022,13 +2028,13 @@ Serverless application model basically a shortcut to cloud formation, says how t
 - Can help you run Lambda, API Gateway, DynamoDB
 
 Relies on CloudFormation templates to work!! SAM templates are an extension of AWS CloudFormation templates,  
-with some additional components that make them easier to work with
+with some additional components that make them easier to work with  
 
 AWS SAM CLI lets you LOCALLY build, test, and debug serverless applications that are defined by AWS SAM templates.  
-for ex. provides a Lambda-like execution environment locally
+for ex. provides a Lambda-like execution environment locally  
 
 AWS toolkits: ide plugin allows you to run build test Lambda functions with AWS SAM.  
-EASIER THAN CLOUDFORMATION use for exam.
+EASIER THAN CLOUDFORMATION use for exam.  
 
 The "AutoPublishAlias" property enables AWS SAM to automatically create and update a Lambda alias that points to the latest version of the function (like after a Canary deployment)  
 
@@ -2071,7 +2077,11 @@ application into an AWS CloudFormation template
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/17343071-a6ff-4e38-a0f3-a8a9a40080ae">
 
 give users an identity to interact with web or mobile apps (outside of AWS)   
-IMPORTANT in exam if they say "hundreds of users", "mobile users", "authenticate with SAML"
+IMPORTANT in exam if they say "hundreds of users", "mobile users", "authenticate with SAML"  
+
+Post-authentication TRIGGER ex: send email  
+Pre-authentication Lambda TRIGGER ex: custom validation that accepts or denies the authentication request
+
 
 Cognito user pool (CUP):   
 - are for AUTHENTICATION (identify verification). create a serverless DB of your users. sign-in function for app users.   
@@ -2212,7 +2222,8 @@ Envelope Encryption: Encrypt the plaintext data with a data key and then encrypt
 - "GenerateDataKey": obtain an encryption key from KMS that we can then use within the function  
   code to encrypt the file. This ensures that the file is encrypted BEFORE it is uploaded to Amazon S3.
 - GenerateDataKeyWithoutPlaintext: returns only the encrypted copy of the data key which you will use for encryption.  
-  returns a data key that is encrypted under a customer master key (CMK) that you specify.  
+  returns a data key that is encrypted under a customer master key (CMK) that you specify.
+- can use "data key caching feature" with the AWS Encryption SDK encryption library to reduce amount of API calls  
 
 KMS limits: ThrottlingException, to respond use Exponential backoff, all services that use KMS share a quota across all regions and accounts. we can use DKE caching
 or you can request quota increase through API or AWS support. 
