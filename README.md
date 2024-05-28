@@ -552,7 +552,7 @@ To ensure ongoing connectivity the Developer needs to use an Elastic IP address 
 the only type of static, public IP address you can assign to an Amazon EC2 instance.  
 - Public – public address that is assigned automatically to instances in public subnets and reassigned if instance is stopped/started.  
 - Private – private address assigned automatically to all instances.  
-- Elastic IP – public address that is static.  
+- Elastic IP – public address that is static!!.  
 
 To use your own domain name, such as www.example.com  
   - Alias: Point a hostname to AWS resource, works with root name (ELB, CloudFront, API Gateway, s3, VPC)
@@ -1769,7 +1769,7 @@ Atomic counter:
 Numeric attribute that is incremented when UpdateItem is called, is not accurate because even if the update fails it increments, used for example for users on a website  
 or counts that can have slight miscalcumations.  
 
-DynamoDB DAX:  
+DynamoDB DAX:!!  
 Fully managed highly aval. seamless i-memory cache for DynamoDB, fully secure, microseconds cached reads and queries. Doesnt require   
 application logic modification because compatible with existing DynamoDB APIs. Solves the "hot key" problem so too many reads.  
 
@@ -1855,7 +1855,7 @@ Mapping templates: ex: You can transform the incoming JSON into a valid XML mess
 - Edge-Optimized (default): for global clients,  Requests are routed through CloudFront Edge locations (improve latency)
   the API Gateway still lives in only one region
 - Regional: for clients in the same region, could manually combine with CloudFront
-- Private: Can only be accessed from your VPC using an interface VPC endpoint (ENI)
+- Private: Can only be accessed from your VPC using an interface VPC endpoint (ENI)!!
 
 Security:   
 Can Authenticate users with:  
