@@ -385,6 +385,12 @@ what it does:
     X-Forwarded-For: original IP address of a client  
     X-Forwarded-Port header: original port that the client used to connect  
 
+!!  
+- HTTP 500 'Internal server' error: There are several reasons for their error: A client submitted a request without an HTTP protocol, and the load balancer was unable to generate a redirect URL, there was an error executing the web ACL rules.
+- HTTP 503 'Service unavailable' error: This error in ALB is an indicator of the target groups for the load balancer having no registered targets.
+- HTTP 504 'Gateway timeout' error: The load balancer failed to establish a connection to the target before the connection timeout expired
+- HTTP 403 'Forbidden' error: You configured an AWS WAF web access control list (web ACL) to monitor requests to your Application Load Balancer and it blocked a request
+    
 - network load balancer (NLB): forwards TCP UDP LTS traffic
   - works like app. load balancer, we redirect to certain target groups
   - redirects to target EC2 instances
