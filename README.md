@@ -271,6 +271,7 @@ EBS (elastic block store) network drive you can attach to your drive while they 
   - network drive so a bit latency to communicate (not physical drive)
   - because its network it can be detached and reattached somewhere else
   - can have a delete on termination attribute
+  - Encryption by default is a Region-specific setting. If you enable it for a Region, you cannot disable it for individual volumes or snapshots in that Region
 
 EBS Volume types:
   - gp2/gp3 "general purp." balance price and perf for wide variety workloads
@@ -360,16 +361,18 @@ what it does:
 - expose a single point of access (DNS) to your app
 - handle failures of instances, using health checks, by using a port and route to check the HTTP response.
   ex response 400 not healthy
-- When it finds that an instance is unhealthy, it TERMINATES that instance and launches a new one.
+- Health checks
+- When it finds that an instance is unhealthy, it TERMINATES that instance and launches a new one. CAN ONLY MANIPULATE THEM IF THEY HAVE AN ASG ATTACHED!!  
+  ASG actually removes/adds new instances, not ALB Itself.  
 
 
 4 types:
 - classic load balancer: deprecated
 
-- application load balancer (ALB): routs https, websocket traffic
+- application load balancer (ALB): routs https, websocket traffic!!  
   -  3 possible target types: Instance, IP and Lambda
   -  You can NOT specify PUBLICLY routable IP addresses to an ALB
-  -  load bal. to multiple http apps. across machines (target group), ec2 instances/ec2 tasks/lambda
+  -  load bal. to multiple http apps. across machines (target group), TYPES: ec2 instances/ec2 tasks/lambda
   -  load bal. to multiple apps on the same machine (containers)
   -  supports route routing / query strings like example.com/users
   -  we can do stuff like if the request is ?=mobile it redirects to a specific instance otherwise if ?=desktop to
@@ -650,10 +653,10 @@ contains:
 - metadata list of key-value per object
   - name must begin with "x-amz-meta-"
   - retrieved when retrieving the object
-  - cant filter by metadata
+  - can't filter by metadata
 - tags key-val for security / lifecycle
   - useful for fine-grained permission
-  - cant filter by tag
+  - can't filter by tag
   - good for analytical purposes
 - version ID (if versioning enabled) 
 
@@ -681,7 +684,10 @@ security:
     
 can force encryption with bucket policy  
 
-x-amz-server-side-encryption, value="AES256" header to request server-side encryption with S3 Managed keys.  
+A process replaces an existing object and immediately tries to read it. Amazon S3 always returns the latest version of the object  
+If two writes are made to a single non-versioned object at the same time, it is possible that only a single event notification will be sent  
+
+x-amz-server-side-encryption, value="AES256" header to request server-side encryption with S3 Managed keys.!!   
 value="aws:kms" with KMS keys.  
 x-amz-server-side​-encryption​-customer-algorithm, x-amz-server-side-encryption-customer-key and x-amz-server-side-encryption-customer-key-MD5 headers. Headers for Customer managed keys.  
 
@@ -693,36 +699,36 @@ policy permission to limit access by IP addresses or require that data must be e
   (popular question) if a client makes a cross-origin request on our S3 bucket we need to enable the correct CORS headers
   "Cross Origin Resource Sharing" must be enabled on the resources that shares
   
-- MFA delete
+- MFA delete:  
   require MFA when deleting an object
 
-- S3 access logs
+- S3 access logs:  
   you can enable logging of all accesses and operations. The target of logs should be a different S3 bucket never the same one
 
 - pre signes URLS give access to a file on a private bucket from 1min to 12hrs, using a pre-signed url by you
 
-- S3 access points:
+- S3 access points:  
   An S3 Object Lambda access point is a new type of access point that you can create to invoke your own AWS Lambda function to modify the content of an S3 object.
   You can use S3 Object Lambda access points to transform data as it is being retrieved from an S3 bucket, without modifying the original data stored in the bucket.
   - Or Access point policy: Users from finance can only access /finance/... files, sales can only access /sales/... files
   this is done with an access point policy.
 
-- S3 Object lambda
+- S3 Object lambda:  
   if you want to run a function before its being retrieved, use and object lambda access point.
   ex: adding watermark specific for the user, resizing, converting the data
 
 S3 can host static websites and have the accessible public with a policy  
 Enable public access and grant everyone the s3:GetObject permissions  
 Upload an index document and enter the name of the index document when enabling static website hosting  
-The error file is optional
+The error file is optional  
 
 you can version your files, it's enabled at the bucket level, instead of overwriting it creates a new version  
-you can enable s3 versioning to have objects that when are deleted are hidden and can be recovered
+you can enable s3 versioning to have objects that when are deleted are hidden and can be recovered  
 
-S3 can generate pre-signed URLs to issue a request as the person who signed it, using the IAM key of the signing principal, it has a limited lifetime
+S3 can generate pre-signed URLs to issue a request as the person who signed it, using the IAM key of the signing principal, it has a limited lifetime  
 
-replication:
-enable versioning 
+replication:  
+enable versioning   
 - CRR cross-region replication (compliance or low latency)
 - SRR same region replication (live replication, log aggregation)
 - buckets can be in different AWS accounts
@@ -730,7 +736,7 @@ enable versioning
 - only replicates the objects added to the bucket AFTER replication is enabled
 - lifecycle actions are not replicated with S3 replication
 
-Storage classes:
+Storage classes:  
 - general purpose
   - frequently accessed data
   - low latency high throughput
@@ -928,6 +934,9 @@ If you decide to use an "EC2 launch type" (EC2 inside ECS and ECS agent with doc
   - distinct instance: place each task on a different container instance, so never 2 tasks on the same container
   - memberOf: place a task on the instance that satisfies an expression
 
+TO SEND CLOUDWATCH LOGS "awslogs log driver":!!  
+you can configure the containers in your tasks to send log information to CloudWatch Logs. If using Fargate add the required "logConfiguration" parameters to task definition  
+
 Another type of "launch type is *Fargate*", you don't need to provision the infrastructure, serverless, 
 just run EC2 tasks, automatic scaling, is fully managed
 - load balancing: each task has a unique private ip, you only define the container port. the ALB will
@@ -1121,8 +1130,8 @@ template components:
   YAML file the "Transform" section in the document represent  it is a Serverless Application Model (SAM) template
 - Instrinct functions (the most important):
   - Ref: returns the instance ID
-  - GetAtt: returns the value of a specific attribute, ex: when creating and EBS vol you want to get the AZ of the EC2
-  - FindInMap: returns a named value from a specific key
+  - GetAtt: returns the value of a specific attribute, ex: when creating and EBS vol you want to get the AZ of the EC2!!  
+  - FindInMap: returns a value from a specific key!!  
   - importValue: import values that are exported in other stacks
   - Condition Functions: if / and / not / or
   - Base64: convert value to base64
@@ -1200,9 +1209,10 @@ CloudFormationsupports the following parameter types:
 ### Simple queueing service
 Producer sends message to SQS, like with SDK (sendMessage API)  
 the message remains until it gets consumed and deleted (def. 4 days max 14 days)  
+Can retrieve 10 messages at one time at max.  
 it can have duplicated messages  
 
-A Consumer polls messages and processes it and deletes it from queue  
+A Consumer polls messages and processes it and deletes it from queue!!  
 Fully managed service used for decoupling apps. max 256kb message. running on EC2 or lambda or your local server  
 max 10 messages at a time. after consuming delete the message so no other consumer uses it.  
 Can have multiple consumers at a time. we can horizontally scale by adding more consumers. At least once delivery because queue can have duplicate messages
@@ -1296,11 +1306,11 @@ Easy to collect/process/analyze streaming data in real-time, such as Application
 - Kinesis Data Streams: capture, process and store data streams
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5c8f258e-1e14-4a5f-95a5-685f309db280">  
 
-is a way to stream big data in your systems (ingest data at scale), is made of multiple "Shards" per stream (can be used to scale up or down),
-  data will be split to Client. it sends a record to the stream that is made out of Partition Key and Data Blob (max 1MB)
-  after it reaches KDS it gets send a consumer, with the Partition Key, Data Blob, and Sequence Nr.
-  Partition key hashed a unique ID you pass, and it always sends the data from that provider to the same shard. Multiple hashes from multiple
-  sources can be sent to the same stream, so it's distributed. 
+is a way to stream big data in your systems (ingest data at scale), is made of multiple "Shards" per stream (can be used to scale up or down),!!  
+  data will be split to Client. it sends a record to the stream that is made out of Partition Key and Data Blob (max 1MB)  
+  after it reaches KDS it gets send a consumer, with the Partition Key, Data Blob, and Sequence Nr.  
+  Partition key hashed a unique ID you pass, and it always sends the data from that provider to the same shard. Multiple hashes from multiple  
+  sources can be sent to the same stream, so it's distributed.   
   - Can give an ORDER by using "SequenceNumberForOrdering"
   - To handle DUPLICATES, you can include a unique ID in each record that you write to the stream, and check if it
     already exists in DynamoDB when consumer tries to process it. 
@@ -1312,6 +1322,9 @@ is a way to stream big data in your systems (ingest data at scale), is made of m
   - Security: encryption at rest (AWS KMS customer master key (CMK)), in flight with HTTPS, IAM policies, VPC endpoints
   Producers: SDK, Kinesis Producer Library KPL, Kinesis Agent, monitor log files.
   ProvisionedThroughputExceeded: too many inputs in a shard, solution: use highly distributed partition key, retries with exponential backoff, increase shards
+
+KDS FANOUT:  
+Increase data delivery speed to consumers.  
 
 Consumers:  
 custom with SDK, Kinesis Client Library, Lambda ecc... can have multiple consumers getting from the same shards.  
@@ -1345,9 +1358,11 @@ Kinesis Data Firehose:
 - Kinesis Data Analytics:
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/fb8c6601-9e33-4380-b85e-e160cb48ef3d">
 
-  analyze data Streams for SQL, fully managed.  
+  analyze data Streams for SQL, fully managed.!!   
   It can read either from KDS or KDF, and apply SQL statements to perform real-time analytics + can add s3 to join data  
   it can then send the data to KDS (that can do real-time processing of the data) or KDF ( that can send it to S3, Redshift, other)  
+
+  Serverless + generate leaderboard scores and time-series analytic. Uses Flink.  
 
   Analyze data for Apache Flink:  
   For managed clusters, it can read data from multiple sources at a time  
@@ -1430,7 +1445,7 @@ You can understand dependencies between microservices
 understand where the error is  
 It uses tracing, each component dealing with the request adds its own "trace"  
 IAM, KMS  
-To enable it:  
+To enable it!!:  
 modify your code using x-ray SDK then install the xRay daemon or enable AWS integration .ebextensions/xray-daemon.config file to the source code to enable the X-Ray daemon (FOR BEANSTALK ONLY)  
 The X-Ray daemon listens for traffic on UDP port 2000  
 You can only use X-ray with Fargate as a "SIDE CAR" because there is not EC2 image  
@@ -1495,7 +1510,7 @@ Main integrations:
 - Kinesis: data transformation on the fly  
 - DynamoDB and S3: triggers for when something happens in DB  
 - CloudFront: lambda edge  
-- CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule or Create an Amazon CloudWatch Events rule that is scheduled to run every x minutes.    
+- CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule or Create an Amazon CloudWatch Events rule that is scheduled to run every x minutes.!!  
 When your resources change state, they automatically send events into an event stream. You can create rules that match selected events in the stream and route  
 them to your AWS Lambda function to take action. Like ex: associate Lambda function with CodePipeline  
 
@@ -1529,7 +1544,7 @@ So get ID, check DynamoDB if duplicate, act accordingly
   An event-source mapping must be created on the Lambda side to associate the stream with the Lambda function
 
 Event: JSON contains data the function is going to process  
-Context: methods and properties that provide information about the invocation, function, and environment LIKE REQUEST ID 
+Context: methods and properties that provide information about the invocation, function, and environment LIKE REQUEST ID  
 <img width="200" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/6344ebcd-3561-4f2a-aae4-1423c294bdb7">
 
 Destinations: Send the results of successful or fails to a destination (Lambda, SNS, SQS, EventBridge)  
@@ -1550,13 +1565,14 @@ the Lambda functions require the execution role to be configured with the approp
 CloudWatch metrics: lambda metrics are displayed there, error counts, invocations, success rates...  
 X-Ray: Can use in lambda if correct IAM role and enable "Active Tracing", it will run the xray daemon for you  
 
-Edge Functions: code attached to CloudFront execution, logic at the edge locations, runs close to users to minimize latency. Deployed globally, serverless  
+Edge Functions: code attached to CloudFront execution, logic at the edge locations, runs close to users to minimize latency. Deployed globally, serverless!!  
 used for: website security, SEO, intelligent Route, real-time image transformation, user authentication, user prioritizing, user tracking and analytics...  
 - CloudFront Functions: JS functions for high scale, latency-sensitive CDN customization. used to customize the viewer response / requests (before CloudFront
   forwards the request to the origin / after it gets the response and returns it to the client). Ex for header manipulation, URL redirects...
-- Lambda@Edge: Used to change CloudFront request / responses to both Origin and Viewer requests. higher package dimensions but slower. do what CloudFront functions
-  do but with file system access, handles heavier data so it can use the body of the HTTP request, longer execution, both for viewer and origin.
-  IT CAN AUTHENTICATE / AUTHORIZE Users for PREMIUM pay-wall content.
+- Lambda@Edge: Used to change CloudFront request / responses to both Origin and Viewer requests. higher package dimensions but slower. do what CloudFront functions  
+  do but with file system access, handles heavier data so it can use the body of the HTTP request, longer execution, both for viewer and origin.  
+  IT CAN AUTHENTICATE / AUTHORIZE Users for PREMIUM pay-wall content.  
+  IT CAN REDIRECT BASED ON CloudFront VIEWER COUNTRY.  
 
 Lambda are launched in a VPC outside of yours, in a VPC managed by AWS so it can't access your VPC resources.  
 But you can deploy it in your own VPC using AWSLambdaVPCAccessExecutionRole  
@@ -1671,8 +1687,9 @@ options to choose the primary key
 Control the R/W capacity modes:  
 - Provisioned mode (default): specify the r/w per second you need to plan your capacity beforehand, you pay for what is going to be provisioned
   - RCU read capacity units: represent one strongly consistent read per second or 2 eventually consistent read per second, for an item up to 4KB
+    - eventually consistent, less latency than strongly
     - read eventually consistently: if we read right after a write data could be old because it hasn't replicated you from the copy we are reading from
-    - Eventually consistanc consume Half the RCUs, divide by 2
+    - Eventually consistent consume Half the RCUs, divide by 2
     ex: 10 strongly consistent reads per second with item 4KB = 10RCUs
     ex: 16 eventually consistent read per second with item size 12KB = (16/2) * (12/4) = 24RCUs
     ex: 10 strongy consistant reads per second with item size 6 KB = 10 * (8/4) because 6 gets rounded to 8KB
@@ -1813,7 +1830,7 @@ Security:
 - Access with IAM  
 - encryption KMS, in transit SSL/TLS  
 - backup (On-demand, Point-in-time recovery) and restore features, they use S3 to do so but you can't access those buckets
-- Global tables, fully replicated multi-region  
+- Global tables, fully replicated multi-region, reduce latency for your users.!!  
 - DynamoDB Local dev and test apps locally without the official server  
 - DMS  
 - Can use identity providers / Cognito to exchange credentials for temporary credentials with roles, and can do operations only on data they own  
@@ -1937,12 +1954,12 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/7e9b3b94-9646-401f-a808-3bac71924293">
 
-- CodePipeline: automate pipeline. Visual workflow tool to orchestrate CICD. We can control the Source / build / test /
+- CodePipeline: automate pipeline. Visual workflow tool to orchestrate CICD. We can control the Source / build / test /  
   deploy / invoke stages. If a stage fails pipeline stops. You can create events for failed pipelines / events with
-  CloudWatch events.
-  you can add an "APPROVAL ACTION" to a stage in a pipeline at the point where you want the pipeline!! 
-  execution to stop so that someone with the required AWS Identity and Access Management permissions can approve or reject
-  the action.
+  CloudWatch events react to changes.!!  
+  you can add an "APPROVAL ACTION" to a stage in a pipeline at the point where you want the pipeline!!  
+  execution to stop so that someone with the required AWS Identity and Access Management permissions can approve or reject  
+  the action.  
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/bc65a9a7-7ddf-4d4c-86a5-fe9e9a28747e">  
 
@@ -2080,8 +2097,7 @@ give users an identity to interact with web or mobile apps (outside of AWS)
 IMPORTANT in exam if they say "hundreds of users", "mobile users", "authenticate with SAML"  
 
 Post-authentication TRIGGER ex: send email  
-Pre-authentication Lambda TRIGGER ex: custom validation that accepts or denies the authentication request
-
+Pre-authentication Lambda TRIGGER ex: custom validation that accepts or denies the authentication request  
 
 Cognito user pool (CUP):   
 - are for AUTHENTICATION (identify verification). create a serverless DB of your users. sign-in function for app users.   
