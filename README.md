@@ -126,10 +126,10 @@ Defense mechanisms:
 
 To access AWS:
 - AWS management console (pw + MFA)
-- CLI (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)
+- CLI (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)!!  
   - to use CLI with MFA you need to create a temporary session, you do so with the STS GetSessionToken API !! 
   - the CLI looks for credentials in this order: Command line, Environment Variable CLI credential file, CLI config file, Container cred. Instance profile cred.
-- SDK (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)
+- SDK (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)!!  
   - looks for credentials in this order:
     - Environment variables
     - Java system properties
@@ -141,7 +141,9 @@ To access AWS:
       extra S3 buckets.  
 
 Access keys are generated with the AWS console, users manage their keys and are secret like passwords.  
-connecting programmatically to AWS resources: Access key ID + Secret access key
+connecting programmatically to AWS resources: Access key ID + Secret access key!!
+ON-PREMISE TO AWS -> in order to use the AWS SDK for your application, you have to create your credentials file first at ~/.aws/credentials for Linux servers   
+or at C:\Users\USER_NAME\.aws\credentials for Windows users and then save your access keys.   
 
 IAM Roles:  
 some AWS services will need to perform actions on your behalf, ex: you give permissions to your EC2 instance to do stuff on your AWS.  
@@ -480,7 +482,7 @@ Transparent Data Encryption (TDE):
 automatically encrypts data before it is written to storage, and automatically decrypts data when the data is read from storage.
 
 RDS proxy:  
-fully managed db proxy for RDS  
+fully managed db proxy for RDS (ALSO WORKS WITH AURORA)!!  
 - Allows apps to pool and share DB connection, minimizing timeouts, open connections, and reduce stress on DB resources
 - Auto scaling, serverless, across multiple AZ
 - Apps connect to proxy not directly to DB instance
@@ -524,10 +526,10 @@ in-memory database with high-performance low latency
   cache can become stale if Lazy Loading is implemented without other strategies (such as TTL).
 - write through architecture: write to cache when there is a modification to the DB
 
-Redis: Supports more complex data structures, You can use Amazon Elasticache for Redis Sorted Sets to implement a dashboard with the ability to sort or rank the cached datasets.  
+Redis: Supports more complex data structures, You can use Amazon Elasticache for Redis Sorted Sets to implement a dashboard with the ability to sort or rank the cached datasets.!!  
 session state data be maintained externally, whilst keeping latency at the LOWEST possible value (like DSD): The two options presented in the answers are Amazon  
 DynamoDB and Amazon ElastiCache Redis. ElastiCache will provide the lowest latency as it is an in-memory database.  
-Memcached: Primarily supports string-based keys and values; does not support advanced data structures. Supports multi-threading, NOT as highly available as Redis   
+Memcached: Primarily supports string-based keys and values; does not support advanced data structures. Supports multi-threading, NOT as highly available as Redis!!   
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/84dafa7c-cfac-4a5c-934e-636a2badf4ed">
 
@@ -714,10 +716,10 @@ policy permission to limit access by IP addresses or require that data must be e
 - pre signes URLS give access to a file on a private bucket from 1min to 12hrs, using a pre-signed url by you
 
 - S3 access points:  
-  An S3 Object Lambda access point is a new type of access point that you can create to invoke your own AWS Lambda function to modify the content of an S3 object.
-  You can use S3 Object Lambda access points to transform data as it is being retrieved from an S3 bucket, without modifying the original data stored in the bucket.
-  - Or Access point policy: Users from finance can only access /finance/... files, sales can only access /sales/... files
-  this is done with an access point policy.
+  An S3 "Object Lambda" access point is a new type of access point that you can create to invoke your own AWS Lambda function to modify the content of an S3 object.!!  
+  You can use S3 Object Lambda access points to transform data as it is being retrieved from an S3 bucket, without modifying the original data stored in the bucket.  
+  - Or Access point policy: Users from finance can only access /finance/... files, sales can only access /sales/... files  
+  this is done with an access point policy.  
 
 - S3 Object lambda:  
   if you want to run a function before its being retrieved, use and object lambda access point.
@@ -810,7 +812,7 @@ It integrates with ANY HTTP backend you want, S3, app load balancer, EC2, S3 web
 Client asks to Edge location (cache), if it doesn't have it the edge location gets it from the origin  
 
 If you want In-flight encryption select these settings of Origin Protocol and Viewer Protocol.  
-IN EXAM IF CloudFront with SSL / Secure connection use this!!!
+IN EXAM IF CloudFront with SSL / Secure connection use this!!  
 
 <img width="241" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2ddcc116-6b9b-49b0-9bc9-8f7fd65e4ce7">
 
@@ -1104,7 +1106,7 @@ Your source bundle must meet the following requirements:
 - Not include a parent folder or top-level directory (subdirectories are fine)
 
 worker environment:  
-If your application performs operations or workflows that take a long time to complete, you can offload those tasks to a dedicated worker environment.  
+If your application performs operations or workflows that take a long time to complete, you can offload those tasks to a dedicated worker environment (like beanstalk).!!  
 Decoupling your web application front end from a process that performs blocking operations is a common way to ensure that your application stays responsive under load.
 
 # CloudFormation
@@ -1873,7 +1875,7 @@ It integrates with / can call:
   the connection is open (for example to do CRUD different backends)
 
 In AWS API Gateway, API keys by themselves do not grant access to execute an API.  
-They need to be associated with a usage plan, and that usage plan then determines which API stages and methods the API key can access. added to a usage plan by calling the "CreateUsagePlanKey" method!
+They need to be associated with a usage plan, and that usage plan then determines which API stages and methods the API key can access. added to a usage plan by calling the "CreateUsagePlanKey" method!!
 
 Mapping templates: ex: You can transform the incoming JSON into a valid XML message for the SOAP backend interface using mapping templates  
 
@@ -1931,7 +1933,7 @@ reduces the nr of calls made, default TTL is 300s, min 0 max 1hr
 Caches are different for every stage. We can invalidate the Cache immediately and flush it, or the user can do that  
 with "max-age=0" if it has the IAM Auth.  
 We can CHOOSE to Cache only a type of request/response for example only POST  
-Ticking the "Require authorization" checkbox ensures that not every client can invalidate the API cache  
+Ticking the "Require authorization" checkbox ensures that not every client can invalidate the API cache!!  
 
 You can make your API available for money to customers. We can config how much and fast they can access them, how many calls  
 possible, use API Keys to identify them, callers pass the key in x-api-key header.  
@@ -2145,7 +2147,7 @@ PARALLEL STEP - begin parallel branches of execution.
 
 Error handling: we can have retry or catch (transit to failure path)  
 
-Wait for task token: allows you to pause step function until a task token is returned. by appending .waitForTaskToken!   
+Wait for task token: allows you to pause step function until a task token is returned. by appending .waitForTaskToken!!   
 
 Activity task:  
 allows you to have the task work performed by an Activity worker (Apps on EC2 / Lambda / mobile device...)  
