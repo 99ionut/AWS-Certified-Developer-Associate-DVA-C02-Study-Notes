@@ -63,6 +63,7 @@ specifically require static IP addresses or deterministic, fast regional failove
 
 Event driven architecture:  
 React to changes from a variety of sources as soon as they happen. Components: Event producers, event routers (EventBridge, SNS), and event consumers.  
+Uses SQS, SNS, EventBridge, Step Functions, Lambda (NO API GATEWAY)!!  
 
 Stateless applications don't "store" data whereas Stateful applications require backing storage
 
@@ -1341,10 +1342,10 @@ Enhanced fan-out Consumer: 2mb/s per consumer per shard by subscribing (push mod
 
 Kinesis Producer Library (KPL):  
 simplifies producer application development, allowing developers to  
-achieve high write throughput to a Kinesis data stream. helps you write to a Kinesis data stream.  
+achieve high write throughput AND WRITE to a Kinesis data stream. helps you write to a Kinesis data stream.  
 
-Kinesis Client Library (KLC):  
-Java library that helps read records from Kinesis Data Stream with distributed apps. sharing the read workload.  
+Kinesis Client Library (KLC):!!  
+Java library that helps read and CONSUME records from Kinesis Data Stream with distributed apps. sharing the read workload.  
 Each shard is to be read by only one KCL instance, 4 shards = max 4KCL instances, 8 = 8 instances  
 
 Kinesis operations:
@@ -1467,6 +1468,8 @@ How to instrument your code: instrument = measure the product performance, diagn
 - Subsegments provide more granular timing information and details about downstream calls that your application made to fulfill the original request.
   - !! namespace "AWS" for AWS SDK calls; "REMOTE" for other downstream calls.
 
+!! X-Ray gives you the ability to trace latency issues with your API Gateway APIs (integrationLatency on cloudwatch)!!  
+
 "GetTraceSummaries":
 you can search for segments, get the list of trace IDs of the application    
 
@@ -1511,7 +1514,8 @@ Serverless: just deploy code without provisioning / managing servers.
 - the first event is being processed  
 
 You can implement an AWS Lambda runtime in any programming language. Include a RUNTIME in your function's deployment  
-package in the form of an executable file named "bootstrap" If you want to use it in a CONTAINER. SUPPORTS ONLY LINUX IMAGES NOT HYBRID WINDOWS-LINUX!!    
+package in the form of an executable file named "bootstrap" If you want to use it in a CONTAINER. SUPPORTS ONLY LINUX IMAGES NOT HYBRID WINDOWS-LINUX!!   
+the deployment package contains: .zip or .jar file with your code and any dependencies. (runtime already provided)!!  
 
 Main integrations:  
 - API Gateway: to create Rest API  
@@ -1601,7 +1605,7 @@ if you need persistence space, use S3.
 Data is SAVED in this directory, persists across these retained invocations, making it useful for caching.  
 
 
-Lambda Layers:  
+Lambda Layers:!!  
 custom runtimes for not supported languages, or create a layer to externalize dependencies to reuse them without having to repackage them to deploy, because the lambda can  
 reference these layers. ONLY FOR LIBRARIES, NOT DB keys ecc... use ENVIRONMENT Variables for those.
 
@@ -2118,8 +2122,7 @@ Cognito user pool (CUP):
   With Cognito user pools, or OIDC auth.  
 - you can add sign-up and sign-in to mobile and web apps and it also offers a user directory so   
   user accounts can be created directly within the user pool. Users also have the ability to reset their passwords
-- You can add social identity providers (IdPs) (SPID), are based on OpenID, they reqire the "Client ID" & "client Secret"
-  to work!!
+- You can add social identity providers (IdPs) (SPID), are based on OpenID, they reqire the "Client ID" & "client Secret" to work!!
 - Is returned for the user to provide a set of temporary, limited-privilege AWS credentials: Cognito ID  
 
 Cognito Identity pools (federated identities):  
