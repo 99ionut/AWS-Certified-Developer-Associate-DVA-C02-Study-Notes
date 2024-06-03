@@ -874,7 +874,7 @@ pre-signed you have access to directly the S3 without being able to use Cloudfro
 
 Signed URL process:  
 2 types of signers, either a trusted key group ( recommended ) or an AWS account that contains a key pair (not recommended)  
-- create one of more trusted key groups, the public key is used in the URL, the private key is used by your app.
+- create one of more trusted key groups, the public key is used in the URL, the private key is used by your app.!!
 - When you create a signer, the public key is with CloudFront and private key is used to sign a portion of URL  
 - When you use the root user to manage CloudFront key pairs, you can only have up to two active CloudFront key  
   pairs per AWS account  
@@ -1855,7 +1855,7 @@ StreamViewType — Specifies the information that will be written to the stream 
 - OLD_IMAGE — The entire item, as it appeared before it was modified.
 - NEW_AND_OLD_IMAGES — Both the new and the old images of the item  
 
-To return the number of WCU consumed by any of these operations, set the "ReturnConsumedCapacity" parameter to one of the following:  
+To return the number of WCU consumed by any of these operations, set the "ReturnConsumedCapacity" parameter to one of the following:!!  
 - TOTAL — returns the total number of write capacity units consumed.  
 - INDEXES — returns the total number of write capacity units consumed, with subtotals for the table and any secondary indexes that were affected by the operation.  
 - NONE — no write capacity details are returned. (This is the default.)  
@@ -1983,7 +1983,7 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
   - connections to AWS CodeCommit repos with IAM user, configure Git credentials for CodeCommit in the IAM console  
   to get access:  
     - Generate HTTPS Git credentials.  
-    - Generate new SSH keys and associate the PUBLIC SSH key to each of your developer's IAM user.  
+    - Generate new SSH keys and associate the PUBLIC SSH key to each of your developer's IAM user.!!  
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc98d861-4d4f-4ab7-90fd-260eda8be962">  
 
