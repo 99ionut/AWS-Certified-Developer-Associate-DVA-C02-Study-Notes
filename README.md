@@ -431,10 +431,12 @@ EC2 security group allows traffic only from the load balancer, so in routing tab
 # Auto scaling group
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/f861c0d3-3b2a-4546-a6fd-2ab0a6252823">
 
+Auto Scaling groups CANNOT span across multiple Regions, they CAN span across the AZs of a Region.!!  
+
 in cloud you can get rid or add servers quickly  
 the goal of ASG is to   
 - scale out (add EC2) to match increase in load
-- scale in (rem. EC2) to match decrease in load
+- scale in (remove EC2) to match decrease in load
 - ensure we have a min and max number of EC2 running
 - registered new instances to ELB
 - ASG launch template contains info on how the new instance should be created
@@ -1175,15 +1177,16 @@ CF Stack policies:
 JSON doc that defines the update actions that are allowed on specific res. during stack update.
 
 CF Custom resources:  
-define resources not yet supported, custom resources from 3rd party. They are integrations backed by lambda functions
+define resources not yet supported, custom resources from 3rd party. They are integrations backed by lambda functions  
 
+CLI "create-stack-set" command create, update, or delete stacks across multiple accounts and AWS Regions!!  
 CF stack sets:  
 CRUD stacks across multiple accounts and regions with a single operation, the developer can deploy the same CloudFormation stack to   
-multiple regions without additional application code. ex: for geographic load testing of an API.
+multiple regions without additional application code. ex: for geographic load testing of an API.  
 
 CF Dynamic references:  
 Reference external vals stored in System Manager, Parameter Store and Secrets Manager within Cloud Formation templates.   
-for ex. get the RDS DB instance master password from secret manager. 
+for ex. get the RDS DB instance master password from secret manager.  
 
 CF Template settings:  
 - Mappings section matches a key to a corresponding set of named values: ex if you want to set values based on region
