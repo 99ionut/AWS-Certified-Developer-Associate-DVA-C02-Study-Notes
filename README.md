@@ -35,26 +35,26 @@
 # uncategorized
 Exponential backoff is used when you get a ThrottlingException, so on each retry double the seconds you wait
 you must implement the retries on 5xx server errors
-Dont implement retry on 4xx client errors
+Dont implement retry on 4xx client errors  
 
 Single Tenant: A single instance of the software and SUPPORTING INFRASTRUCTURE SERVES A SINGLE CUSTOMER (Dedicated Hosts/Dedicated Instances).  
 With single tenancy, each customer has his or her own independent multi-tenant database and instance of the software. Essentially, there is no sharing happening with this option
 
 AWS Directory Services (AD)
 
-Administrative overhead is the cost of setting up the service. This includes setting up users, security configs, and all the monitoring tools available. These questions usually differentiated themselves by having answers that would show you could setup a given task faster with a tool like cloud formation or beanstalk. They usually have an element of security to them as well.
+Administrative overhead is the cost of setting up the service. This includes setting up users, security configs, and all the monitoring tools available. These questions usually differentiated themselves by having answers that would show you could setup a given task faster with a tool like cloud formation or beanstalk. They usually have an element of security to them as well.  
 
-Operational overhead is the cost of the day-to-day operation of the service in question. The questions usually differentiated themselves by having answers that demonstrated knowing a service could potentially be expensive and you might be able to minimize the cost using an a different AWS service or sometimes not an AWS service at all. These require general knowledge of all the different services available. Reading this subreddit it seems these questions take the full breadth of AWS services into account. Mine was heavy with Lambda.
+Operational overhead is the cost of the day-to-day operation of the service in question. The questions usually differentiated themselves by having answers that demonstrated knowing a service could potentially be expensive and you might be able to minimize the cost using an a different AWS service or sometimes not an AWS service at all. These require general knowledge of all the different services available. Reading this subreddit it seems these questions take the full breadth of AWS services into account. Mine was heavy with Lambda.  
 
-Port 3306 is the default port used for the MySQL protocol
+Port 3306 is the default port used for the MySQL protocol  
 
-resource group:
-If you work with multiple resources, you might find it useful to manage them as a group rather
-than move from one AWS service to another for each task. maintain separate sets of resources for the alpha, beta, and release
-stages. Each version runs on Amazon EC2 and uses an Elastic Load Balancer.
-create a single page to view and manage all of the resources 
+resource group:  
+If you work with multiple resources, you might find it useful to manage them as a group rather  
+than move from one AWS service to another for each task. maintain separate sets of resources for the alpha, beta, and release  
+stages. Each version runs on Amazon EC2 and uses an Elastic Load Balancer.  
+create a single page to view and manage all of the resources  
 
-AWS Global Accelerator is a networking service that helps you improve the availability, performance, and security of your  
+AWS Global Accelerator is a networking service that helps you improve the availability, performance, and security of your   
 public applications. Global Accelerator provides two global static public IPs that act as a fixed entry point to your  
 application endpoints, such as Application Load Balancers, Network Load Balancers, Amazon Elastic Compute Cloud (EC2)  
 instances, and elastic IPs.   
@@ -65,7 +65,9 @@ Event driven architecture:
 React to changes from a variety of sources as soon as they happen. Components: Event producers, event routers (EventBridge, SNS), and event consumers.  
 Uses SQS, SNS, EventBridge, Step Functions, Lambda (NO API GATEWAY)!!  
 
-Stateless applications don't "store" data whereas Stateful applications require backing storage
+Stateless applications don't "store" data whereas Stateful applications require backing storage  
+
+By default, IAM users do not have access to the AWS Billing and Cost Management console. You or your account administrator must grant users access.  
 
 # IAM
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/3d22a197-c740-4bcb-bc14-38ea11d542e7">
@@ -91,13 +93,13 @@ Consists of:
   - "Resource": list of res. to which the action is applied
   - "Condition": when it's applied (optional)
 
-IAM Access Analyzer:  
-simplifies inspecting unused access to guide you toward least privilege. The findings highlight unused roles, unused access keys, password.
+IAM Access Analyzer:!!  
+simplifies inspecting unused access to guide you toward least privilege. The findings highlight unused roles, unused access keys, password.  
 
 IAM certificate store:  
 if you got your certificate from a third-party CA, import the certificate into ACM or upload it to the IAM certificate store  
  
-You can use Signature Version 4 to sign the API requests, to give API access in one AWS account to users in a different AWS account, also use  
+SIGV4 You can use Signature Version 4 to sign the API requests, to give API access in one AWS account to users in a different AWS account, also use!!  
 resource policy on the resource you are trying to access...  
 Insert the signature into a query string parameter referred to as "X-Amz-Signature"
 Incorporate the signature into an HTTP header called "Authorization".  
@@ -167,7 +169,7 @@ IAM Best practices:
 - Use different access keys for different applications.
 - Use access keys for CLI and SDK
 - Remove unused access keys.
-- audit permissions w/ Credential report and IAM access advisor
+- audit permissions w/ Credential report and IAM access advisor!!  
 
 Shared reponsability model:  
 You know.
@@ -366,13 +368,15 @@ what it does:
   ex response 400 not healthy
 - Health checks
 - When it finds that an instance is unhealthy, it TERMINATES that instance and launches a new one. CAN ONLY MANIPULATE THEM IF THEY HAVE AN ASG ATTACHED!!  
-  ASG actually removes/adds new instances, not ALB Itself.  
-
+  ASG actually removes/adds new instances, not ALB Itself.
+- Separate public traffic from private traffic
+- Build a highly available system  
 
 4 types:
 - classic load balancer: deprecated
 
-- application load balancer (ALB): routs https, websocket traffic!!  
+- application load balancer (ALB): routs https, websocket traffic!!
+  - ALB access logs - Elastic Load Balancing provides access logs that capture detailed information about requests sent to your load balancer.  
   -  3 possible target types: Instance, IP and Lambda
   -  You can NOT specify PUBLICLY routable IP addresses to an ALB
   -  load bal. to multiple http apps. across machines (target group), TYPES: ec2 instances/ec2 tasks/lambda
@@ -876,7 +880,7 @@ Signed URL process:
 2 types of signers, either a trusted key group ( recommended ) or an AWS account that contains a key pair (not recommended)  
 - create one of more trusted key groups, the public key is used in the URL, the private key is used by your app.!!
 - When you create a signer, the public key is with CloudFront and private key is used to sign a portion of URL  
-- When you use the root user to manage CloudFront key pairs, you can only have up to two active CloudFront key  
+- When you use the root user to manage CloudFront key pairs, you can only have up to two active CloudFront key!!  
   pairs per AWS account  
 
 
@@ -1062,7 +1066,7 @@ separate environments for development, testing, and production use, and you can 
 to any environment  
 
 You can add AWS Elastic Beanstalk configuration files (.ebextensions FOLDER) to your web application's source code to configure your environment and customize   
-the AWS resources that it contains. YAML or JSON-formatted documents with a .CONFIG file extension that you place in a folder named .ebextensions and deploy (EXCEPT FOR ALREADY-EXISTING "env.yaml" config file for the environment.)  
+the AWS resources that it contains. YAML or JSON-formatted documents with a .CONFIG file extension that you place in a folder named .ebextensions and deploy (EXCEPT FOR ALREADY-EXISTING "env.yaml" config file for the environment.)!!  
 
 Deploy options for updates:  
 - All at once, deploy the new v all in one go but it has a bit of downtime  
@@ -1130,7 +1134,7 @@ template components:
 - parameters: they are a way to provide inputs to your AWS CF template (ex choose type of ec2, password...)
 - mapping: fixed variables within CF template ex (dev vs prod) The optional Mappings section matches a key to a corresponding set of named values. For example, if you want to set values
   based on a region, you can create a mapping that uses the region name as a key and contains the values you want to specify for
-  each specific region, match then with Fn::FindInMap
+  each specific region, match then with Fn::FindInMap, FindInMap [ MapName, TopLevelKey, SecondLevelKey ]
 - Rules: Validates a parameter or a combination of parameters during a stack creation
 - outputs: output the variables such as VPC ID and subnet ID to network stack
 - conditions: control the creation of res. based on conditions ex: what region you deploy in
@@ -1140,7 +1144,7 @@ template components:
 - Instrinct functions (the most important):
   - Ref: returns the instance ID
   - GetAtt: returns the value of a specific attribute, ex: when creating and EBS vol you want to get the AZ of the EC2!!  
-  - FindInMap: returns a value from a specific key!!  
+  - FindInMap: returns a value from a specific key!! FindInMap [ MapName, TopLevelKey, SecondLevelKey ]
   - importValue: import values that are exported in other stacks
   - Condition Functions: if / and / not / or
   - Base64: convert value to base64
@@ -1239,7 +1243,7 @@ inflight encryption with HTTPS API
 - SQS access policies (if you want cross account access or publish S3 event notifications)
 
 SQS Message Visibility Timeout:  
-After a message is polled by a consumer it becomes invisible to other consumers, it has 30s to process it,  
+After a message is polled by a consumer it becomes invisible to other consumers, it has 30s to process it,!!  
 if the message hasn't been deleted because not processed yet, it will be put back in the queue and be processed twice, if you need more than 30s to process it  
 use the "ChangeMessageVisibility" API to change the timeout time to increase the value of VisibilityTimeout
 
@@ -1900,7 +1904,7 @@ Can Authenticate users with:
   be cached. if you want to implement a custom authorization scheme that uses a bearer token authentication
   strategy such as OAuth or SAML, or that uses request parameters to determine the caller's identity. (TOKEN authorizer e REQUEST authorizer)
 
-- Custom Domain Name HTTPS: security through integration with AWS Certificate Manager (ACM)
+- Custom Domain Name HTTPS: security through integration with AWS Certificate Manager (ACM)!!
   
 Deployment Stages:  
 After Making a change must be deployed it or else changes wont apply, its done through "stages"  
@@ -2070,7 +2074,7 @@ The "AutoPublishAlias" property enables AWS SAM to automatically create and upda
 SAM local "start-api" subcommand allows you to run your serverless application locally for quick development and testing.  
 For example it creates a local HTTP server that acts as a proxy for API Gateway and invokes your Lambda functions based on the AWS SAM template.  
 
-SAM supports the following resource types:  
+SAM supports the following resource types:!!  
 - AWS::Serverless::Api
 - AWS::Serverless::Application
 - AWS::Serverless::Function
@@ -2114,7 +2118,7 @@ Pre-authentication Lambda TRIGGER ex: custom validation that accepts or denies t
 Cognito user pool (CUP):   
 - are for AUTHENTICATION (identify verification). create a serverless DB of your users. sign-in function for app users.   
   Username / email / password / MFA / phone verify. / login with Google (federate identity). block users compromised.   
-- when they login they get back a JSON web toke JWT.   
+- when they login they get back a JSON web toke JWT.!!   
 - CUP can invoke Lambda on triggers.  
 - It offers a Hosted authentication UI that you can use in your apps.  
 - Offers Adaptive Authentication: block sign-ins or require MFA if the login is suspicious.  
@@ -2234,14 +2238,16 @@ Types of KMS keys:
 - AWS owned keys (free) 
 - AWS Managed Key: free (automatic rotation every 1 year)
 - Customer-managed keys created in KMS (1$ a month) automatic rotation 1 year
-- Customer-managed keys imported (1$ a month must be symmetric only manual rotation possible)
+- Customer-managed keys imported (1$ a month must be symmetric only manual rotation possible)  
 
-KMS Key policies: control access to keys like s3 bucket policies. Defines who has access to KMS keys. You can set which actions to allow, only generate key, encrypt,
-decrypt ecc...
+KMS Key policies: control access to keys like s3 bucket policies. Defines who has access to KMS keys. You can set which actions to allow, only generate key, encrypt,  
+decrypt ecc...  
 
 how encrypt / decrypt works:  
 
-<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ad7a1c71-5da4-42ab-9e64-62d9d40a57a1">
+<img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/ad7a1c71-5da4-42ab-9e64-62d9d40a57a1">  
+
+KMS stores the CMK, and receives data from the clients, which it encrypts and sends back  
 
 Envelope Encryption: Encrypt the plaintext data with a data key and then encrypt the data key with a top-level PLAINTEXT MASTER key.  
 !! Envelope Encryption: KMS has a limit of 4KB, if you want more, use Envelope Encryption which corresponds to  
@@ -2297,12 +2303,15 @@ S3 Select: you can use simple structured query language (SQL) statements to filt
 Amazon Managed Streaming for Apache Kafka (MSK):  
 Alternative for kinesis. 
 
-AWS Certificate Manager (ACM):  
-manage and deploy SSL/TLS certificate, provide in-flight encryption for websites. Remember its stored in us-east-1 always!
+the 3 certificate managers are:  
+- AWS Certificate Manager (ACM):  
+  manage and deploy SSL/TLS certificate, provide in-flight encryption for websites. Remember its stored in us-east-1 always!!
 
-AWS Private Certificate Authority (CA):  
-Managed service allows you to create private Certificate Authorities, only work in your Organization / services that have the integration, not on the public internet.   
-For custom Encrypted communication, authentication users, public key infrastructure.   
+- AWS Private Certificate Authority (CA):  
+  Managed service allows you to create private Certificate Authorities, only work in your Organization / services that have the integration, not on the public internet.   
+  For custom Encrypted communication, authentication users, public key infrastructure.   
+
+- IAM is used as a SSL certificate manager only when you must support HTTPS connections in a Region that is not supported by ACM  
 
 AWS Macie:  
 Managed Machine learning pattern matching to discover and protect your sensitive data in AWS. Help identify and alert about PII  
