@@ -457,7 +457,13 @@ Amazon EC2 Auto Scaling adds only 1 instance to the group.
 
 Instance refresh:  
 if you want to update the launch template, as scaling happens old instances get terminated and new ones  
-will have the new template, so at the end after a while all instances will have the new template
+will have the new template, so at the end after a while all instances will have the new template  
+
+Can change the ASG health check type from EC2 to ELB with a configuration file  
+
+Auto Scaling works with ALB and NLB  
+EC2 Auto Scaling groups are regional constructs. They can span AZ, but not AWS REGIONS  
+You can use the EC2 health check to identify and replace unhealthy instances, dont need an ALB  
 
 # RDS
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/b70b6dcf-bc97-462c-8db3-30509fcb3ed4">
@@ -1248,7 +1254,7 @@ inflight encryption with HTTPS API
 SQS Message Visibility Timeout:  
 After a message is polled by a consumer it becomes invisible to other consumers, it has 30s to process it,!!  
 if the message hasn't been deleted because not processed yet, it will be put back in the queue and be processed twice, if you need more than 30s to process it  
-use the "ChangeMessageVisibility" API to change the timeout time to increase the value of VisibilityTimeout
+use the "ChangeMessageVisibility" API to change the timeout time to increase the value of VisibilityTimeout!!  
 
 SQS Dead Letter queues (DLQ):  
 We can set a threshold to how many times a message can go back into the queue because a consumer fails to process it, after the "MaximumReceives" threshold  
@@ -1390,6 +1396,12 @@ Monitoring / troubleshooting / logs
 # CloudWatch
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/b5813ebd-7021-4505-abbf-ec18af030d43">
 
+policy to log on ECS:  
+- "logs:CreateLogGroup",
+- "logs:CreateLogStream",
+- "logs:PutLogEvents",
+- "logs:DescribeLogStreams" <-- info about the logs  
+                
 Collect and track metrics  
 collect, monitor and analyze and store Logs  
 Send notifications for Events  
