@@ -42,15 +42,15 @@ With single tenancy, each customer has his or her own independent multi-tenant d
 
 AWS Directory Services (AD)
 
-Administrative overhead is the cost of setting up the service. This includes setting up users, security configs, and all the monitoring tools available. These questions usually differentiated themselves by having answers that would show you could setup a given task faster with a tool like cloud formation or beanstalk. They usually have an element of security to them as well.  
+Administrative overhead is the cost of setting up the service. This includes setting up users, security configs, and all the monitoring tools available. These questions usually differentiated themselves by having answers that would show you could setup a given task faster with a tool like cloud formation or Beanstalk. They usually have an element of security to them as well.  
 
-Operational overhead is the cost of the day-to-day operation of the service in question. The questions usually differentiated themselves by having answers that demonstrated knowing a service could potentially be expensive and you might be able to minimize the cost using an a different AWS service or sometimes not an AWS service at all. These require general knowledge of all the different services available. Reading this subreddit it seems these questions take the full breadth of AWS services into account. Mine was heavy with Lambda.  
+Operational overhead is the cost of the day-to-day operation of the service in question. The questions usually differentiated themselves by having answers that demonstrated knowing a service could potentially be expensive and you might be able to minimize the cost using a different AWS service or sometimes not an AWS service at all. These require general knowledge of all the different services available. Reading this subreddit it seems these questions take the full breadth of AWS services into account. Mine was heavy with Lambda.  
 
 Port 3306 is the default port used for the MySQL protocol  
 
 resource group:  
 If you work with multiple resources, you might find it useful to manage them as a group rather  
-than move from one AWS service to another for each task. maintain separate sets of resources for the alpha, beta, and release  
+then move from one AWS service to another for each task. maintain separate sets of resources for the alpha, beta, and release  
 stages. Each version runs on Amazon EC2 and uses an Elastic Load Balancer.  
 create a single page to view and manage all of the resources  
 
@@ -63,7 +63,7 @@ specifically require static IP addresses or deterministic, fast regional failove
 
 Event driven architecture:  
 React to changes from a variety of sources as soon as they happen. Components: Event producers, event routers (EventBridge, SNS), and event consumers.  
-Uses SQS, SNS, EventBridge, Step Functions, Lambda (NO API GATEWAY)!!  
+Uses SQS, SNS, EventBridge, Step Functions, Lambda (NO API GATEWAY)   
 
 Stateless applications don't "store" data whereas Stateful applications require backing storage  
 
@@ -93,13 +93,13 @@ Consists of:
   - "Resource": list of res. to which the action is applied
   - "Condition": when it's applied (optional)
 
-IAM Access Analyzer:!!  
+IAM Access Analyzer:   
 simplifies inspecting unused access to guide you toward least privilege. The findings highlight unused roles, unused access keys, password.  
 
 IAM certificate store:  
 if you got your certificate from a third-party CA, import the certificate into ACM or upload it to the IAM certificate store  
  
-SIGV4 You can use Signature Version 4 to sign the API requests, to give API access in one AWS account to users in a different AWS account, also use!!  
+SIGV4 You can use Signature Version 4 to sign the API requests, to give API access in one AWS account to users in a different AWS account, also use   
 resource policy on the resource you are trying to access...  
 Insert the signature into a query string parameter referred to as "X-Amz-Signature"
 Incorporate the signature into an HTTP header called "Authorization".  
@@ -118,7 +118,7 @@ Inline vs Managed policies:
 - inline: strict one-to-one if IAM deleted policy deleted
 
 Permission to Pass a Role:
-you need the iam:PassRole permission, roles can only be passed to what their trust allows!!  
+you need the iam:PassRole permission, roles can only be passed to what their trust allows   
 The "trust policy" defines which resource can assume the role, and under which condition
 The "Resource based" Policy can deny events from other AWS acc, or aggregate from multiple acc. into one using "Multi-Account aggregation"
 The "access policy" when the user attempted to log in by using the provided credentials for the role
@@ -129,10 +129,10 @@ Defense mechanisms:
 
 To access AWS:
 - AWS management console (pw + MFA)
-- CLI (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)!!  
-  - to use CLI with MFA you need to create a temporary session, you do so with the STS GetSessionToken API !! 
+- CLI (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)   
+  - to use CLI with MFA you need to create a temporary session, you do so with the STS GetSessionToken API   
   - the CLI looks for credentials in this order: Command line, Environment Variable CLI credential file, CLI config file, Container cred. Instance profile cred.
-- SDK (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)!!  
+- SDK (access keys require an ACCESS KEY ID and a SECRET ACCESS KEY to make programmatic calls to AWS)   
   - looks for credentials in this order:
     - Environment variables
     - Java system properties
@@ -140,11 +140,11 @@ To access AWS:
     - ECS container credentials 
     - instance profile credentials (EC2 instances)  
       For ex: the AWS SDK for Java will find credentials stored in environment variables (where its allowed)
-      before it checks for instance provide credentials (where its not allowd) and will allow access to
+      before it checks for instance provide credentials (where its not allowed) and will allow access to
       extra S3 buckets.  
 
 Access keys are generated with the AWS console, users manage their keys and are secret like passwords.  
-connecting programmatically to AWS resources: Access key ID + Secret access key!!
+connecting programmatically to AWS resources: Access key ID + Secret access key 
 ON-PREMISE TO AWS -> in order to use the AWS SDK for your application, you have to create your credentials file first at ~/.aws/credentials for Linux servers   
 or at C:\Users\USER_NAME\.aws\credentials for Windows users and then save your access keys.   
 
@@ -169,16 +169,16 @@ IAM Best practices:
 - Use different access keys for different applications.
 - Use access keys for CLI and SDK
 - Remove unused access keys.
-- audit permissions w/ Credential report and IAM access advisor!!  
+- audit permissions w/ Credential report and IAM access advisor   
 
 Shared reponsability model:  
 You know.
 
-AWS STS:!!  
-Security token service: allows to grant limited and temp access to aws resources (up to 1hr)  
+AWS STS:   
+Security token service: allows to grant limited and temp access to AWS resources (up to 1hr)  
 Define an IAM role, define its principals, use AWS STS to impersonate the IAM Role (AssumeRole API), Get the temp. credentials  
 - AssumeRole: Assume roles within your account or cross-account, ex: use with cross-account to get temporary access to resources in a second account  
-- GetSessionToken: for STS with MFA, from a user or AWS account root user. it returns Access ID, Secret Key, Session Token, Expiration date.!!
+- GetSessionToken: for STS with MFA, from a user or AWS account root user. it returns Access ID, Secret Key, Session Token, Expiration date. 
 - GetCallerIdentityt: return details about the IAM user or role used in the API call
 - DecodeAuthorizationMessage: decode error message when AWS API is denied.
 - CAN'T be used with API GATEWAY AUTHENTICATION.
@@ -197,7 +197,7 @@ Instance types:
 
 m5.2xlarge: m = class like general purpose, 5 = generation (aws improve over hw over time) 2xlarge = size in instance class (the more cup and memory ecc..)  
 
-If you are below a besline you earn burst credits (balance) that you can use for higher throughput later, it gets reset if you perform an immutable/traffic-splitting deploy because it  
+If you are below a baseline you earn burst credits (balance) that you can use for higher throughput later, it gets reset if you perform an immutable/traffic-splitting deploy because it  
 generates new instances.  
 
 Security groups:  
@@ -316,7 +316,7 @@ EC2 instance store:
   - better I/O performance, high performance because physically attached hw store
   - lose the storage if ec2 is stopped
   - good for buffer / cache / scratch data / temp content
-  - risk of data if data center hw fails
+  - risk of data if data center hardware fails
   - your responsibility to backup
 
 # EFS
@@ -367,7 +367,7 @@ what it does:
 - handle failures of instances, using health checks, by using a port and route to check the HTTP response.
   ex response 400 not healthy
 - Health checks
-- When it finds that an instance is unhealthy, it TERMINATES that instance and launches a new one. CAN ONLY MANIPULATE THEM IF THEY HAVE AN ASG ATTACHED!!  
+- When it finds that an instance is unhealthy, it TERMINATES that instance and launches a new one. CAN ONLY MANIPULATE THEM IF THEY HAVE AN ASG ATTACHED   
   ASG actually removes/adds new instances, not ALB Itself.
 - Separate public traffic from private traffic
 - Build a highly available system  
@@ -375,7 +375,7 @@ what it does:
 4 types:
 - classic load balancer: deprecated
 
-- application load balancer (ALB): routs https, websocket traffic!!
+- application load balancer (ALB): routs https, websocket traffic 
   - ALB access logs - Elastic Load Balancing provides access logs that capture detailed information about requests sent to your load balancer.  
   -  3 possible target types: Instance, IP and Lambda
   -  You can NOT specify PUBLICLY routable IP addresses to an ALB
@@ -387,12 +387,12 @@ what it does:
   - You can register your Lambda functions as targets and configure a listener rule to forward requests to the target group for your  
     Lambda function. When the load balancer forwards the request to a target group with a Lambda function as a target, it invokes  
     your Lambda function and passes the content of the request to the Lambda function, in JSON format.  
-    X-Forwarded-Proto: protocol (HTTP/HTTPS)!!  
+    X-Forwarded-Proto: protocol (HTTP/HTTPS)   
     X-Forwarded-Host: original Host header requested by the client  
     X-Forwarded-For: original IP address of a client  
     X-Forwarded-Port header: original port that the client used to connect  
 
-!!  
+   
 - HTTP 500 'Internal server' error: There are several reasons for their error: A client submitted a request without an HTTP protocol, and the load balancer was unable to generate a redirect URL, there was an error executing the web ACL rules.
 - HTTP 503 'Service unavailable' error: This error in ALB is an indicator of the target groups for the load balancer having no registered targets.
 - HTTP 504 'Gateway timeout' error: The load balancer failed to establish a connection to the target before the connection timeout expired
@@ -409,7 +409,7 @@ what it does:
   for example firewalls, intrusion detection system, inspection system... for example if you want your traffic to be
   inspected before it reaches EC2
   - GENEVE protocol 6081
-  - target adresses: EC2 / IP adresses
+  - target addresses: EC2 / IP addresses
 
 Sticky sessions: its possible to implement so that the same client is always redirected to the same instance behind a  
 load balancer, it uses a cookie with an expiration date. it can be an Application cookie or duration-based cookie.
@@ -422,7 +422,7 @@ can be public or private
 SSL/TLS certificate allows traffic between your client and load balancer to be encrypted in transit, they are
 issued by Certificate Authorities, they have an expiration date
 
-Connection Draining: If EC2 is shutting down it goes in draining mode so the uses that are already connected and need  
+Connection Draining: If EC2 is shutting down it goes in draining mode so the users that are already connected and need  
 to complete their requests finish and ELB doesn't forward new traffic there, then when it's all done it shuts down.
 
 load balancer security group allows traffic from anywhere, in routing table 0.0.0.0/0
@@ -431,7 +431,7 @@ EC2 security group allows traffic only from the load balancer, so in routing tab
 # Auto scaling group
 <img width="50" alt="image" src="https://github.com/ionutsuciu1999/AWSnote/assets/73752549/f861c0d3-3b2a-4546-a6fd-2ab0a6252823">
 
-Auto Scaling groups CANNOT span across multiple Regions, they CAN span across the AZs of a Region.!!  
+Auto Scaling groups CANNOT span across multiple Regions, they CAN span across the AZs of a Region.   
 
 in cloud you can get rid or add servers quickly  
 the goal of ASG is to   
@@ -495,7 +495,7 @@ Transparent Data Encryption (TDE):
 automatically encrypts data before it is written to storage, and automatically decrypts data when the data is read from storage.
 
 RDS proxy:  
-fully managed db proxy for RDS (ALSO WORKS WITH AURORA)!!  
+fully managed db proxy for RDS (ALSO WORKS WITH AURORA)   
 - Allows apps to pool and share DB connection, minimizing timeouts, open connections, and reduce stress on DB resources
 - Auto scaling, serverless, across multiple AZ
 - Apps connect to proxy not directly to DB instance
@@ -517,7 +517,7 @@ proprietary tech from AWS
 both RDS and Aurora:  
 - at-rest encryption: with AWS KMS
 - at-flight encryption using AWSTLS
-- IAM authentication: IAM roles to connect / pw username
+- IAM authentication: IAM roles to connect / password username
 - security groups for network access
 - audit logs can be enabled
 
@@ -539,10 +539,10 @@ in-memory database with high-performance low latency
   cache can become stale if Lazy Loading is implemented without other strategies (such as TTL).
 - write through architecture: write to cache when there is a modification to the DB
 
-Redis: Supports more complex data structures, You can use Amazon Elasticache for Redis Sorted Sets to implement a dashboard with the ability to sort or rank the cached datasets.!!  
+Redis: Supports more complex data structures, You can use Amazon Elasticache for Redis Sorted Sets to implement a dashboard with the ability to sort or rank the cached datasets.   
 session state data be maintained externally, whilst keeping latency at the LOWEST possible value (like DSD): The two options presented in the answers are Amazon  
 DynamoDB and Amazon ElastiCache Redis. ElastiCache will provide the lowest latency as it is an in-memory database.  
-Memcached: Primarily supports string-based keys and values; does not support advanced data structures. Supports multi-threading, NOT as highly available as Redis!!   
+Memcached: Primarily supports string-based keys and values; does not support advanced data structures. Supports multi-threading, NOT as highly available as Redis    
 
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/84dafa7c-cfac-4a5c-934e-636a2badf4ed">
 
@@ -559,7 +559,7 @@ TTL time to live:
 
 DNS domain name system: translates ip addresses to human-friendly names  
 terminology:
-- Domain registrar: Route 53, godaddy..
+- Domain registrar: Route 53, GoDaddy...
 - DNS records:
 - zone file: contains DNS records
 - name server: resolver DNS queries
@@ -569,7 +569,7 @@ terminology:
 Route 53 is an authoritative DNS (you can update the records yourself), and is a Domain registrar  
 Route 53 records contains:  
 - Domain/subdomain name: example.com
-- record type: (must know): !!
+- record type: (must know):  
   - A maps hostname to ipv4
   - AAAA maps hostname to ipv6
   - CNAME Point a hostname to another hostname, works if you have a non-root domain (something.domain.com). provides a domain name for it, such as d111111abcdef8.cloudfront.net. Instead of using this provided domain name, you can use an alternate domain name (also known as a CNAME).
@@ -578,12 +578,12 @@ To ensure ongoing connectivity the Developer needs to use an Elastic IP address 
 the only type of static, public IP address you can assign to an Amazon EC2 instance.  
 - Public – public address that is assigned automatically to instances in public subnets and reassigned if instance is stopped/started.  
 - Private – private address assigned automatically to all instances.  
-- Elastic IP – public address that is static!!.  
+- Elastic IP – public address that is static.  
 
 To use your own domain name, such as www.example.com  
   - Alias: Point a hostname to AWS resource, works with root name (ELB, CloudFront, API Gateway, s3, VPC)
   - NS name server for the hosted zone controls how traffic is routed
-    -  public hosted zones responds with the public ip when trying to resolve the DNS
+    -  public hosted zones respond with the public ip when trying to resolve the DNS
     -  private hosted only you in your VPC network can access it
 - value: 128.241.223.111
 - routing policy: how r53 responds to queries
@@ -598,7 +598,7 @@ To use your own domain name, such as www.example.com
 - TTL amount of time the record is cached at DNS resolver
 
 Traffic flow:  
-node-based editor allows to config complex routing decision policy!!  
+node-based editor allows to config complex routing decision policy   
 
 Health checks:  
 for public resources, uses the "failure threshold" parameter, this allows automated DNS failover (redirect to a secondary IP)  
@@ -708,7 +708,7 @@ can force encryption with bucket policy
 A process replaces an existing object and immediately tries to read it. Amazon S3 always returns the latest version of the object  
 If two writes are made to a single non-versioned object at the same time, it is possible that only a single event notification will be sent  
 
-x-amz-server-side-encryption, value="AES256" header to request server-side encryption with S3 Managed keys.!!   
+x-amz-server-side-encryption, value="AES256" header to request server-side encryption with S3 Managed keys.    
 value="aws:kms" with KMS keys.  
 x-amz-server-side​-encryption​-customer-algorithm, x-amz-server-side-encryption-customer-key and x-amz-server-side-encryption-customer-key-MD5 headers. Headers for Customer managed keys.  
 
@@ -729,7 +729,7 @@ policy permission to limit access by IP addresses or require that data must be e
 - pre signes URLS give access to a file on a private bucket from 1min to 12hrs, using a pre-signed url by you
 
 - S3 access points:  
-  An S3 "Object Lambda" access point is a new type of access point that you can create to invoke your own AWS Lambda function to modify the content of an S3 object.!!  
+  An S3 "Object Lambda" access point is a new type of access point that you can create to invoke your own AWS Lambda function to modify the content of an S3 object.   
   You can use S3 Object Lambda access points to transform data as it is being retrieved from an S3 bucket, without modifying the original data stored in the bucket.  
   - Or Access point policy: Users from finance can only access /finance/... files, sales can only access /sales/... files  
   this is done with an access point policy.  
@@ -792,7 +792,7 @@ lifecycles rules:
 S3 Event notifications:  
 like generating thumbnails of images uploaded to s3  
 S3 bucket -> Amazon Event Bridge -> rules -> services  
-S3 event notifications can directly invoke a Lambda function, you dont necessarely need Event Bridge  
+S3 event notifications can directly invoke a Lambda function, you dont necessarily need Event Bridge  
 
 S3 performance:  
 - can speed up upload by using multi-part upload
@@ -804,9 +804,9 @@ S3 performance:
 - S3 static websites use the HTTP protocol only and you cannot enable HTTPS. To enable HTTPS connections to your S3 static website,  
   use an Amazon CloudFront distribution that is configured with an SSL/TLS certificate. This will ensure encrypted in-transit as per the requirements
 
-syntax to represents to Object
+syntax to represent to Object
 - s3:// dctlabs/Development/Projects.xls this is the full path to a file including the bucket name and object key
-- Development/Projects.xls subfolders/direct name rapresents an Object key 
+- Development/Projects.xls subfolders/direct name represent an Object key 
 - "Project=Blue" is an example of an object tag. You can use object tagging to categorize storage. Each tag is a key-value pair.
 - "arn:aws:s3:::dctlabs" is the Amazon Resource Name (ARN) of a bucket.
   (ARNs) uniquely identify AWS resources. We require an ARN when you need to specify a resource unambiguously across all of AWS,
@@ -825,7 +825,7 @@ It integrates with ANY HTTP backend you want, S3, app load balancer, EC2, S3 web
 Client asks to Edge location (cache), if it doesn't have it the edge location gets it from the origin  
 
 If you want In-flight encryption select these settings of Origin Protocol and Viewer Protocol.  
-IN EXAM IF CloudFront with SSL / Secure connection use this!!  
+IN EXAM IF CloudFront with SSL / Secure connection use this   
 
 <img width="241" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/2ddcc116-6b9b-49b0-9bc9-8f7fd65e4ce7">
 
@@ -836,7 +836,7 @@ CloudFront vs something like S3 replication
 CloudFront:  
 - is global edge network
 - files are cached to each edge location TTL for a day
-- great for static content that must be available eveywhere
+- great for static content that must be available everywhere
 S3 replication
 - must be setup for each region you want replication
 - files are updated in near real-time
@@ -867,7 +867,7 @@ If it's an ELB it must be public, if its EC2 it can be private because there is 
 
 Geo restriction  
 allowlist: if you are on the list of approved countries (we can also block using Web ACL in AWS WAF)  
-blocklist prevents user fron entering from banned countries  
+blocklist prevents user from entering from banned countries  
 
 Signed URL / signed cookie  
 Signed URL = access to individual files ( one URL per file ) To restrict access to content 
@@ -886,9 +886,9 @@ pre-signed you have access to directly the S3 without being able to use Cloudfro
 
 Signed URL process:  
 2 types of signers, either a trusted key group ( recommended ) or an AWS account that contains a key pair (not recommended)  
-- create one of more trusted key groups, the public key is used in the URL, the private key is used by your app.!!
+- create one of more trusted key groups, the public key is used in the URL, the private key is used by your app. 
 - When you create a signer, the public key is with CloudFront and private key is used to sign a portion of URL  
-- When you use the root user to manage CloudFront key pairs, you can only have up to two active CloudFront key!!  
+- When you use the root user to manage CloudFront key pairs, you can only have up to two active CloudFront key   
   pairs per AWS account  
 
 
@@ -911,7 +911,7 @@ protect user-sensitive info through application stack
 sensitive info encrypted at the edge close to user
 
 Real-time logs:  
-get requests recieved by CloudFront and sent to Kinesis data streams, here you can monitor, analyze and take action based on content performance
+get requests received by CloudFront and sent to Kinesis data streams, here you can monitor, analyze and take action based on content performance
 
 # Docker
 - software development platform to deploy applications
@@ -921,7 +921,7 @@ resources are shared with the host, many containers on one server, they can be m
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/25b17b94-3cab-4d38-b615-95f0e1fe9864">
 
 Elastic Beanstalk uses the "docker-compose.yml" file to pull and run your image if you are using Docker Compose.  
-Otherwise Docker platforms for Elastic Beanstalk You specify images by name in the "Dockerrun.aws.json" file and save!!   
+Otherwise Docker platforms for Elastic Beanstalk You specify images by name in the "Dockerrun.aws.json" file and save    
 it in the root of your source directory.
 
 Docker builds images automatically by reading the instructions from "Dockerfile" which is a text file named Dockerfile  
@@ -933,7 +933,7 @@ that contains all commands, in order, needed to build a given image.
 ### Elastic container service
 
 ECS agent facilitates the communication between your container instances and Amazon ECS  
-/etc/ecs/ecs.config contains cluster Parameter values, like cluster name.!!  
+/etc/ecs/ecs.config contains cluster Parameter values, like cluster name.   
 
 EC2 Launch type:  
 to launch a container = to launch an ECS task  
@@ -946,7 +946,7 @@ If you decide to use an "EC2 launch type" (EC2 inside ECS and ECS agent with doc
   the ELB finds the correct ports automatically even if random. You must allow on the EC2 instance security group any port from the ALB security group
 - for EC2 instance storage to share data between tasks
 - ECS Task Placement Strategy:
-  when a task of EC2 is launched, ECS must determinate where in which EC2 to place it for memory and CPU availability
+  when a task of EC2 is launched, ECS must determine where in which EC2 to place it for memory and CPU availability
   to assist you, you can define a Task placement strategy and task placement constraints
   - Binpack: Place tasks based on the LEAST available amount of CPU or memory, cost saving so it uses the least possible amount of EC2s
   - Random: places a task randomly, no logic to it
@@ -955,7 +955,7 @@ If you decide to use an "EC2 launch type" (EC2 inside ECS and ECS agent with doc
   - distinct instance: place each task on a different container instance, so never 2 tasks on the same container
   - memberOf: place a task on the instance that satisfies an expression
 
-TO SEND CLOUDWATCH LOGS "awslogs log driver":!!  
+TO SEND CLOUDWATCH LOGS "awslogs log driver":   
 you can configure the containers in your tasks to send log information to CloudWatch Logs. If using Fargate add the required "logConfiguration" parameters to task definition  
 
 Another type of "launch type is *Fargate*", you don't need to provision the infrastructure, serverless, 
@@ -985,7 +985,7 @@ ECS services to scale underlying EC2 instances:
   adds EC2 when you are missing capacity (CPU, RAM) (recommended) this is used to scale the cluster
   container instances, not the number of tasks. To scale nr of tasks Create an ECS Service with Auto Scaling and attach an Elastic Load Balancer
 - AUTO scaling group scaling, scale based on CPU utilization
-we can scale using:  !!
+we can scale using:   
 - TARGET tracking based on a target value from Cloudwatch metric
 - STEP scaling scale based on a specified Cloudwatch alarm
 - SCHEDULED scaling scale based on a specified date / time
@@ -1074,7 +1074,7 @@ separate environments for development, testing, and production use, and you can 
 to any environment  
 
 You can add AWS Elastic Beanstalk configuration files (.ebextensions FOLDER) to your web application's source code to configure your environment and customize   
-the AWS resources that it contains. YAML or JSON-formatted documents with a .CONFIG file extension that you place in a folder named .ebextensions and deploy (EXCEPT FOR ALREADY-EXISTING "env.yaml" config file for the environment.)!!  
+the AWS resources that it contains. YAML or JSON-formatted documents with a .CONFIG file extension that you place in a folder named .ebextensions and deploy (EXCEPT FOR ALREADY-EXISTING "env.yaml" config file for the environment.)   
 
 Deploy options for updates:  
 - All at once, deploy the new v all in one go but it has a bit of downtime  
@@ -1119,7 +1119,7 @@ Your source bundle must meet the following requirements:
 - Not include a parent folder or top-level directory (subdirectories are fine)
 
 worker environment:  
-If your application performs operations or workflows that take a long time to complete, you can offload those tasks to a dedicated worker environment (like beanstalk).!!  
+If your application performs operations or workflows that take a long time to complete, you can offload those tasks to a dedicated worker environment (like beanstalk).   
 Decoupling your web application front end from a process that performs blocking operations is a common way to ensure that your application stays responsive under load.
 
 # CloudFormation
@@ -1131,9 +1131,9 @@ can create a template in a Manual way: edit them in Cloud Formation Designer or 
 automated way: using AWS CLI  
 
 YAMS and JSON are languages you can write CF templates  
-"aws cloudformation deploy" then "sam deploy" commands  
+"aws CloudFormation deploy" then "sam deploy" commands  
 
-!!
+ 
 template components:
 - Template version/Format Version 
 - description
@@ -1151,13 +1151,13 @@ template components:
   YAML file the "Transform" section in the document represent  it is a Serverless Application Model (SAM) template
 - Instrinct functions (the most important):
   - Ref: returns the instance ID
-  - GetAtt: returns the value of a specific attribute, ex: when creating and EBS vol you want to get the AZ of the EC2!!  
-  - FindInMap: returns a value from a specific key!! FindInMap [ MapName, TopLevelKey, SecondLevelKey ]
+  - GetAtt: returns the value of a specific attribute, ex: when creating and EBS vol you want to get the AZ of the EC2   
+  - FindInMap: returns a value from a specific key  FindInMap [ MapName, TopLevelKey, SecondLevelKey ]
   - importValue: import values that are exported in other stacks
   - Condition Functions: if / and / not / or
   - Base64: convert value to base64
 - Outputs: Describes the values that are returned whenever you view your stack's properties.
-  !! Exported Output Values in CloudFormation must have UNIQUE names within a single REGION
+    Exported Output Values in CloudFormation must have UNIQUE names within a single REGION
 
 CF Rollbacks:  
 if a stack creation fails you have the option to default: everything rolls back, or to disable rollback to troubleshoot
@@ -1185,7 +1185,7 @@ JSON doc that defines the update actions that are allowed on specific res. durin
 CF Custom resources:  
 define resources not yet supported, custom resources from 3rd party. They are integrations backed by lambda functions  
 
-CLI "create-stack-set" command create, update, or delete stacks across multiple accounts and AWS Regions!!  
+CLI "create-stack-set" command create, update, or delete stacks across multiple accounts and AWS Regions   
 CF stack sets:  
 CRUD stacks across multiple accounts and regions with a single operation, the developer can deploy the same CloudFormation stack to   
 multiple regions without additional application code. ex: for geographic load testing of an API.  
@@ -1196,12 +1196,12 @@ for ex. get the RDS DB instance master password from secret manager.
 
 CF Template settings:  
 - Mappings section matches a key to a corresponding set of named values: ex if you want to set values based on region
-- Metadata section to include arbitrary JSON or YAML objects thatprovide details about the template.
+- Metadata section to include arbitrary JSON or YAML objects that provide details about the template.
 - Parameters enable you to input custom values to your template each time you create or update a stack.
 - Conditions section contains statements that define the circumstances under which entities are created or configured
 
 CF Deploy a Lambda 2 options:  
-- write the code directly inside the CloudFormation template in the json
+- write the code directly inside the CloudFormation template in the JSON
 - Upload a ZIP file containing the function code to Amazon S3, then add a reference to it in an AWS::Lambda::Function
 
 CF pseudo-parameter:  
@@ -1234,7 +1234,7 @@ the message remains until it gets consumed and deleted (def. 4 days max 14 days)
 Can retrieve 10 messages at one time at max.  
 it can have duplicated messages  
 
-A Consumer polls messages and processes it and deletes it from queue!!  
+A Consumer polls messages and processes it and deletes it from queue   
 Fully managed service used for decoupling apps. max 256kb message. running on EC2 or lambda or your local server  
 max 10 messages at a time. after consuming delete the message so no other consumer uses it.  
 Can have multiple consumers at a time. we can horizontally scale by adding more consumers. At least once delivery because queue can have duplicate messages
@@ -1252,9 +1252,9 @@ inflight encryption with HTTPS API
 - SQS access policies (if you want cross account access or publish S3 event notifications)
 
 SQS Message Visibility Timeout:  
-After a message is polled by a consumer it becomes invisible to other consumers, it has 30s to process it,!!  
+After a message is polled by a consumer it becomes invisible to other consumers, it has 30s to process it,   
 if the message hasn't been deleted because not processed yet, it will be put back in the queue and be processed twice, if you need more than 30s to process it  
-use the "ChangeMessageVisibility" API to change the timeout time to increase the value of VisibilityTimeout!!  
+use the "ChangeMessageVisibility" API to change the timeout time to increase the value of VisibilityTimeout   
 
 SQS Dead Letter queues (DLQ):  
 We can set a threshold to how many times a message can go back into the queue because a consumer fails to process it, after the "MaximumReceives" threshold  
@@ -1264,7 +1264,7 @@ Usually makes sense for asynchronous invocations, synchronous recieve the respon
 Also SNS can have a DLQ  
 
 SQS Delay queue:  
-Delay a messages so cosumers dont see it immediately, up to 15 min, or per message individually, default is 0
+Delay messages so cosumers dont see it immediately, up to 15 min, or per message individually, default is 0
 
 SQS Short polling:  
 Querying only a subset of its servers to determine whether any messages are available for a response.
@@ -1273,9 +1273,9 @@ SQS Long polling:
 When a consumer requests a message from the queue it can wait for messages from queue to arrive if there are none in the queue, this is called long polling  
 long polling decreases the number of API calls, messages get processed at the end of the wait period, higher efficiency  
 the wait time can be 1-20s, its better than short polling. IT RETURNS MESSAGES AS SOON AS THEY BECOME AVAILABLE:
-to enable: Set the ReceiveMessage API with a WaitTimeSeconds of 1-20s!!  
+to enable: Set the ReceiveMessage API with a WaitTimeSeconds of 1-20s   
 
-SQS Extended client library ECL:!!    
+SQS Extended client library ECL:     
 library that uses an s3 bucket to send messages higher than 256kb, the queue sends a message telling the consumer to get the larger message from the s3
 
 Must know API:  
@@ -1328,7 +1328,7 @@ Easy to collect/process/analyze streaming data in real-time, such as Application
 - Kinesis Data Streams: capture, process and store data streams
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5c8f258e-1e14-4a5f-95a5-685f309db280">  
 
-is a way to stream big data in your systems (ingest data at scale), is made of multiple "Shards" per stream (can be used to scale up or down),!!  
+is a way to stream big data in your systems (ingest data at scale), is made of multiple "Shards" per stream (can be used to scale up or down),   
   data will be split to Client. it sends a record to the stream that is made out of Partition Key and Data Blob (max 1MB)  
   after it reaches KDS it gets send a consumer, with the Partition Key, Data Blob, and Sequence Nr.  
   Partition key hashed a unique ID you pass, and it always sends the data from that provider to the same shard. Multiple hashes from multiple  
@@ -1357,7 +1357,7 @@ Kinesis Producer Library (KPL):
 simplifies producer application development, allowing developers to  
 achieve high write throughput AND WRITE to a Kinesis data stream. helps you write to a Kinesis data stream.  
 
-Kinesis Client Library (KLC):!!  
+Kinesis Client Library (KLC):   
 Java library that helps read and CONSUME records from Kinesis Data Stream with distributed apps. sharing the read workload.  
 Each shard is to be read by only one KCL instance, 4 shards = max 4KCL instances, 8 = 8 instances  
 
@@ -1380,7 +1380,7 @@ Kinesis Data Firehose:
 - Kinesis Data Analytics:
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/fb8c6601-9e33-4380-b85e-e160cb48ef3d">
 
-  analyze data Streams for SQL, fully managed.!!   
+  analyze data Streams for SQL, fully managed.    
   It can read either from KDS or KDF, and apply SQL statements to perform real-time analytics + can add s3 to join data  
   it can then send the data to KDS (that can do real-time processing of the data) or KDF ( that can send it to S3, Redshift, other)  
 
@@ -1423,7 +1423,7 @@ Send notifications for Events
   - log stream, instance within application
   - log expiration policy
   - can send logs (export) to multiple sources. Either using S3 Export, export in batch when running the API CreateExportTastk Or  
-    Using "CloudWatch log subscription" real-time logs "CloudWatch integration feature with S3"!!  
+    Using "CloudWatch log subscription" real-time logs "CloudWatch integration feature with S3"   
   - logs encrypted by default, you can use your own KMS "associate-kms-key" command
   - "CloudWatch Logs Insight" used to query the logs
   - "CloudWatch metric filter" filter expressions (ex. count "ERROR" in logs) to trigger alarms
@@ -1473,7 +1473,7 @@ You can understand dependencies between microservices
 understand where the error is  
 It uses tracing, each component dealing with the request adds its own "trace"  
 IAM, KMS  
-To enable it!!:  
+To enable it :  
 modify your code using x-ray SDK then install the xRay daemon or enable AWS integration .ebextensions/xray-daemon.config file to the source code to enable the X-Ray daemon (FOR BEANSTALK ONLY)  
 The X-Ray daemon listens for traffic on UDP port 2000  
 You can only use X-ray with Fargate as a "SIDE CAR" because there is not EC2 image  
@@ -1485,9 +1485,9 @@ How to instrument your code: instrument = measure the product performance, diagn
 - Metadata tags to record additional data that you want stored in the trace but don't need to use with search.
 - Annotations in AWS X-Ray that can be used with Filter expressions
 - Subsegments provide more granular timing information and details about downstream calls that your application made to fulfill the original request.
-  - !! namespace "AWS" for AWS SDK calls; "REMOTE" for other downstream calls.
+  -   namespace "AWS" for AWS SDK calls; "REMOTE" for other downstream calls.
 
-!! X-Ray gives you the ability to trace latency issues with your API Gateway APIs (integrationLatency on cloudwatch)!!  
+  X-Ray gives you the ability to trace latency issues with your API Gateway APIs (integrationLatency on CloudWatch)   
 
 "GetTraceSummaries":
 you can search for segments, get the list of trace IDs of the application    
@@ -1533,15 +1533,15 @@ Serverless: just deploy code without provisioning / managing servers.
 - the first event is being processed  
 
 You can implement an AWS Lambda runtime in any programming language. Include a RUNTIME in your function's deployment  
-package in the form of an executable file named "bootstrap" If you want to use it in a CONTAINER. SUPPORTS ONLY LINUX IMAGES NOT HYBRID WINDOWS-LINUX!!   
-the deployment package contains: .zip or .jar file with your code and any dependencies. (runtime already provided)!!  
+package in the form of an executable file named "bootstrap" If you want to use it in a CONTAINER. SUPPORTS ONLY LINUX IMAGES NOT HYBRID WINDOWS-LINUX    
+the deployment package contains: .zip or .jar file with your code and any dependencies. (runtime already provided)   
 
 Main integrations:  
 - API Gateway: to create Rest API  
 - Kinesis: data transformation on the fly  
 - DynamoDB and S3: triggers for when something happens in DB  
 - CloudFront: lambda edge  
-- CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule or Create an Amazon CloudWatch Events rule that is scheduled to run every x minutes.!!  
+- CloudWatch events / EventBridge: when we want to react when something happens in our structure, or if we want to use a CRON eventBridge rule or Create an Amazon CloudWatch Events rule that is scheduled to run every x minutes.   
 When your resources change state, they automatically send events into an event stream. You can create rules that match selected events in the stream and route  
 them to your AWS Lambda function to take action. Like ex: associate Lambda function with CodePipeline  
 
@@ -1596,7 +1596,7 @@ the Lambda functions require the execution role to be configured with the approp
 CloudWatch metrics: lambda metrics are displayed there, error counts, invocations, success rates...  
 X-Ray: Can use in lambda if correct IAM role and enable "Active Tracing", it will run the xray daemon for you  
 
-Edge Functions: code attached to CloudFront execution, logic at the edge locations, runs close to users to minimize latency. Deployed globally, serverless!!  
+Edge Functions: code attached to CloudFront execution, logic at the edge locations, runs close to users to minimize latency. Deployed globally, serverless   
 used for: website security, SEO, intelligent Route, real-time image transformation, user authentication, user prioritizing, user tracking and analytics...  
 - CloudFront Functions: JS functions for high scale, latency-sensitive CDN customization. used to customize the viewer response / requests (before CloudFront
   forwards the request to the origin / after it gets the response and returns it to the client). Ex for header manipulation, URL redirects...
@@ -1624,18 +1624,18 @@ if you need persistence space, use S3.
 Data is SAVED in this directory, persists across these retained invocations, making it useful for caching.  
 
 
-Lambda Layers:!!  
+Lambda Layers:   
 custom runtimes for not supported languages, or create a layer to externalize dependencies to reuse them without having to repackage them to deploy, because the lambda can  
 reference these layers. ONLY FOR LIBRARIES, NOT DB keys ecc... use ENVIRONMENT Variables for those.
 
 File System Mounting:  
 Can access EFS if running in VPC, it's a config to mount EFS file system to local directory at initialization, it uses EFS access points.
 
-reserved vs provisioned concurrency !!  
+reserved vs provisioned concurrency    
 Concurrency:  
 the more we invoke the more executions up to 1000, we can set a "reserved concurrency" to limit the max amount per each function.  
 if we don't set limit, we can have 1 function taking up all 1000 executions, and have the other functions not being able to start.  
-!! Lambda will keep the unreserved concurrency pool at a minimum of 100 concurrent executions, so that functions that do not have specific limits set can still process requests. So, in practice, if your total account limit is 1000, you are limited to allocating 900 to individual functions. So if you have 2 functions that need to have the same concurrency, you can max do 450 and 450.  
+  Lambda will keep the unreserved concurrency pool at a minimum of 100 concurrent executions, so that functions that do not have specific limits set can still process requests. So, in practice, if your total account limit is 1000, you are limited to allocating 900 to individual functions. So if you have 2 functions that need to have the same concurrency, you can max do 450 and 450.  
 
 Cold start and provision concurrency:  
 new instance so all initializations have to start. The first request has a higher latency,  
@@ -1763,12 +1763,12 @@ Writing Data:
 Reading Data: 
 - GetItem: read based on Primary Key (hash / hash + range), eventually consistent (default) / strongly  
 - BOTH PutItem and UpdateItem can add a NEW item. If the item already exists, PutItem will Replace the entire item while UpdateItem will Update only what you passed.
-- ProjectionExpression to read only certain (subset of) attributes --projection-expression!!  
+- ProjectionExpression to read only certain (subset of) attributes --projection-expression   
 - Query: Based on Partition key value (required) , and optional sort key values (=,<,> ec...), FilterExpression additional filtering after query for non-key attributes
 - Scan: get the entire table and filter out on your application (inefficient).
   supports parallel scans for faster results.  
   To minimize the impact of the scan:  
-  - on the provisioned throughput Set a smaller page size for the scans!!
+  - on the provisioned throughput Set a smaller page size for the scans 
   - Optimize the table to use query instead of scans for big tables.
  
 Deleting Data:
@@ -1795,7 +1795,7 @@ SQL-compatible query (no joins) if all you know is SQL. You can select, CRUD, an
 
 Local Secondary Index LSI:  
 Alternative sort key for table (same as partition key) based on sort key = scalar attribute (String, Number, Binary) + up to 5 local secondary indexes per table  
-must be defined at table creation time. !! 
+must be defined at table creation time.   
 ex: give me all the games that have been played by this user between 2021 and 2023. We have a different sort key thanks to LSI  
 With a local secondary index you can have a different sort key but the partition key is the same.  
 <img width="400" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/4cb1c79c-c587-4ab8-b635-f573ac1fd9c7">  
@@ -1818,9 +1818,9 @@ lock the record for your exclusive use until you have finished with it. This can
 
 Atomic counter:  
 Numeric attribute that is incremented when UpdateItem is called, is not accurate because even if the update fails it increments, used for example for users on a website  
-or counts that can have slight miscalcumations.  
+or counts that can have slight miscalculations.  
 
-DynamoDB DAX:!!  
+DynamoDB DAX:   
 Fully managed highly aval. seamless i-memory cache for DynamoDB, fully secure, microseconds cached reads and queries. Doesnt require   
 application logic modification because compatible with existing DynamoDB APIs. Solves the "hot key" problem so too many reads.  
 
@@ -1861,7 +1861,7 @@ Security:
 - Access with IAM  
 - encryption KMS, in transit SSL/TLS  
 - backup (On-demand, Point-in-time recovery) and restore features, they use S3 to do so but you can't access those buckets
-- Global tables, fully replicated multi-region, reduce latency for your users.!!  
+- Global tables, fully replicated multi-region, reduce latency for your users.   
 - DynamoDB Local dev and test apps locally without the official server  
 - DMS  
 - Can use identity providers / Cognito to exchange credentials for temporary credentials with roles, and can do operations only on data they own  
@@ -1874,7 +1874,7 @@ StreamViewType — Specifies the information that will be written to the stream 
 - OLD_IMAGE — The entire item, as it appeared before it was modified.
 - NEW_AND_OLD_IMAGES — Both the new and the old images of the item  
 
-To return the number of WCU consumed by any of these operations, set the "ReturnConsumedCapacity" parameter to one of the following:!!  
+To return the number of WCU consumed by any of these operations, set the "ReturnConsumedCapacity" parameter to one of the following:   
 - TOTAL — returns the total number of write capacity units consumed.  
 - INDEXES — returns the total number of write capacity units consumed, with subtotals for the table and any secondary indexes that were affected by the operation.  
 - NONE — no write capacity details are returned. (This is the default.)  
@@ -1891,14 +1891,14 @@ It integrates with / can call:
 - Lambda function: invoke / expose the REST API
 - HTTP: HTTP endpoints even on-premise / ABL (HTTP API)
 - AWS Services: Any AWS service API with gateway (HTTP API)
-- Websockets: two-way interactive communicatio. between browser and server, enable stateful apps. server can push info to client
+- Websockets: two-way interactive communication. between browser and server, enable stateful apps. server can push info to client
   used in real-time apps like chat, collab platforms, multiplayer games.
   Client connects to API Gateway, it gives a Connection ID, lambda uses logic and stores in DB the connection ID,
   it uses a Connection URL Callback to send data to client. You can use Routing to reroute to a specific backend when
   the connection is open (for example to do CRUD different backends)
 
 In AWS API Gateway, API keys by themselves do not grant access to execute an API.  
-They need to be associated with a usage plan, and that usage plan then determines which API stages and methods the API key can access. added to a usage plan by calling the "CreateUsagePlanKey" method!!
+They need to be associated with a usage plan, and that usage plan then determines which API stages and methods the API key can access. added to a usage plan by calling the "CreateUsagePlanKey" method 
 
 Mapping templates: ex: You can transform the incoming JSON into a valid XML message for the SOAP backend interface using mapping templates  
 
@@ -1906,7 +1906,7 @@ Mapping templates: ex: You can transform the incoming JSON into a valid XML mess
 - Edge-Optimized (default): for global clients,  Requests are routed through CloudFront Edge locations (improve latency)
   the API Gateway still lives in only one region
 - Regional: for clients in the same region, could manually combine with CloudFront
-- Private: Can only be accessed from your VPC using an interface VPC endpoint (ENI)!!
+- Private: Can only be accessed from your VPC using an interface VPC endpoint (ENI) 
 
 Security:   
 Can Authenticate users with:  
@@ -1914,22 +1914,22 @@ Can Authenticate users with:
   in the headers.
 - Resource policies: Allow for CROSS ACCOUNT access combined with IAM security, or for specific IP Addresses, or VPC
   endpoint.
-- Cognito user pools(for external users) users sign in with Congnito first which provides token
+- Cognito user pools(for external users) users sign in with Cognito first which provides token
 - Custom Authorizer (Lambda Authorizer) Token-Basesd auth. the lambda if auth is correct returns an IAM policy that will
   be cached. if you want to implement a custom authorization scheme that uses a bearer token authentication
   strategy such as OAuth or SAML, or that uses request parameters to determine the caller's identity. (TOKEN authorizer e REQUEST authorizer)
 
-- Custom Domain Name HTTPS: security through integration with AWS Certificate Manager (ACM)!!
+- Custom Domain Name HTTPS: security through integration with AWS Certificate Manager (ACM) 
   
 Deployment Stages:  
 After Making a change must be deployed it or else changes wont apply, its done through "stages"  
 each stage has its own config. parameters. Stages are kept and can be rolled back if needed  
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/8baded8a-55ea-461e-8980-df53eb2cebc8">  
-Update stage variable value from the stage name of test to that of prod, to PROMOTE the TEST stage to the PRODUCTION stage. !!
+Update stage variable value from the stage name of test to that of prod, to PROMOTE the TEST stage to the PRODUCTION stage.  
 
 Stage variables: like Environment variables (config) but for API Gateway, use them for often changing values  
 so it prevents redeployment every time.  
-- A common use is defining to which Lambda function it points and when you deploy V2 change a % of traffic to the new one changing the Stage Var. (Canary Deployment)!!  
+- A common use is defining to which Lambda function it points and when you deploy V2 change a % of traffic to the new one changing the Stage Var. (Canary Deployment)   
 - Also used to implement and run different versions for testing purposes ex: alpha .tutorialsdojo .com endpoint and beta release through the beta .tutorialsdojo .com endpoint
 - You can also use stage variables to pass configuration parameters to a Lambda function through your mapping templates
 - If you create a stage variable to call a Lambda function through your API, you must add the required permissions. Update your Lambda function's resource-based IAM policy so that it grants invoke permission to the API Gateway
@@ -1939,10 +1939,10 @@ Integration types:
 - HTTP / AWS (lambda or AWS services): You must config the integration request and response, setup data mapping
   with mapping templates for request and response which means we can change the data before it reaches client or backend.
   Mapping template: modify parameters and strings, filter output results, use VTL scripting language for loops,
-  if ecc.. We can use it to convert from JSON (REST APIs) to XML (SOAP APIs) 
+  if ecc... We can use it to convert from JSON (REST APIs) to XML (SOAP APIs) 
 - AWS_PROXY (lambda proxy) incoming requests from the client is input data to lambda without changing the data,
   the function handles all logic
-- Lambda custom integration (non-proxy): opposite of proxt, specify how the incoming request data is mapped
+- Lambda custom integration (non-proxy): opposite of proxy, specify how the incoming request data is mapped
 - HTTP_PROXY Same as AWS_PROXY, requests passed directly to the backend, without modification, for API
   or HTTP endpoints.
 
@@ -1956,10 +1956,10 @@ reduces the nr of calls made, default TTL is 300s, min 0 max 1hr
 Caches are different for every stage. We can invalidate the Cache immediately and flush it, or the user can do that  
 with "max-age=0" if it has the IAM Auth.  
 We can CHOOSE to Cache only a type of request/response for example only POST  
-Ticking the "Require authorization" checkbox ensures that not every client can invalidate the API cache!!  
+Ticking the "Require authorization" checkbox ensures that not every client can invalidate the API cache   
 
 You can make your API available for money to customers. We can config how much and fast they can access them, how many calls  
-possible, use API Keys to identify them, callers pass the key in x-api-key header.  
+possible, use API Keys to identify them, callers pass the key in "x-api-key" header.  
 Throttling default 10000 rps across all API, in case it happens Error 429 too many requests.  
 Can set Stage limit and Method limit to increase performance  
 
@@ -1967,7 +1967,7 @@ CloudWatch Logs: Log contains info about request/response body
 
 X-Ray: enable tracing to get extra info  
 
-CloudWatch Metrics: Metrics based on stages, CacheHitCount & CacheMissCount, Count (nr of req), IntegrationLatency!!  
+CloudWatch Metrics: Metrics based on stages, CacheHitCount & CacheMissCount, Count (nr of req), IntegrationLatency   
 (time between request and response from the backend), Latency (time between request and sending response to user),   
 4XXError (client side) 5XXError (server side)  
 
@@ -1987,8 +1987,8 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 
 - CodePipeline: automate pipeline. Visual workflow tool to orchestrate CICD. We can control the Source / build / test /  
   deploy / invoke stages. If a stage fails pipeline stops. You can create events for failed pipelines / events with
-  CloudWatch events react to changes.!!  
-  you can add an "APPROVAL ACTION" to a stage in a pipeline at the point where you want the pipeline!!  
+  CloudWatch events react to changes.   
+  you can add an "APPROVAL ACTION" to a stage in a pipeline at the point where you want the pipeline   
   execution to stop so that someone with the required AWS Identity and Access Management permissions can approve or reject  
   the action.  
   
@@ -2002,12 +2002,12 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
   - connections to AWS CodeCommit repos with IAM user, configure Git credentials for CodeCommit in the IAM console  
   to get access:  
     - Generate HTTPS Git credentials.  
-    - Generate new SSH keys and associate the PUBLIC SSH key to each of your developer's IAM user.!!  
+    - Generate new SSH keys and associate the PUBLIC SSH key to each of your developer's IAM user.   
   
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/cc98d861-4d4f-4ab7-90fd-260eda8be962">  
 
 - CodeBuild: Build and test code. The build instructions are in buildspec.yml (must be at root of code like .git).  
-  Logs can be used in S3 + CLOUDWATCH. We can use CloudWatch Metrics to monitor build statistics. TO DETECT FAILED build and triggers / alarms.!!  
+  Logs can be used in S3 + CLOUDWATCH. We can use CloudWatch Metrics to monitor build statistics. TO DETECT FAILED build and triggers / alarms.   
   Don't store codebuild secrets as plaintext in environment variables Instead environment variables can reference parameters store parameters, or secrets manager secrets.   
   build logs of the failed phase in the last build attempt in the AWS CodeBuild project build history  
   CodePipeline stage can run many CodeBuild actions (not stages) in parallel.  
@@ -2018,7 +2018,7 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 
 - CodeDeploy: automate deploy code to EC2 / lambda (help automate with traffic shift linear / canary)
   Deploy / Rollback capability:
-  - ECS (only Blue- green)
+  - ECS (only Blue-green)
   - Gradual deploy control (
   - AllAtOnce
   - HalfAtATime
@@ -2028,20 +2028,20 @@ happens often and quickly, shift away from "one release every 3 months" to "5 re
 - AppSpec.yml file says how deploys should happen.  Must run a CodeDeploy Agent on the target instance.  
 - an order of the hooks for in-place deployments: ApplicationStop -> BeforeInstall -> AfterInstall -> ApplicationStart
 - defined the deployment actions in a file AppSpec.yml. Hooks allowed: BeforeAllowTraffic > AfterAllowTraffic  
-- it can pull code boundle from S3
+- it can pull code bundle from S3
 
 <img width="450" height="600" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/0c52fbf2-0fee-4e0d-beda-6b7f3e635465">
 <img width="450" height="600" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/5656f273-9341-4276-9aa9-b7dd71ad8f65">
 <img width="450" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/377e1523-2f19-4a92-90d8-4694879141ab">
 
-Deployment lifecycle evens, You can specify scripts to run in a hook:  
+Deployment lifecycle events, You can specify scripts to run in a hook:  
 - ApplicationStop
 - DownloadBundle: CodeDeploy agent copies the application revision files to a temporary location
 - BeforeInstall: You can use this deployment lifecycle event for preinstall tasks, such as decrypting files and creating a backup of the current version
 - Install: CodeDeploy agent copies the revision files from the temporary location to the final destination folder.
 - AfterInstall: tasks such as configuring your application or changing file permissions.
 - ApplicationStart: restart services that were stopped during ApplicationStop.
-- ValidateService: It is used to verify the deployment was completed successfully. !! 
+- ValidateService: It is used to verify the deployment was completed successfully.   
 - BeforeBlockTraffic: run tasks on instances before they are deregistered from a load balancer.
 - BlockTraffic: internet traffic is blocked from accessing instances that are currently serving traffic
 - AfterBlockTraffic: run tasks on instances after they are deregistered from their respective load balancer.
@@ -2051,11 +2051,11 @@ Deployment lifecycle evens, You can specify scripts to run in a hook:
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/99ca4948-7aae-4adb-9221-4d657205ab0f">   
 
-- CodeStart / CodeCatalyst: Manage software dev activities. + setup CI/CD pipelines and has a dashboard to overview them!!  
+- CodeStart / CodeCatalyst: Manage software dev activities. + setup CI/CD pipelines and has a dashboard to overview them   
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/079e00e5-8737-4a92-b317-8b972e9473f7">  
 
-- CodeArtifact: share software packages, software packages depend on each other to be built (code dependencies), storing and!!  
+- CodeArtifact: share software packages, software packages depend on each other to be built (code dependencies), storing and   
   getting these dependencies is called artifact management We can use Resource policy to authorize different packages.
 
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/8c76f5b0-bfe0-4f1b-8b03-3c983ecfdbe8">  
@@ -2075,7 +2075,7 @@ Serverless application model basically a shortcut to cloud formation, says how t
 - can use CodeDeploy to deploy lambda functions  
 - Can help you run Lambda, API Gateway, DynamoDB
 
-Relies on CloudFormation templates to work!! SAM templates are an extension of AWS CloudFormation templates,  
+Relies on CloudFormation templates to work  SAM templates are an extension of AWS CloudFormation templates,  
 with some additional components that make them easier to work with  
 
 AWS SAM CLI lets you LOCALLY build, test, and debug serverless applications that are defined by AWS SAM templates.  
@@ -2089,7 +2089,7 @@ The "AutoPublishAlias" property enables AWS SAM to automatically create and upda
 SAM local "start-api" subcommand allows you to run your serverless application locally for quick development and testing.  
 For example it creates a local HTTP server that acts as a proxy for API Gateway and invokes your Lambda functions based on the AWS SAM template.  
 
-SAM supports the following resource types:!!  
+SAM supports the following resource types:   
 - AWS::Serverless::Api
 - AWS::Serverless::Application
 - AWS::Serverless::Function
@@ -2104,7 +2104,7 @@ SAM supports the following resource types:!!
 <img width="50" alt="image" src="https://github.com/99ionut/AWS-Certified-Developer-Associate-DVA-C02-Study-Notes/assets/73752549/181c3088-4372-4996-9a5f-fdc502dfa23c">
 
 Cloud development Kit:  
-define cloud infrastructure using familiar language, code gets compiled into CloudFormation model (Json/Yaml) example: BUILD A STACK USING PYTHON!!  
+define cloud infrastructure using familiar language, code gets compiled into CloudFormation model (Json/Yaml) example: BUILD A STACK USING PYTHON   
 You can deploy infrastructure and application code together, if it doesn't compile you don't get either of them.  
 
 Create the app from a "template provided by AWS CDK" -> Add code to the app to create resources within stacks ->  
@@ -2133,7 +2133,7 @@ Pre-authentication Lambda TRIGGER ex: custom validation that accepts or denies t
 Cognito user pool (CUP):   
 - are for AUTHENTICATION (identify verification). create a serverless DB of your users. sign-in function for app users.   
   Username / email / password / MFA / phone verify. / login with Google (federate identity). block users compromised.   
-- when they login they get back a JSON web toke JWT.!!   
+- when they login they get back a JSON web toke JWT.    
 - CUP can invoke Lambda on triggers.  
 - It offers a Hosted authentication UI that you can use in your apps.  
 - Offers Adaptive Authentication: block sign-ins or require MFA if the login is suspicious.  
@@ -2141,7 +2141,7 @@ Cognito user pool (CUP):
   With Cognito user pools, or OIDC auth.  
 - you can add sign-up and sign-in to mobile and web apps and it also offers a user directory so   
   user accounts can be created directly within the user pool. Users also have the ability to reset their passwords
-- You can add social identity providers (IdPs) (SPID), are based on OpenID, they reqire the "Client ID" & "client Secret" to work!!
+- You can add social identity providers (IdPs) (SPID), are based on OpenID, they reqire the "Client ID" & "client Secret" to work 
 - Is returned for the user to provide a set of temporary, limited-privilege AWS credentials: Cognito ID  
 
 Cognito Identity pools (federated identities):  
@@ -2169,7 +2169,7 @@ PARALLEL STEP - begin parallel branches of execution.
 
 Error handling: we can have retry or catch (transit to failure path)  
 
-Wait for task token: allows you to pause step function until a task token is returned. by appending .waitForTaskToken!!   
+Wait for task token: allows you to pause step function until a task token is returned. by appending .waitForTaskToken    
 
 Activity task:  
 allows you to have the task work performed by an Activity worker (Apps on EC2 / Lambda / mobile device...)  
@@ -2229,13 +2229,13 @@ AWS AppSync:
 build scalable applications that require real-time updates on a range of data sources, including Amazon DynamoDB.  
 
 AWS Serverless Application Repository (SAR):  
-SAM Templates, publicly share applications with everyone or privately share them with specific AWS accounts. for example for common infrastrucutres.  
+SAM Templates, publicly share applications with everyone or privately share them with specific AWS accounts. for example for common infrastructures.  
 
 ---
 # AWS Security
 in flight TLS / SSL will be encrypted before sending and decrypted after. prevents MITM man-in-the-middle attack.   
-Server-Side encryption: Data is encrypted after being recieved by the server, decrypted before being sent. It's stored in an encrypted for thanks to a key.  
-Client-Side encryption: data in encrypt. by the client and never decrypted by server. Client-side encryption with  
+Server-Side encryption: Data is encrypted after being received by the server, decrypted before being sent. It's stored in an encrypted for thanks to a key.  
+Client-Side encryption: data in encrypted. by the client and never decrypted by server. Client-side encryption with  
 customer-managed encryption keys allows you to select either symmetric or asymmetric keys.  
 
 # KMS 
@@ -2265,7 +2265,7 @@ how encrypt / decrypt works:
 KMS stores the CMK, and receives data from the clients, which it encrypts and sends back  
 
 Envelope Encryption: Encrypt the plaintext data with a data key and then encrypt the data key with a top-level PLAINTEXT MASTER key.  
-!! Envelope Encryption: KMS has a limit of 4KB, if you want more, use Envelope Encryption which corresponds to  
+  Envelope Encryption: KMS has a limit of 4KB, if you want more, use Envelope Encryption which corresponds to  
 - "GenerateDataKey" API. Returns a plaintext key and an encrypted copy of a data key. Erase the plaintext data key from memory and store the encrypted data key alongside the locally encrypted data.  
 - "GenerateDataKey": obtain an encryption key from KMS that we can then use within the function  
   code to encrypt the file. This ensures that the file is encrypted BEFORE it is uploaded to Amazon S3.
@@ -2284,7 +2284,7 @@ AWS SSM Patameter store:
 Secure storage for your configs and secrets, optional encryption using KMS. Security through IAM, notification with EventBridge, version tracking for changes inside.  
 Parameter policies can have TTL, DOES NOT SUPPORT KEY ROTATION
 
-AWS Secrets Manager:!!   
+AWS Secrets Manager:    
 meant for storing secrets, newer than SSM, allows to force rotation of secrets every x days. Integrated with RDS, meant for RDS so in the exam if you see its Secret Manager.  
 You can replicate secrets across multiple regions, and replicas sync. 
 
@@ -2308,7 +2308,7 @@ AWS OpenSearch Service:
 In DynamoDB, query only by primary key or indexes, with open search you can search any field even partially matches. You can perform analytics with the dat  a
 and use OpenSearch Dashboards to visualize it.  
 
-Amazon Athena!!:  
+Amazon Athena :  
 serverless query service to analyze data stored in S3, SQL to query files. Commonly used with QuickSight for reporting / dashboard, used for business intelligence,  
 analysis, report, ecc... Exam if analyzing data in s3 using serverless SQL, use Athena.   
 You can improve its performance using a columnar data for cost-saving, compress data for small retrieval, partition datasets for data you check often.  
@@ -2320,7 +2320,7 @@ Alternative for kinesis.
 
 the 3 certificate managers are:  
 - AWS Certificate Manager (ACM):  
-  manage and deploy SSL/TLS certificate, provide in-flight encryption for websites. Remember its stored in us-east-1 always!!
+  manage and deploy SSL/TLS certificates, provide in-flight encryption for websites. Remember its stored in us-east-1 always 
 
 - AWS Private Certificate Authority (CA):  
   Managed service allows you to create private Certificate Authorities, only work in your Organization / services that have the integration, not on the public internet.   
